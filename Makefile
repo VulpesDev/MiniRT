@@ -1,0 +1,101 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/01/30 20:41:46 by tfregni           #+#    #+#              #
+#    Updated: 2023/05/23 16:52:13 by tfregni          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+SRCS		= main.c
+UNAME_S		:= $(shell uname -s)
+OBJS		= ${SRCS:.c=.o}
+CC			= cc
+CFLAGS		= -O3 -Wall -Wextra -Werror -g
+NAME		= minirt
+LINKS		= -lm -Llibft -lft
+INC			= -Ilibft
+RE_LIBFT	= "$(wildcard ./libft/libft.a)"
+RM			= rm -rf
+MAKE		= make
+
+ifeq (${UNAME_S}, Linux)
+MLX_PATH	= mlx-linux
+MLX_TAR 	= minilibx-linux.tgz
+LINKS 		+= -lbsd -lXext -lX11
+INC			+= -Ilinux
+endif
+
+ifeq (${UNAME_S}, Darwin)
+MLX_PATH	= mlx-mac
+MLX_TAR		= minilibx_opengl.tgz
+LINKS		+= -framework OpenGL -framework AppKit
+INC			+= -Imac
+endif
+
+INC 		+= -I${MLX_PATH}
+LINKS 		+= -L./${MLX_PATH} -lmlx
+
+mlx		:
+	$(MAKE) getmlxlib
+	$(MAKE) -C ${MLX_PATH}
+	$(MAKE) ${NAME}
+
+${NAME}	: ${OBJS}
+	@$(MAKE) libft
+	${CC} ${CFLAGS} ${OBJS} ${LINKS} -o ${NAME}
+
+%.o:%.c
+	${CC} ${CFLAGS} ${INC} -c $< -o $@
+
+all		: mlx
+
+# ifneq wasn't working because of missing quotes
+# ifneq ("${RE_LIBFT}" yes
+# ifneq (${RE_LIBFT} no
+# also, make -C ${LIB} calls the all rule that cleans
+libft	:
+ifneq ("${RE_LIBFT}", "./libft/libft.a")
+	@$(MAKE) libft.a --no-print-directory -C libft
+endif
+
+clean	:
+	@${MAKE} clean -C libft
+ifneq ("$(wildcard ${NAME} ${MLX_PATH})", "")
+	@${MAKE} clean -C ${MLX_PATH}
+endif
+ifneq ("$(wildcard ${OBJS})", "")
+	@${RM} ${OBJS}
+endif
+
+getmlxlib:
+ifeq (${UNAME_S}, Linux)
+	@if [ ! -d ${MLX_PATH} ]; then \
+			@echo "Downloading miniLibX..."; \
+			wget https://cdn.intra.42.fr/document/document/12154/${MLX_TAR}; \
+			mkdir ${MLX_PATH}; \
+			tar -xzf minilibx-linux.tgz --strip-components=1 -C ${MLX_PATH}; \
+			rm minilibx-linux.tgz; \
+	fi
+else ifeq (${UNAME_S}, Darwin)
+	@if [ ! -d ${MLX_PATH} ]; then \
+			@echo "Downloading miniLibX..."; \
+			wget https://cdn.intra.42.fr/document/document/12155/${MLX_TAR}; \
+			mkdir ${MLX_PATH}; \
+			tar -xzf minilibx_opengl.tgz --strip-components=1 -C ${MLX_PATH}; \
+			rm minilibx_opengl.tgz; \
+	fi
+endif
+
+fclean	: clean
+	make fclean -C libft
+ifneq ("$(wildcard ${NAME})", "")
+	${RM} ${NAME}
+endif
+
+re		: fclean all
+
+.PHONY	: all clean fclean re libft
