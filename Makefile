@@ -6,7 +6,7 @@
 #    By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 20:41:46 by tfregni           #+#    #+#              #
-#    Updated: 2023/05/23 16:52:13 by tfregni          ###   ########.fr        #
+#    Updated: 2023/05/25 00:08:53 by tfregni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ LINKS		= -lm -Llibft -lft
 INC			= -Ilibft
 RE_LIBFT	= "$(wildcard ./libft/libft.a)"
 RM			= rm -rf
-MAKE		= make
+MAKE		= make -s
 
 ifeq (${UNAME_S}, Linux)
 MLX_PATH	= mlx-linux
@@ -40,16 +40,19 @@ INC 		+= -I${MLX_PATH}
 LINKS 		+= -L./${MLX_PATH} -lmlx
 
 mlx		:
-	$(MAKE) getmlxlib
-	$(MAKE) -C ${MLX_PATH}
-	$(MAKE) ${NAME}
+	@echo "Downloading minilibx"
+	@$(MAKE) getmlxlib
+	@echo "Building minilibx"
+	@$(MAKE) -C ${MLX_PATH}
+	@echo "Making miniRT... "
+	@$(MAKE) ${NAME}
 
 ${NAME}	: ${OBJS}
 	@$(MAKE) libft
-	${CC} ${CFLAGS} ${OBJS} ${LINKS} -o ${NAME}
+	@${CC} ${CFLAGS} ${OBJS} ${LINKS} -o ${NAME}
 
 %.o:%.c
-	${CC} ${CFLAGS} ${INC} -c $< -o $@
+	@${CC} ${CFLAGS} ${INC} -c $< -o $@
 
 all		: mlx
 
@@ -65,10 +68,14 @@ endif
 clean	:
 	@${MAKE} clean -C libft
 ifneq ("$(wildcard ${NAME} ${MLX_PATH})", "")
+	@echo "Cleaning up minilibx... "
 	@${MAKE} clean -C ${MLX_PATH}
+	@echo "done"
 endif
 ifneq ("$(wildcard ${OBJS})", "")
+	@echo "Cleaning up miniRT objects..."
 	@${RM} ${OBJS}
+	@echo "done"
 endif
 
 getmlxlib:
@@ -91,11 +98,13 @@ else ifeq (${UNAME_S}, Darwin)
 endif
 
 fclean	: clean
-	make fclean -C libft
+	@$(MAKE) fclean -C libft
 ifneq ("$(wildcard ${NAME})", "")
-	${RM} ${NAME}
+	@echo "Cleaning up miniRT executable..."
+	@${RM} ${NAME}
+	@echo "done"
 endif
 
 re		: fclean all
 
-.PHONY	: all clean fclean re libft
+.PHONY	: all clean fclean re libft getmlxlib mlx
