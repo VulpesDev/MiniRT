@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/05/25 12:42:29 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/05/25 16:41:28 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include "./libft/libft.h"
 # include <fcntl.h>
 # include <stdio.h>
+# include "keys.h"
 # define SPACE "\t "
 
 typedef enum e_err
