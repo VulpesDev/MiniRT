@@ -6,11 +6,11 @@
 #    By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 20:41:46 by tfregni           #+#    #+#              #
-#    Updated: 2023/05/25 00:08:53 by tfregni          ###   ########.fr        #
+#    Updated: 2023/05/25 12:38:37 by tfregni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS		= main.c
+SRCS		= main.c parse.c
 UNAME_S		:= $(shell uname -s)
 OBJS		= ${SRCS:.c=.o}
 CC			= cc
@@ -19,6 +19,7 @@ NAME		= minirt
 LINKS		= -lm -Llibft -lft
 INC			= -Ilibft
 RE_LIBFT	= "$(wildcard ./libft/libft.a)"
+DSYM		= *.dSYM
 RM			= rm -rf
 MAKE		= make -s
 
@@ -72,16 +73,16 @@ ifneq ("$(wildcard ${NAME} ${MLX_PATH})", "")
 	@${MAKE} clean -C ${MLX_PATH}
 	@echo "done"
 endif
-ifneq ("$(wildcard ${OBJS})", "")
+ifneq ("$(wildcard ${OBJS} $(DSYM))", "")
 	@echo "Cleaning up miniRT objects..."
-	@${RM} ${OBJS}
+	@${RM} ${OBJS} $(DSYM)
 	@echo "done"
 endif
 
 getmlxlib:
 ifeq (${UNAME_S}, Linux)
 	@if [ ! -d ${MLX_PATH} ]; then \
-			@echo "Downloading miniLibX..."; \
+			@echo "Downloading miniLibX for Linux..."; \
 			wget https://cdn.intra.42.fr/document/document/12154/${MLX_TAR}; \
 			mkdir ${MLX_PATH}; \
 			tar -xzf minilibx-linux.tgz --strip-components=1 -C ${MLX_PATH}; \
@@ -89,7 +90,7 @@ ifeq (${UNAME_S}, Linux)
 	fi
 else ifeq (${UNAME_S}, Darwin)
 	@if [ ! -d ${MLX_PATH} ]; then \
-			@echo "Downloading miniLibX..."; \
+			@echo "Downloading miniLibX for Mac..."; \
 			wget https://cdn.intra.42.fr/document/document/12155/${MLX_TAR}; \
 			mkdir ${MLX_PATH}; \
 			tar -xzf minilibx_opengl.tgz --strip-components=1 -C ${MLX_PATH}; \
