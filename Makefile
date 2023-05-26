@@ -6,11 +6,11 @@
 #    By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 20:41:46 by tfregni           #+#    #+#              #
-#    Updated: 2023/05/26 09:01:40 by tfregni          ###   ########.fr        #
+#    Updated: 2023/05/26 23:27:57 by tfregni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS		= main.c parse.c
+SRCS		= main.c parse.c populate_element.c populate_solid.c
 UNAME_S		:= $(shell uname -s)
 OBJS		= ${SRCS:.c=.o}
 CC			= cc
@@ -72,12 +72,12 @@ endif
 clean	:
 	@${MAKE} clean -C libft
 ifneq ("$(wildcard ${NAME} ${MLX_PATH})", "")
-	@echo "Cleaning up minilibx... "
+	@printf "Cleaning up minilibx... "
 	@${MAKE} clean -C ${MLX_PATH}
 	@echo "done"
 endif
 ifneq ("$(wildcard ${OBJS} $(DSYM))", "")
-	@echo "Cleaning up miniRT objects..."
+	@printf "Cleaning up miniRT objects..."
 	@${RM} ${OBJS} $(DSYM)
 	@echo "done"
 endif
@@ -104,7 +104,7 @@ endif
 fclean	: clean
 	@$(MAKE) fclean -C libft
 ifneq ("$(wildcard ${NAME})", "")
-	@echo "Cleaning up miniRT executable..."
+	@printf "Cleaning up miniRT executable..."
 	@${RM} ${NAME}
 	@echo "done"
 endif
