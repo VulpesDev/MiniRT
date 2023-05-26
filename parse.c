@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 09:24:43 by tfregni           #+#    #+#             */
-/*   Updated: 2023/05/26 09:37:34 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/05/26 21:22:19 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ void	handle_solid(char **el)
 {
 	if (!ft_strcmp(el[0], "sp"))
 		ft_printf("Sphere\n");
-	if (!ft_strcmp(el[0], "pl"))
+	else if (!ft_strcmp(el[0], "pl"))
 		ft_printf("Plane\n");
-	if (!ft_strcmp(el[0], "cy"))
+	else if (!ft_strcmp(el[0], "cy"))
 		ft_printf("Cylinder\n");
 	else
 		ft_printf("Solid not recognized\n");
@@ -55,7 +55,7 @@ int	parse_element(char *line)
 	return (0);
 }
 
-int	parse_arg(char *filename)
+int	parse_args(char *filename)
 {
 	int		len;
 	int		fd;

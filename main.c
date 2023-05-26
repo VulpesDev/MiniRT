@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:42:10 by tfregni           #+#    #+#             */
-/*   Updated: 2023/05/26 08:12:44 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/05/26 21:13:04 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main(int ac, char **av)
 	(void) av;
 	if (ac != 2)
 		return (ft_error("miniRT", "bad arguments", 1));
-	if (parse_arg(av[1]))
+	if (parse_args(av[1]))
 		return (1);
 	return (0);
 }

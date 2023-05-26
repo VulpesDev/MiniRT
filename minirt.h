@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/05/26 09:35:16 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/05/26 21:13:56 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ typedef struct s_cylinder
 
 
 /* PARSE */
-int		parse_arg(char *filename);
+int		parse_args(char *filename);
 
 /* GRAPHIC */
 int		create_trgb(int t, int r, int g, int b);
