@@ -6,7 +6,7 @@
 #    By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 20:41:46 by tfregni           #+#    #+#              #
-#    Updated: 2023/05/25 12:38:37 by tfregni          ###   ########.fr        #
+#    Updated: 2023/05/26 09:01:40 by tfregni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,16 +41,19 @@ INC 		+= -I${MLX_PATH}
 LINKS 		+= -L./${MLX_PATH} -lmlx
 
 mlx		:
-	@echo "Downloading minilibx"
-	@$(MAKE) getmlxlib
+	@if [ ! -d "./mlx-mac" ]; then \
+		@echo "Downloading minilibx"; \
+		@$(MAKE) getmlxlib; \
+	fi
 	@echo "Building minilibx"
 	@$(MAKE) -C ${MLX_PATH}
-	@echo "Making miniRT... "
 	@$(MAKE) ${NAME}
 
 ${NAME}	: ${OBJS}
 	@$(MAKE) libft
+	@printf "Making miniRT... "
 	@${CC} ${CFLAGS} ${OBJS} ${LINKS} -o ${NAME}
+	@echo "done"
 
 %.o:%.c
 	@${CC} ${CFLAGS} ${INC} -c $< -o $@

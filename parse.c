@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 09:24:43 by tfregni           #+#    #+#             */
-/*   Updated: 2023/05/25 12:44:27 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/05/26 09:37:34 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,26 @@
 
 void	handle_unique(char **el)
 {
-	(void) el;
-	printf("UNIQUE\n");
+	if (!ft_strcmp(el[0], "A"))
+		ft_printf("Ambient\n");
+	else if (!ft_strcmp(el[0], "C"))
+		ft_printf("Camera\n");
+	else if (!ft_strcmp(el[0], "L"))
+		ft_printf("Light\n");
+	else
+		ft_printf("Element not recognized\n");
 }
 
 void	handle_solid(char **el)
 {
-	(void) el;
-	printf("SOLID\n");
+	if (!ft_strcmp(el[0], "sp"))
+		ft_printf("Sphere\n");
+	if (!ft_strcmp(el[0], "pl"))
+		ft_printf("Plane\n");
+	if (!ft_strcmp(el[0], "cy"))
+		ft_printf("Cylinder\n");
+	else
+		ft_printf("Solid not recognized\n");
 }
 
 int	parse_element(char *line)
@@ -29,6 +41,7 @@ int	parse_element(char *line)
 	char	**el;
 
 	el = ft_split_by_sep(line, SPACE);
+	// ft_print_strarr(el);
 	if (!el)
 		return (ft_error("minirt: invalid element", el[0], INVALID_ELEMENT));
 	if (el[0] && el[0][0])
