@@ -49,45 +49,46 @@ typedef t_point	t_vector;
 
 typedef struct s_ambient
 {
-	float	lighting_ratio;
-	int		trgb;
+	float		lighting_ratio;
+	t_point		trgb;
 }				t_ambient;
 
 typedef struct s_camera
 {
-	t_point		view;
+	t_point		pos;//I think view is a bit confusing
 	t_vector	orientation;
 	uint8_t		fov;
 }				t_camera;
 
 typedef struct s_light
 {
-	t_point		point;
+	t_point		pos;//Consistency would be good in my opinion
 	float		brightness;
-	int			trgb;
+	t_point			trgb;
 }				t_light;
 
 typedef struct s_sphere
 {
-	t_point		center;
+	t_point		pos;
 	float		diameter;
-	int			trgb;
+	t_point			trgb;
 }				t_sphere;
 
 typedef struct s_plane
 {
-	t_point		point;
-	t_vector	vector;
+	t_point		pos;
+	t_vector	rot;//I think that's menant by the subject by normalized vector for axis/it is weird that it's in range [-1,1] maybe its in radians and not degrees, which would still not make sense 
 	int			trgb;
 }				t_plane;
 
 typedef struct s_cylinder
 {
-	t_point		center;
+	t_point		pos;
 	t_vector	axis;
+	float		rot;
 	float		diameter;
 	float		height;
-	int			trgb;
+	t_point			trgb;
 }				t_cylinder;
 
 
