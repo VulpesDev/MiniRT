@@ -6,11 +6,11 @@
 #    By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 20:41:46 by tfregni           #+#    #+#              #
-#    Updated: 2023/05/26 23:27:57 by tfregni          ###   ########.fr        #
+#    Updated: 2023/05/30 12:48:49 by tfregni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS		= main.c parse.c populate_element.c populate_solid.c
+SRCS		= main.c parse.c populate_element.c populate_solid.c parse_util.c
 UNAME_S		:= $(shell uname -s)
 OBJS		= ${SRCS:.c=.o}
 CC			= cc

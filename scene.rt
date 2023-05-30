@@ -1,11 +1,23 @@
 CA 	hdik 			fhdjkslfdh  hjdkl h 	fddfj
-L	fhdjk hjdk    y89y89
+
+
+# L	-50.0,0,20 	0.6 0,0,1
+# L	-50.0,0,20 	-0.6 0,0,1
+# L	-50.0,0,20
+# L	-50.0,0,20 	0.6 -10,0,1
+L	-50.0,0,20 	0.6 0,0,1
 
 
 
+C 			-50.0,0,20 	0,0,1	 70
+# C 			1,1,1 	0,0,0	 185
+# C 			30,23,0.567 	-1.1,1,0.2	 67
+# C 	-50.0,0,20 	0,0,1	 70	njsk
 
-A nkdfl				fjkdlf	fdkl	fdjkls
-C 			djk 	dsnjk	 dnjskndjsnkd	njsk
+A 0.8			12,12,254
+# A 1,2,3			12,12,256
+# A -0.2			-1,245,112
+# A 0.67			127,128,129
 
 cy 	bndjk fdbjk
 sp
@@ -20,3 +32,4 @@ pl				njkfòndj			bjkdl
 
 
 
+A	fdbhj 4t67

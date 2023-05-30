@@ -6,26 +6,66 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 09:24:43 by tfregni           #+#    #+#             */
-/*   Updated: 2023/05/26 21:22:19 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/05/30 13:18:03 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void	handle_unique(char **el)
+/**
+ * Prints the current status of the unique elements flag
+*/
+// static void	print_flag(int *flag)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (i < 3)
+// 		ft_printf("%d\t", flag[i++]);
+// 	ft_printf("\n");
+// }
+
+/**
+ * I create a triple flag as int array to check that the unique
+ * elements are not set multiple times.
+*/
+t_err	handle_unique(t_scene *scene, char **el)
 {
+	static int	flag[3] = {0};
+
 	if (!ft_strcmp(el[0], "A"))
+	{
 		ft_printf("Ambient\n");
+		if (flag[AMBIENT])
+			return (ft_error("Ambient element already set", NULL, INVALID_DUP));
+		flag[AMBIENT] = 1;
+		validate_ambient(scene, el);
+	}
 	else if (!ft_strcmp(el[0], "C"))
+	{
 		ft_printf("Camera\n");
+		if (flag[CAMERA])
+			return (ft_error("Camera element already set", NULL, INVALID_DUP));
+		flag[CAMERA] = 1;
+		validate_camera(scene, el);
+	}
 	else if (!ft_strcmp(el[0], "L"))
+	{
 		ft_printf("Light\n");
+		if (flag[LIGHT])
+			return (ft_error("Light element already set", NULL, INVALID_DUP));
+		flag[LIGHT] = 1;
+		validate_light(scene, el);
+	}
 	else
 		ft_printf("Element not recognized\n");
+	// print_flag(flag);
+	return (SUCCESS);
 }
 
-void	handle_solid(char **el)
+void	handle_solid(t_scene *scene, char **el)
 {
+	(void) scene;
 	if (!ft_strcmp(el[0], "sp"))
 		ft_printf("Sphere\n");
 	else if (!ft_strcmp(el[0], "pl"))
@@ -36,26 +76,31 @@ void	handle_solid(char **el)
 		ft_printf("Solid not recognized\n");
 }
 
-int	parse_element(char *line)
+/**
+ * Added support to comment # to make testing scenes easier
+*/
+int	parse_element(t_scene *scene, char *line)
 {
 	char	**el;
 
 	el = ft_split_by_sep(line, SPACE);
 	// ft_print_strarr(el);
 	if (!el)
-		return (ft_error("minirt: invalid element", el[0], INVALID_ELEMENT));
+		return (ft_error("minirt: invalid element: ", el[0], INVALID_ELEMENT));
 	if (el[0] && el[0][0])
 	{
-		if (ft_isalpha(el[0][0]) && el[0][0] <= 'Z')
-			handle_unique(el);
+		if (el[0][0] == '#')
+			return (1);
+		else if (ft_isalpha(el[0][0]) && el[0][0] <= 'Z')
+			handle_unique(scene, el);
 		else if (ft_isalpha(el[0][0]) && el[0][0] >= 'a')
-			handle_solid(el);
+			handle_solid(scene, el);
 	}
 	ft_free_str_arr(el);
 	return (0);
 }
 
-int	parse_args(char *filename)
+int	parse_args(t_scene *scene, char *filename)
 {
 	int		len;
 	int		fd;
@@ -75,7 +120,7 @@ int	parse_args(char *filename)
 			break ;
 		if (!ft_strcmp(line, "\n"))
 			continue ;
-		parse_element(line);
+		parse_element(scene, line);
 		free(line);
 	}
 	close(fd);

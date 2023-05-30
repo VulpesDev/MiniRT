@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/05/30 10:16:33 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/05/30 13:17:07 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,20 @@
 
 typedef enum e_err
 {
-	ARG_REQUIRED = 1,
+	SUCCESS,
+	ARG_REQUIRED,
 	FILE_EXTENSION,
 	INVALID_FILE,
 	INVALID_ELEMENT,
+	INVALID_DUP,
 }			t_err;
+
+enum e_unique_el
+{
+	AMBIENT,
+	CAMERA,
+	LIGHT,
+};
 
 typedef struct s_img
 {
@@ -90,8 +99,33 @@ typedef struct s_cylinder
 	int			trgb;
 }				t_cylinder;
 
+/**
+ * Possible struct for the scene:
+ * one value for each unique element (A, C, L),
+ * an array for each solid. Plus a pointer
+ * to the image.
+*/
+typedef struct s_scene
+{
+	t_img		*img;
+	t_ambient	ambient;
+	t_camera	camera;
+	t_light		light;
+	t_sphere	*sp;
+	t_plane		*pl;
+	t_cylinder	*cy;
+}				t_scene;
+
 /* PARSE */
-int		parse_args(char *filename);
+int		parse_args(t_scene *scene, char *filename);
+t_err	validate_ambient(t_scene *scene, char **el);
+t_err	validate_camera(t_scene *scene, char **el);
+t_err	validate_light(t_scene *scene, char **el);
+
+/* PARSE UTILS */
+int		validate_3d_range(t_point point, float min, float max);
+t_point	extract_xyz(char *xyz);
+int		extract_rgb(char *rgb);
 
 /* GRAPHIC */
 int		create_trgb(int t, int r, int g, int b);
