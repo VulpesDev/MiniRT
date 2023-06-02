@@ -6,7 +6,7 @@
 #    By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 20:41:46 by tfregni           #+#    #+#              #
-#    Updated: 2023/05/30 12:48:49 by tfregni          ###   ########.fr        #
+#    Updated: 2023/06/02 12:10:12 by tfregni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ INC 		+= -I${MLX_PATH}
 LINKS 		+= -L./${MLX_PATH} -lmlx
 
 mlx		:
-	@if [ ! -d "./mlx-mac" ]; then \
+	@if [ ! -d "./$(MLX_PATH)" ]; then \
 		@echo "Downloading minilibx"; \
 		@$(MAKE) getmlxlib; \
 	fi
