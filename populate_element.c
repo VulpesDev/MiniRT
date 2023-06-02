@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:30:47 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/02 18:21:42 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/02 19:26:32 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,6 @@ t_err	validate_light(t_scene *scene, char **el)
 			|| arrlen == 3)
 			return (SUCCESS);
 	}
-	return (ft_warning("invalid argument: ", \
+	return (ft_warning("invalid argument", \
 			el[2], INVALID_ELEMENT));
 }

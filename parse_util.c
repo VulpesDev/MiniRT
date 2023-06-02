@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 12:46:52 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/02 19:17:03 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/02 19:25:38 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ t_err	extract_rgb(char *rgb, int *ret)
 	char	**split_arg;
 	int		i;
 
-	if (!rgb || !ret)
-		return (MEM_FAIL);
 	split_arg = ft_split(rgb, ',');
 	if (split_arg && ft_arrlen(split_arg) == 3)
 	{
@@ -41,19 +39,17 @@ t_err	extract_rgb(char *rgb, int *ret)
 			{
 				ft_free_str_arr(split_arg);
 				return (ft_warning("invalid argument", \
-						split_arg[i], INVALID_ELEMENT));
+						rgb, INVALID_ELEMENT));
 			}
 			i++;
 		}
-		*ret = create_trgb(0, ft_atoi(split_arg[0]), \
-							ft_atoi(split_arg[1]), \
+		*ret = create_trgb(0, ft_atoi(split_arg[0]), ft_atoi(split_arg[1]), \
 							ft_atoi(split_arg[2]));
 		ft_free_str_arr(split_arg);
 		return (SUCCESS);
 	}
 	ft_free_str_arr(split_arg);
-	return (ft_warning("invalid argument", \
-						rgb, INVALID_ELEMENT));
+	return (ft_warning("invalid argument", rgb, INVALID_ELEMENT));
 }
 
 /**

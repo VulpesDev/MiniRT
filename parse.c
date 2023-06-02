@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 09:24:43 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/02 18:15:54 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/02 19:28:15 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,13 +132,13 @@ int	parse_args(t_scene *scene, char *filename)
 	line = NULL;
 	while (1)
 	{
+		free(line);
 		line = get_next_line(fd);
 		if (!line)
 			break ;
 		if (!ft_strcmp(line, "\n"))
 			continue ;
 		parse_element(scene, line);
-		free(line);
 	}
 	close(fd);
 	return (0);
