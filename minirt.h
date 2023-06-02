@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/05/25 16:41:28 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/02 12:49:02 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <stdio.h>
 # include "keys.h"
 # define SPACE "\t "
+# define HEIGHT 500
+# define WIDTH 500
 
 typedef enum e_err
 {
@@ -25,6 +27,15 @@ typedef enum e_err
 	INVALID_FILE,
 	INVALID_ELEMENT,
 }			t_err;
+
+typedef struct s_point
+{
+	float	x;
+	float	y;
+	float	z;
+}			t_point;
+
+typedef t_point	t_vector;
 
 int		parse_arg(char *filename);
 t_err	ft_error(char *msg, char *arg, int err_code);
