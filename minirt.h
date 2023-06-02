@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/02 13:34:51 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/02 16:38:14 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 typedef enum e_err
 {
 	SUCCESS,
+	MEM_FAIL,
 	ARG_REQUIRED,
 	FILE_EXTENSION,
 	INVALID_FILE,
@@ -36,6 +37,12 @@ enum e_unique_el
 	CAMERA,
 	LIGHT,
 };
+
+// typedef enum e_bool
+// {
+// 	FALSE,
+// 	TRUE,
+// }			t_bool;
 
 typedef struct s_img
 {
@@ -113,9 +120,9 @@ typedef struct s_scene
 	t_ambient	ambient;
 	t_camera	camera;
 	t_light		light;
-	t_list		*spheres;
-	t_list		*planes;
-	t_list		*cylinders;
+	// t_list		*spheres;
+	// t_list		*planes;
+	// t_list		*cylinders;
 	t_sphere	*sp;
 	t_plane		*pl;
 	t_cylinder	*cy;
@@ -128,16 +135,18 @@ t_err	validate_camera(t_scene *scene, char **el);
 t_err	validate_light(t_scene *scene, char **el);
 int		validate_sphere(t_scene *scene, char **el);
 int		validate_plane(t_scene *scene, char **el);
+int		validate_cylinder(t_scene *scene, char **el);
 
 /* PARSE UTILS */
 int		validate_3d_range(t_point point, float min, float max);
-t_point	extract_xyz(char *xyz);
-int		extract_rgb(char *rgb);
+t_err	extract_xyz(char *xyz, t_point *point);
+t_err	extract_rgb(char *rgb, int *ret);
 
 /* GRAPHIC */
 int		create_trgb(int t, int r, int g, int b);
 
 /* ERROR HANDLING*/
-t_err	ft_error(char *msg, char *arg, int err_code);
+t_err	ft_error(char *msg, char *arg, int err_code, t_scene *scene);
+t_err	ft_warning(char *msg, char *arg, int err_code);
 
 #endif

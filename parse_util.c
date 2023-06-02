@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 12:46:52 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/02 12:41:10 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/02 19:17:03 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,51 +20,56 @@ int	create_trgb(int t, int r, int g, int b)
 /**
  * Given a string, it splits by the ',' and extracts 3 int that
  * assigns bitwise to an int to return (setting transparency to 0)
- * In case of error it exits
+ * @param	string in format "int,int,int"
+ *			pointer to the int where to write the rgb
+ * @returns 0 for success
 */
-int	extract_rgb(char *rgb)
+t_err	extract_rgb(char *rgb, int *ret)
 {
 	char	**split_arg;
 	int		i;
-	int		ret;
 
+	if (!rgb || !ret)
+		return (MEM_FAIL);
 	split_arg = ft_split(rgb, ',');
-	// ft_print_strarr(split_arg);
-	if (ft_arrlen(split_arg) == 3)
+	if (split_arg && ft_arrlen(split_arg) == 3)
 	{
 		i = 0;
 		while (i < 3)
 		{
 			if (ft_atoi(split_arg[i]) < 0 || ft_atoi(split_arg[i]) > 255)
 			{
-				free(split_arg);
-				return (ft_error("minirt: invalid argument", \
+				ft_free_str_arr(split_arg);
+				return (ft_warning("invalid argument", \
 						split_arg[i], INVALID_ELEMENT));
 			}
 			i++;
 		}
-		ret = create_trgb(0, ft_atoi(split_arg[0]), \
+		*ret = create_trgb(0, ft_atoi(split_arg[0]), \
 							ft_atoi(split_arg[1]), \
 							ft_atoi(split_arg[2]));
-		free(split_arg);
-		return (ret);
+		ft_free_str_arr(split_arg);
+		return (SUCCESS);
 	}
-	free(split_arg);
-	return (ft_error("minirt: invalid argument", \
+	ft_free_str_arr(split_arg);
+	return (ft_warning("invalid argument", \
 						rgb, INVALID_ELEMENT));
 }
 
 /**
- * Given a string it splits it by the ',' and extracts 3 floating point
- * values that assigns to a t_point element to return. If any error
- * occurs, it calls ft_error which exits the program.
+ * @param	string expected in the format float,float,float
+ * 			pointer to a t_point structure carrying 3 floats
+ * @returns	0 for success, > 0 error code
+ * The point structure is populated with the values extracted
+ * from the string when validated
 */
-t_point	extract_xyz(char *xyz)
+t_err	extract_xyz(char *xyz, t_point *point)
 {
 	char	**split_arg;
 	int		i;
-	t_point	point;
 
+	if (!xyz || !point)
+		return (MEM_FAIL);
 	split_arg = ft_split(xyz, ',');
 	if (ft_arrlen(split_arg) == 3)
 	{
@@ -72,19 +77,21 @@ t_point	extract_xyz(char *xyz)
 		while (i < 3)
 		{
 			if (!ft_isfloat(split_arg[i]))
-				return (ft_error("minirt: expected floating point value", \
-							NULL, INVALID_ELEMENT), (t_point){0, 0, 0});
+			{
+				free(split_arg);
+				return (ft_warning("expected floating point value", \
+							NULL, INVALID_ELEMENT));
+			}
 			i++;
 		}
-		point.x = ft_atof(split_arg[0]);
-		point.y = ft_atof(split_arg[1]);
-		point.z = ft_atof(split_arg[2]);
-		free(split_arg);
-		return (point);
+		point->x = ft_atof(split_arg[0]);
+		point->y = ft_atof(split_arg[1]);
+		point->z = ft_atof(split_arg[2]);
+		ft_free_str_arr(split_arg);
+		return (SUCCESS);
 	}
-	free(split_arg);
-	return (ft_error("minirt: invalid argument", xyz, INVALID_ELEMENT), \
-						(t_point){0, 0, 0});
+	ft_free_str_arr(split_arg);
+	return (ft_warning("invalid argument", xyz, INVALID_ELEMENT));
 }
 
 /**
