@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/02 11:59:17 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/02 12:12:31 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include "keys.h"
-# define SPACE "\t "
 # include <mlx.h>
 # define SPACE "\t\n\f\r\v "
 
