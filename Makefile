@@ -5,34 +5,107 @@
 #                                                     +:+ +:+         +:+      #
 #    By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/12/08 16:50:22 by tvasilev          #+#    #+#              #
-#    Updated: 2023/05/23 13:54:12 by tvasilev         ###   ########.fr        #
+#    Created: 2023/01/30 20:41:46 by tfregni           #+#    #+#              #
+#    Updated: 2023/06/02 11:59:41 by tvasilev         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = cc
+SRCS		= main.c parse.c
+UNAME_S		:= $(shell uname -s)
+OBJS		= ${SRCS:.c=.o}
+CC			= cc
+CFLAGS		= -O3 -Wall -Wextra -Werror -g
+NAME		= minirt
+LINKS		= -lm -Llibft -lft
+INC			= -Ilibft
+RE_LIBFT	= "$(wildcard ./libft/libft.a)"
+DSYM		= *.dSYM
+RM			= rm -rf
+MAKE		= make -s
 
-CFLAGS = -Wall -Werror -Wextra
+ifeq (${UNAME_S}, Linux)
+MLX_PATH	= mlx-linux
+MLX_TAR 	= minilibx-linux.tgz
+LINKS 		+= -lbsd -lXext -lX11
+INC			+= -Ilinux
+endif
 
-NAME = miniRT
+ifeq (${UNAME_S}, Darwin)
+MLX_PATH	= mlx-mac
+MLX_TAR		= minilibx_opengl.tgz
+LINKS		+= -framework OpenGL -framework AppKit
+INC			+= -Imac
+endif
 
-SRC = main.c
+INC 		+= -I${MLX_PATH}
+LINKS 		+= -L./${MLX_PATH} -lmlx
 
-OBJ = $(SRC:.c=.o)
+mlx		:
+	@echo "Downloading minilibx"
+	@$(MAKE) getmlxlib
+	@echo "Building minilibx"
+	@$(MAKE) -C ${MLX_PATH}
+	@echo "Making miniRT... "
+	@$(MAKE) ${NAME}
 
-all: $(NAME)
+${NAME}	: ${OBJS}
+	@$(MAKE) libft
+	@${CC} ${CFLAGS} ${OBJS} ${LINKS} -o ${NAME}
 
-.c.o:
-	$(CC) $(CFLAGS) -I/usr/include -Imlx_linux -O3 -c $< -o $@ -g
+%.o:%.c
+	@${CC} ${CFLAGS} ${INC} -c $< -o $@
 
-$(NAME): $(OBJ)
-	cd mlx_linux && ./configure
-	$(CC) $(OBJ) -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -o $(NAME)
+all		: mlx
 
-clean:
-	-rm -f $(OBJ)
+# ifneq wasn't working because of missing quotes
+# ifneq ("${RE_LIBFT}" yes
+# ifneq (${RE_LIBFT} no
+# also, make -C ${LIB} calls the all rule that cleans
+libft	:
+ifneq ("${RE_LIBFT}", "./libft/libft.a")
+	@$(MAKE) libft.a --no-print-directory -C libft
+endif
 
-fclean: clean
-	-rm -f $(NAME)
+clean	:
+	@${MAKE} clean -C libft
+ifneq ("$(wildcard ${NAME} ${MLX_PATH})", "")
+	@echo "Cleaning up minilibx... "
+	@${MAKE} clean -C ${MLX_PATH}
+	@echo "done"
+endif
+ifneq ("$(wildcard ${OBJS} $(DSYM))", "")
+	@echo "Cleaning up miniRT objects..."
+	@${RM} ${OBJS} $(DSYM)
+	@echo "done"
+endif
 
-re: fclean all
+getmlxlib:
+ifeq (${UNAME_S}, Linux)
+	@if [ ! -d ${MLX_PATH} ]; then \
+			@echo "Downloading miniLibX for Linux..."; \
+			wget https://cdn.intra.42.fr/document/document/12154/${MLX_TAR}; \
+			mkdir ${MLX_PATH}; \
+			tar -xzf minilibx-linux.tgz --strip-components=1 -C ${MLX_PATH}; \
+			rm minilibx-linux.tgz; \
+	fi
+else ifeq (${UNAME_S}, Darwin)
+	@if [ ! -d ${MLX_PATH} ]; then \
+			@echo "Downloading miniLibX for Mac..."; \
+			wget https://cdn.intra.42.fr/document/document/12155/${MLX_TAR}; \
+			mkdir ${MLX_PATH}; \
+			tar -xzf minilibx_opengl.tgz --strip-components=1 -C ${MLX_PATH}; \
+			rm minilibx_opengl.tgz; \
+	fi
+endif
+
+fclean	: clean
+	@$(MAKE) fclean -C libft
+ifneq ("$(wildcard ${NAME})", "")
+	@echo "Cleaning up miniRT executable..."
+	@${RM} ${NAME}
+	@echo "done"
+endif
+
+re		: fclean all
+
+.PHONY	: all clean fclean re libft getmlxlib mlx
