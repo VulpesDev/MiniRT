@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/02 16:38:14 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/02 19:35:05 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "keys.h"
 # include <mlx.h>
 # define SPACE "\t\n\f\r\v "
-# define MAX_SOLID 10
+# define MAX_SOLID 3
 
 typedef enum e_err
 {
@@ -120,9 +120,6 @@ typedef struct s_scene
 	t_ambient	ambient;
 	t_camera	camera;
 	t_light		light;
-	// t_list		*spheres;
-	// t_list		*planes;
-	// t_list		*cylinders;
 	t_sphere	*sp;
 	t_plane		*pl;
 	t_cylinder	*cy;
