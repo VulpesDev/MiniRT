@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:42:10 by tfregni           #+#    #+#             */
-/*   Updated: 2023/05/30 11:23:08 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/02 13:39:23 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,14 @@ int	main(int ac, char **av)
 	(void) av;
 	if (ac != 2)
 		return (ft_error("miniRT", "bad arguments", 1));
+	scene.sp = malloc(sizeof(t_sphere) * (MAX_SOLID + 1));
+	scene.pl = malloc(sizeof(t_plane) * (MAX_SOLID + 1));
+	scene.cy = malloc(sizeof(t_cylinder) * (MAX_SOLID + 1));
 	if (parse_args(&scene, av[1]))
+	{
+		// free the arrays in the scene
 		return (1);
+	}
+	// free the arrays in the scene
 	return (0);
 }

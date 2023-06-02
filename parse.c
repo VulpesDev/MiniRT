@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 09:24:43 by tfregni           #+#    #+#             */
-/*   Updated: 2023/05/30 13:18:03 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/02 12:47:47 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,11 @@ t_err	handle_unique(t_scene *scene, char **el)
 
 void	handle_solid(t_scene *scene, char **el)
 {
-	(void) scene;
 	if (!ft_strcmp(el[0], "sp"))
+	{
 		ft_printf("Sphere\n");
+		validate_sphere(scene, el);
+	}
 	else if (!ft_strcmp(el[0], "pl"))
 		ft_printf("Plane\n");
 	else if (!ft_strcmp(el[0], "cy"))

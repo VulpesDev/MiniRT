@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 12:46:52 by tfregni           #+#    #+#             */
-/*   Updated: 2023/05/30 13:21:21 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/02 12:41:10 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	create_trgb(int t, int r, int g, int b)
 /**
  * Given a string, it splits by the ',' and extracts 3 int that
  * assigns bitwise to an int to return (setting transparency to 0)
+ * In case of error it exits
 */
 int	extract_rgb(char *rgb)
 {
@@ -35,8 +36,11 @@ int	extract_rgb(char *rgb)
 		while (i < 3)
 		{
 			if (ft_atoi(split_arg[i]) < 0 || ft_atoi(split_arg[i]) > 255)
+			{
+				free(split_arg);
 				return (ft_error("minirt: invalid argument", \
 						split_arg[i], INVALID_ELEMENT));
+			}
 			i++;
 		}
 		ret = create_trgb(0, ft_atoi(split_arg[0]), \

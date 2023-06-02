@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/02 12:12:31 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/02 13:34:51 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include "keys.h"
 # include <mlx.h>
 # define SPACE "\t\n\f\r\v "
+# define MAX_SOLID 10
 
 typedef enum e_err
 {
@@ -112,6 +113,9 @@ typedef struct s_scene
 	t_ambient	ambient;
 	t_camera	camera;
 	t_light		light;
+	t_list		*spheres;
+	t_list		*planes;
+	t_list		*cylinders;
 	t_sphere	*sp;
 	t_plane		*pl;
 	t_cylinder	*cy;
@@ -122,6 +126,8 @@ int		parse_args(t_scene *scene, char *filename);
 t_err	validate_ambient(t_scene *scene, char **el);
 t_err	validate_camera(t_scene *scene, char **el);
 t_err	validate_light(t_scene *scene, char **el);
+int		validate_sphere(t_scene *scene, char **el);
+int		validate_plane(t_scene *scene, char **el);
 
 /* PARSE UTILS */
 int		validate_3d_range(t_point point, float min, float max);
