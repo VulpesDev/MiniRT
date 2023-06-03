@@ -6,11 +6,11 @@
 #    By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 20:41:46 by tfregni           #+#    #+#              #
-#    Updated: 2023/05/25 12:38:37 by tfregni          ###   ########.fr        #
+#    Updated: 2023/06/02 12:37:15 by tfregni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS		= main.c parse.c
+SRCS		= main.c parse.c populate_element.c populate_solid.c parse_util.c
 UNAME_S		:= $(shell uname -s)
 OBJS		= ${SRCS:.c=.o}
 CC			= cc
@@ -41,16 +41,19 @@ INC 		+= -I${MLX_PATH}
 LINKS 		+= -L./${MLX_PATH} -lmlx
 
 mlx		:
-	@echo "Downloading minilibx"
-	@$(MAKE) getmlxlib
+	@if [ ! -d "./$(MLX_PATH)" ]; then \
+		@echo "Downloading minilibx"; \
+		@$(MAKE) getmlxlib; \
+	fi
 	@echo "Building minilibx"
 	@$(MAKE) -C ${MLX_PATH}
-	@echo "Making miniRT... "
 	@$(MAKE) ${NAME}
 
 ${NAME}	: ${OBJS}
 	@$(MAKE) libft
+	@printf "Making miniRT... "
 	@${CC} ${CFLAGS} ${OBJS} ${LINKS} -o ${NAME}
+	@echo "done"
 
 %.o:%.c
 	@${CC} ${CFLAGS} ${INC} -c $< -o $@
@@ -69,12 +72,12 @@ endif
 clean	:
 	@${MAKE} clean -C libft
 ifneq ("$(wildcard ${NAME} ${MLX_PATH})", "")
-	@echo "Cleaning up minilibx... "
+	@printf "Cleaning up minilibx... "
 	@${MAKE} clean -C ${MLX_PATH}
 	@echo "done"
 endif
 ifneq ("$(wildcard ${OBJS} $(DSYM))", "")
-	@echo "Cleaning up miniRT objects..."
+	@printf "Cleaning up miniRT objects..."
 	@${RM} ${OBJS} $(DSYM)
 	@echo "done"
 endif
@@ -101,7 +104,7 @@ endif
 fclean	: clean
 	@$(MAKE) fclean -C libft
 ifneq ("$(wildcard ${NAME})", "")
-	@echo "Cleaning up miniRT executable..."
+	@printf "Cleaning up miniRT executable..."
 	@${RM} ${NAME}
 	@echo "done"
 endif
