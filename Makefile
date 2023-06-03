@@ -6,11 +6,11 @@
 #    By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 20:41:46 by tfregni           #+#    #+#              #
-#    Updated: 2023/06/03 12:40:35 by tvasilev         ###   ########.fr        #
+#    Updated: 2023/06/03 13:03:05 by tvasilev         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS		= main.c event_handler.c
+SRCS		= main3.c event_handler.c vector_calcs.c
 UNAME_S		:= $(shell uname -s)
 OBJS		= ${SRCS:.c=.o}
 CC			= cc

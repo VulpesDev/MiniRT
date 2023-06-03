@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main2.c                                            :+:      :+:    :+:   */
+/*   main3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/23 16:42:10 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/03 12:55:22 by tvasilev         ###   ########.fr       */
+/*   Created: 2023/06/03 12:57:44 by tvasilev          #+#    #+#             */
+/*   Updated: 2023/06/03 13:18:09 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
 #include "vector_math.h"
+#include "minirt.h"
+#include "event_handler.h"
 #include <math.h>
-
-// t_err	ft_error(char *msg, char *arg, int err_code)
-// {
-// 	ft_putstr_fd(msg, 2);
-// 	if (arg)
-// 	{
-// 		ft_putstr_fd(": ", 2);
-// 		ft_putstr_fd(arg, 2);
-// 	}
-// 	ft_putchar_fd('\n', 2);
-// 	exit (err_code);
-// }
 
 void	print_coord(char *name, t_point	point)
 {
 	printf("%s (%f, %f, %f)\n", name, point.x, point.y, point.z);
+}
+
+void	my_mlx_pixel_put_d(t_img *data, int x, int y, int color)
+{
+	char	*dst;
+
+	if (x >= WIDTH || x <= 0 || y >= HEIGHT || y <= 0)
+		return ;
+	dst = data->addr + (y * data->line_len + x * (data->bpp / 8));
+	*(unsigned int *)dst = color;
 }
 
 // n (plane normal vector)
@@ -54,7 +53,7 @@ int intersectPlane(const t_vector n, const t_vector p0, const t_vector l0, const
 
 int intersectDisk(const t_vector n, const t_vector p0, const float radius, const t_vector l0, const t_vector l)
 {
-    float t = 100;
+    float t = 500;
     if (intersectPlane(n, p0, l0, l, t)) {
         t_vector p = vect_sum(l0, vect_mult(l, t));
         t_vector v = vect_sub(p, p0);
@@ -65,12 +64,33 @@ int intersectDisk(const t_vector n, const t_vector p0, const float radius, const
      return 0;
 }
 
-void	shoot_rays(t_point cam, t_point p_top_l, t_point p_bot_r, t_vector n_plane, t_point c_plane)
+int	mlx_manage(t_img *data)
+{
+
+	//mouse hook
+	//key hook
+	mlx_key_hook(data->win_ptr, &key_handle, data);
+	//any other special hooks
+	mlx_hook(data->win_ptr, X_BUTTON, 0, &close_window, data);
+	//put image
+	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img, 0, 0);
+	//loop
+	mlx_loop(data->mlx_ptr);
+	//3x destroy
+	mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+	mlx_destroy_image(data->mlx_ptr, data->img);
+	mlx_destroy_display(data->mlx_ptr);
+	//free mlx
+	free(data->mlx_ptr);
+	return (1);
+}
+
+void	shoot_rays(t_img *data, t_point cam, t_point p_top_l, t_point p_bot_r, t_vector n_plane, t_point c_plane)
 {
 	int x = p_top_l.x, y = p_top_l.y;
 	t_vector ray;
 
-
+	(void)data;
 	while (y != p_bot_r.y)
 	{
 		x = p_top_l.x;
@@ -83,7 +103,11 @@ void	shoot_rays(t_point cam, t_point p_top_l, t_point p_bot_r, t_vector n_plane,
 			ray = vect_sub(ray, cam);
 			ray = vect_norm(ray);
 			//print_coord("norm_ray ", ray);
-			printf("%d", intersectDisk(n_plane, c_plane, 210, cam, ray));
+			//printf("%d", intersectDisk(n_plane, c_plane, 210, cam, ray));
+			if (intersectDisk(n_plane, c_plane, 210, cam, ray))
+			{
+				my_mlx_pixel_put_d(data, x + WIDTH/2, y + HEIGHT/2, 0xFF0000);
+			}
 			//printf("%d", intersectPlane(n_plane, c_plane, cam, ray, 0));
 			x > p_bot_r.x ? x-- : x++;
 		}
@@ -92,8 +116,20 @@ void	shoot_rays(t_point cam, t_point p_top_l, t_point p_bot_r, t_vector n_plane,
 	}
 }
 
-int	main(/*int ac, char **av*/)
+int	main(void)
 {
+	t_img	data;
+	void	*mlx;
+	void	*mlx_win;
+
+	mlx = mlx_init();
+	mlx_win = mlx_new_window(mlx, WIDTH, HEIGHT, "miniRT");
+
+	data.mlx_ptr = mlx;
+	data.win_ptr = mlx_win;
+	data.img = mlx_new_image(mlx, WIDTH, HEIGHT);
+	data.addr = mlx_get_data_addr(data.img, &data.bpp, &data.line_len, &data.endian);
+
 	t_point	cam;
 	t_point	canvas_center;
 	t_point	p_top_left;
@@ -130,11 +166,8 @@ int	main(/*int ac, char **av*/)
 	print_coord("canvas_center", canvas_center);
 	print_coord("top left point", p_top_left);
 	print_coord("bot right point", p_bot_right);
-	shoot_rays(cam, p_top_left, p_bot_right, plane_normal, plane_center);
-	// (void) av;
-	// if (ac != 2)	// shall we read from stdin if no args are given?
-	// 	return (ft_error("miniRT", "bad arguments", 1));
-	// if (parse_arg(av[1]))
-	// 	return (1);
-	return (0);
+	shoot_rays(&data, cam, p_top_left, p_bot_right, plane_normal, plane_center);
+
+	mlx_manage(&data);
+	return (1);
 }
