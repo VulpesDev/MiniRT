@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 12:21:04 by tfregni           #+#    #+#             */
-/*   Updated: 2023/02/20 08:29:47 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/03 22:26:21 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ Keymap
 # define RIGHT 124
 # define R 15
 # define C 8
+# define PLUS 30
+# define MINUS 44
 /*
 Mouse map
 */

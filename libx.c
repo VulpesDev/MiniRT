@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 08:25:02 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/03 21:02:48 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/03 22:21:09 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,14 @@ int	free_img(t_img *data)
 	return (0);
 }
 
-int	mlx_manage(t_img *data)
+int	mlx_manage(t_scene *scene)
 {
-	mlx_key_hook(data->win_ptr, &key_handle, data);
+	t_img	*data;
+
+	data = scene->img;
+	mlx_key_hook(data->win_ptr, &key_handle, scene);
 	mlx_hook(data->win_ptr, ON_DESTROY, 0, &free_img, data);
-	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img, 0, 0);
+	// mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img, 0, 0);
 	mlx_loop(data->mlx_ptr);
 	free_img(data);
 	return (1);
@@ -47,4 +50,20 @@ void	my_mlx_pixel_put_d(t_img *data, int x, int y, int color)
 		return ;
 	dst = data->addr + (y * data->line_len + x * (data->bpp / 8));
 	*(unsigned int *)dst = color;
+}
+
+t_err	init_img(t_scene *scene)
+{
+	t_img	*data;
+
+	scene->img = malloc(sizeof(t_img));
+	if (!scene->img)
+		return (MEM_FAIL);
+	data = scene->img;
+	data->mlx_ptr = mlx_init();
+	data->win_ptr = mlx_new_window(data->mlx_ptr, WIDTH, HEIGHT, "miniRT");
+	data->img = mlx_new_image(data->mlx_ptr, WIDTH, HEIGHT);
+	data->addr = mlx_get_data_addr(data->img, &data->bpp, \
+									&data->line_len, &data->endian);
+	return (SUCCESS);
 }
