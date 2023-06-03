@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/03 17:03:17 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/03 21:08:30 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,9 +145,17 @@ t_err	extract_rgb(char *rgb, int *ret);
 
 /* GRAPHIC */
 int		create_trgb(int t, int r, int g, int b);
+int		mlx_manage(t_img *data);
+void	my_mlx_pixel_put_d(t_img *data, int x, int y, int color);
+
+/* RENDER */
+t_err	render_scene(t_scene *scene);
 
 /* ERROR HANDLING*/
 t_err	ft_error(char *msg, char *arg, int err_code, t_scene *scene);
 t_err	ft_warning(char *msg, char *arg, int err_code);
+
+/* CLEANUP */
+int		free_img(t_img *data);
 
 #endif
