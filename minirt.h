@@ -6,19 +6,24 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/02 19:35:05 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/03 16:55:18 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 # define MINIRT_H
 # include "libft.h"
+# include "event_handler.h"
+# include "vector_math.h"
 # include <fcntl.h>
 # include <stdio.h>
 # include "keys.h"
 # include <mlx.h>
 # define SPACE "\t\n\f\r\v "
 # define MAX_SOLID 3
+# define HEIGHT 500
+# define WIDTH 500
+# define X_BUTTON 17
 
 typedef enum e_err
 {
