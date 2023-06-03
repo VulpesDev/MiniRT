@@ -6,12 +6,15 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 12:21:04 by tfregni           #+#    #+#             */
-/*   Updated: 2023/02/20 08:29:47 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/03 16:39:09 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef KEYS_H
 # define KEYS_H
+
+# define X_BUTTON 17
+
 /*
 Keymap
 */
