@@ -1,30 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vector_math.h                                      :+:      :+:    :+:   */
+/*   event_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/02 12:49:11 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/06/03 12:34:25 by tvasilev         ###   ########.fr       */
+/*   Created: 2023/06/03 12:29:38 by tvasilev          #+#    #+#             */
+/*   Updated: 2023/06/03 12:41:26 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VECTOR_MATH_H
-# define VECTOR_MATH_H
+#include "event_handler.h"
 
-# include "minirt.h"
+int	close_window(t_img *data)
+{
+	mlx_loop_end(data->mlx_ptr);
+	return (1);
+}
 
-t_vector vect_sum(t_vector a, t_vector b);
+int	key_handle(int keycode, t_img *data)
+{
+	if (keycode == ESC)
+	{
+		close_window(data);
+	}
+	return (1);
+}
 
-t_vector vect_sub(t_vector a, t_vector b);
-
-float	vect_dot(t_vector a, t_vector b);
-
-t_vector	vect_norm(t_vector v);
-
-float	vect_mag(t_vector v);
-
-t_vector	vect_mult(t_vector v, float a);
-
-#endif
+// int	mouse_handle(int button, int x, int y, t_img *data)
+// {
+	
+// }

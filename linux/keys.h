@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   keys.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 12:22:28 by tfregni           #+#    #+#             */
-/*   Updated: 2023/02/19 13:03:12 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/03 12:44:59 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef KEYS_H
 # define KEYS_H
+/*
+Buttons
+*/
+# define X_BUTTON 17
 /*
 Keymap
 */
