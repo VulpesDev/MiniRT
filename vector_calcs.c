@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 12:48:28 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/06/03 17:02:43 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/04 09:22:30 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ float	vect_mag(t_vector v)
 t_vector	vect_norm(t_vector v)
 {
 	t_vector	result;
-	float	m;
+	float		m;
 
 	m = vect_mag(v);
 	result.x = v.x / m;
@@ -39,7 +39,7 @@ t_vector	vect_norm(t_vector v)
 	return (result);
 }
 
-t_vector vect_sum(t_vector a, t_vector b)
+t_vector	vect_sum(t_vector a, t_vector b)
 {
 	t_vector	result;
 
@@ -49,7 +49,7 @@ t_vector vect_sum(t_vector a, t_vector b)
 	return (result);
 }
 
-t_vector vect_sub(t_vector a, t_vector b)
+t_vector	vect_sub(t_vector a, t_vector b)
 {
 	t_vector	result;
 

@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/03 22:22:50 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/04 11:13:00 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,14 @@
 /**
  * Can check interception with just the discriminant of the quadratic formula
  * b^2 - 4ac. If < 0 no intersection, 0 tan, > 0 2 intersections
- *
+ * a_quad = (bx^2 + by^2) = camera.direction sum of squares
+ * b_quad = (2axbx + 2ayby) = (2 * camera.origin.x * camera.direction.x)
+ * c_quad = (ax^2 + bx^2 - r^2) = camera.origin^2 etc.
 */
-// int	intersect_sphere(t_sphere sp, t_pxl p)
-// {
+int	intersect_circle(t_sphere sp, t_pxl p)
+{
 
-// }
+}
 
 int	apply_ligthing_ratio(int trgb, float lighting_ratio)
 {
@@ -32,14 +34,14 @@ int	apply_ligthing_ratio(int trgb, float lighting_ratio)
 
 /**
  * The trgb value of a pxl not intersecting a solid is each 8bit color
- * multiplied by the
+ * multiplied by the lighting ratio
 */
 void	draw(t_scene *scene)
 {
 	t_pxl	p;
 	t_img	*data;
 
-	printf("LR: %f\n", scene->ambient.lighting_ratio);
+	// printf("LR: %f\n", scene->ambient.lighting_ratio);
 	data = scene->img;
 	p.y = 0;
 	p.trgb = apply_ligthing_ratio(scene->ambient.trgb, \
