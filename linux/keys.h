@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 12:22:28 by tfregni           #+#    #+#             */
-/*   Updated: 2023/02/19 13:03:12 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/04 13:48:18 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ Keymap
 # define ESC 65307
 # define C 99
 # define R 114
+# define PLUS 61
+# define MINUS 45
 /*
 Mouse map
 */

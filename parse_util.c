@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 12:46:52 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/02 19:25:38 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/04 13:38:57 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_err	extract_xyz(char *xyz, t_point *point)
 		{
 			if (!ft_isfloat(split_arg[i]))
 			{
-				free(split_arg);
+				ft_free_str_arr(split_arg);
 				return (ft_warning("expected floating point value", \
 							NULL, INVALID_ELEMENT));
 			}

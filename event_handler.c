@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 12:29:38 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/06/03 22:27:28 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/04 16:48:08 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	key_handle(int keycode, t_scene *scene)
 	else
 		ft_printf("KeyCode: %d\n", keycode);
 	if (keycode != ESC)
-		render_scene(scene);
+		draw(scene);
 	return (0);
 }
 

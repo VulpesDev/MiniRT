@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/03 22:25:48 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/04 18:02:13 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@
 # define MAX_SOLID 3
 # define HEIGHT 500
 # define WIDTH 500
+# define CANV_MIN_X -1
+# define CANV_MAX_X 1
+# define CANV_MIN_Y 1
 
 typedef enum e_err
 {
@@ -157,6 +160,7 @@ t_err	init_img(t_scene *scene);
 
 /* RENDER */
 t_err	render_scene(t_scene *scene);
+void	draw(t_scene *scene);
 
 /* ERROR HANDLING*/
 t_err	ft_error(char *msg, char *arg, int err_code, t_scene *scene);
