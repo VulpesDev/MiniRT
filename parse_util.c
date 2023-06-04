@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 12:46:52 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/04 13:38:57 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/05 00:48:07 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,12 @@ t_err	extract_rgb(char *rgb, int *ret)
 
 /**
  * @param	string expected in the format float,float,float
- * 			pointer to a t_point structure carrying 3 floats
+ * 			pointer to a t_point_3d structure carrying 3 floats
  * @returns	0 for success, > 0 error code
  * The point structure is populated with the values extracted
  * from the string when validated
 */
-t_err	extract_xyz(char *xyz, t_point *point)
+t_err	extract_xyz(char *xyz, t_point_3d *point)
 {
 	char	**split_arg;
 	int		i;
@@ -93,7 +93,7 @@ t_err	extract_xyz(char *xyz, t_point *point)
 /**
  * It checks that every parameter of the given struct is in the given range
 */
-int	validate_3d_range(t_point point, float min, float max)
+int	validate_3d_range(t_point_3d point, float min, float max)
 {
 	if ((point.x < min || point.x > max)
 		|| (point.y < min || point.y > max)
