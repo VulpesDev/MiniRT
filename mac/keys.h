@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 12:21:04 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/05 10:56:23 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/06 00:59:27 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ Keymap
 # define Q 12
 # define W 13
 # define E 14
+# define A 0
+# define S 1
+# define D 2
 # define R 15
 # define C 8
 # define PLUS 30

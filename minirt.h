@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/05 12:36:50 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/06 01:04:07 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define CANV_MAX_X 1
 # define CANV_MIN_Y -1
 # define CAM_PACE 0.1
+# define LIGHT_PACE 0.3
 
 typedef enum e_err
 {
