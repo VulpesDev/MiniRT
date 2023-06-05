@@ -6,11 +6,12 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/05 00:49:27 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/05 11:00:27 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+#include "vector_math.h"
 
 /**
  * Can check interception with just the discriminant of the quadratic formula
@@ -48,12 +49,35 @@ int	apply_ligthing_ratio(int trgb, float lighting_ratio)
 
 /**
  * @returns a color as int
+ * @math
+ * circle = (x^2 - a) + (y^2 - b) - r^2 = 0 (a and b are the coord)
+ * ray = a + bt (a: origin b: direction t: distance)
+ * Substitute ray into circle and solve for t
+ * (bx^2 + by^2 + bz^2)t^2 + (2(axbx + ayby + azbz))t + (ax^2 +ay^2 + az^2 - r^2) = 0
+ * a : ray origin (scene->camera.pos)
+ * b : ray direction (scene->camera.orientation)
+ * r : radius (scene->sphere.diameter / 2)
+ * t : hit distance
+ * Quadratic formula: (-b +- sqrt(b^2 - 4ac))/2a
+ * Discriminant: b^2 - 4ac
 */
 int	per_pixel(t_pxl p, t_scene *scene)
 {
 	t_point_2d	coord;
+	float		a;
+	float		b;
+	float		c;
+	t_vector	ray_direction;
+	float		discriminant;
 
 	coord = to_canvas(p);
+	ray_direction = vect_norm((t_vector){coord.x, coord.y, -1.0f});
+	a = vect_dot(ray_direction, ray_direction);
+	b = 2.0f * vect_dot(scene->camera.pos, ray_direction);
+	c = vect_dot(scene->camera.pos, scene->camera.pos) - pow((scene->sp->diameter / 2), 2);
+	discriminant = b * b - (4.0f * a * c);
+	if (discriminant >= 0)
+		return (scene->sp->trgb);
 	return (apply_ligthing_ratio(scene->ambient.trgb, \
 								scene->ambient.lighting_ratio));
 }
@@ -67,17 +91,13 @@ void	draw(t_scene *scene)
 	t_pxl	p;
 	t_img	*data;
 
-	// printf("LR: %f\n", scene->ambient.lighting_ratio);
 	data = scene->img;
 	p.y = 0;
-	// p.trgb = apply_ligthing_ratio(scene->ambient.trgb, \
-	// 							scene->ambient.lighting_ratio);
 	while (p.y < HEIGHT)
 	{
 		p.x = 0;
 		while (p.x < WIDTH)
 		{
-			// p.trgb = per_pixel(p, scene);
 			my_mlx_pixel_put_d(scene->img, p.x, p.y, per_pixel(p, scene));
 			p.x++;
 		}

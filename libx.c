@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 08:25:02 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/03 22:21:09 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/05 11:10:15 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	mlx_manage(t_scene *scene)
 
 	data = scene->img;
 	mlx_key_hook(data->win_ptr, &key_handle, scene);
+	mlx_mouse_hook(data->win_ptr, &mouse_handle, scene);
 	mlx_hook(data->win_ptr, ON_DESTROY, 0, &free_img, data);
 	// mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img, 0, 0);
 	mlx_loop(data->mlx_ptr);
