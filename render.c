@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/05 11:00:27 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/05 14:33:05 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,13 @@
 // {
 
 // }
+
+float	ft_max(float a, float b)
+{
+	if (a > b)
+		return (a);
+	return (b);
+}
 
 t_point_2d	to_canvas(t_pxl pxl)
 {
@@ -47,6 +54,30 @@ int	apply_ligthing_ratio(int trgb, float lighting_ratio)
 			lighting_ratio * (trgb & 0xFF)));
 }
 
+float	calc_hit_point(float discriminant, float a, float b)
+{
+	return ((-b + sqrt(discriminant)) / (2.0f * a));
+}
+
+/**
+ * It returns the discriminant. If it's >=0 it assigns to t the value of the closest hit point
+*/
+float	intersect_sphere(t_scene *scene, t_vector ray_direction, float *t)
+{
+	float		a;
+	float		b;
+	float		c;
+	float		discriminant;
+
+	a = vect_dot(ray_direction, ray_direction);
+	b = 2.0f * vect_dot(scene->camera.pos, ray_direction);
+	c = vect_dot(scene->camera.pos, scene->camera.pos) - pow((scene->sp->diameter / 2), 2);
+	discriminant = b * b - (4.0f * a * c);
+	if (discriminant >= 0)
+		*t = calc_hit_point(discriminant, a, b);
+	return (discriminant);
+}
+
 /**
  * @returns a color as int
  * @math
@@ -64,20 +95,20 @@ int	apply_ligthing_ratio(int trgb, float lighting_ratio)
 int	per_pixel(t_pxl p, t_scene *scene)
 {
 	t_point_2d	coord;
-	float		a;
-	float		b;
-	float		c;
 	t_vector	ray_direction;
 	float		discriminant;
+	float		t;
 
 	coord = to_canvas(p);
 	ray_direction = vect_norm((t_vector){coord.x, coord.y, -1.0f});
-	a = vect_dot(ray_direction, ray_direction);
-	b = 2.0f * vect_dot(scene->camera.pos, ray_direction);
-	c = vect_dot(scene->camera.pos, scene->camera.pos) - pow((scene->sp->diameter / 2), 2);
-	discriminant = b * b - (4.0f * a * c);
+	discriminant = intersect_sphere(scene, ray_direction, &t);
 	if (discriminant >= 0)
-		return (scene->sp->trgb);
+	{
+		t_vector hit_pos = vect_sum(scene->camera.pos, vect_mult(ray_direction, t));
+		t_vector normal = vect_norm(vect_sub(hit_pos, scene->sp[0].pos));
+		float light = ft_max(vect_dot(normal, (vect_norm(scene->light.pos))), 0.0f);
+		return (scene->sp->trgb * light);
+	}
 	return (apply_ligthing_ratio(scene->ambient.trgb, \
 								scene->ambient.lighting_ratio));
 }
