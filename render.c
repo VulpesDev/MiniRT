@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/05 16:09:13 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/05 21:34:33 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,13 @@
 float	ft_max(float a, float b)
 {
 	if (a > b)
+		return (a);
+	return (b);
+}
+
+float	ft_min(float a, float b)
+{
+	if (a < b)
 		return (a);
 	return (b);
 }
@@ -56,12 +63,17 @@ int	apply_ligthing_ratio(int trgb, float lighting_ratio)
 
 float	calc_hit_point(float discriminant, float a, float b)
 {
-	return ((-b + sqrt(discriminant)) / (2.0f * a));
+	float	t0;
+	float	t1;
+
+	t0 = (-b - sqrt(discriminant)) / (2.0f * a);
+	t1 = (-b + sqrt(discriminant)) / (2.0f * a);
+	return (ft_min(t0, t1));
 }
 
 /**
  * It returns the discriminant. If it's >=0 it assigns to t the value of
- * the farthest hit point
+ * the closest hit point
 */
 float	intersect_sphere(t_scene *scene, t_vector ray_direction, float *t)
 {
@@ -87,7 +99,7 @@ float	light_coeff(t_scene *scene, float t, t_vector ray_direction)
 
 	hit_pos = vect_sum(scene->camera.pos, vect_mult(ray_direction, t));
 	normal = vect_norm(vect_sub(hit_pos, scene->sp[0].pos));
-	light = ft_max(vect_dot(normal, (vect_norm(scene->light.pos))), 0.0f);
+	light = ft_max(vect_dot(normal, vect_inverse((vect_norm(scene->light.pos)))), 0.0f);
 	if (light >= 1)
 		printf("light: %f",light);
 	return (light);
