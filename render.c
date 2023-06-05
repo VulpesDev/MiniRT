@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/05 15:51:11 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/05 16:09:13 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ float	light_coeff(t_scene *scene, float t, t_vector ray_direction)
 	hit_pos = vect_sum(scene->camera.pos, vect_mult(ray_direction, t));
 	normal = vect_norm(vect_sub(hit_pos, scene->sp[0].pos));
 	light = ft_max(vect_dot(normal, (vect_norm(scene->light.pos))), 0.0f);
+	if (light >= 1)
+		printf("light: %f",light);
 	return (light);
 }
 
@@ -118,7 +120,7 @@ int	per_pixel(t_pxl p, t_scene *scene)
 	discriminant = intersect_sphere(scene, ray_direction, &t);
 	if (discriminant >= 0)
 	{
-		return (scene->sp->trgb * light_coeff(scene, t, ray_direction));
+		return (apply_ligthing_ratio(scene->sp[0].trgb, light_coeff(scene, t, ray_direction)));
 	}
 	return (apply_ligthing_ratio(scene->ambient.trgb, \
 								scene->ambient.lighting_ratio));
