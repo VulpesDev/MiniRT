@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 12:29:38 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/06/05 11:10:59 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/05 15:23:34 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ int	key_handle(int keycode, t_scene *scene)
 	else if (keycode == DOWN)
 		scene->camera.pos.y -= CAM_PACE;
 	else if (keycode == LEFT)
-		scene->camera.pos.x -= CAM_PACE;
-	else if (keycode == RIGHT)
 		scene->camera.pos.x += CAM_PACE;
+	else if (keycode == RIGHT)
+		scene->camera.pos.x -= CAM_PACE;
 	else
 		ft_printf("KeyCode: %d\n", keycode);
 	if (keycode != ESC)

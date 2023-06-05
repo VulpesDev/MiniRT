@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/05 14:33:05 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/05 15:51:11 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ float	calc_hit_point(float discriminant, float a, float b)
 }
 
 /**
- * It returns the discriminant. If it's >=0 it assigns to t the value of the closest hit point
+ * It returns the discriminant. If it's >=0 it assigns to t the value of
+ * the farthest hit point
 */
 float	intersect_sphere(t_scene *scene, t_vector ray_direction, float *t)
 {
@@ -78,13 +79,26 @@ float	intersect_sphere(t_scene *scene, t_vector ray_direction, float *t)
 	return (discriminant);
 }
 
+float	light_coeff(t_scene *scene, float t, t_vector ray_direction)
+{
+	t_vector	hit_pos;
+	t_vector	normal;
+	float		light;
+
+	hit_pos = vect_sum(scene->camera.pos, vect_mult(ray_direction, t));
+	normal = vect_norm(vect_sub(hit_pos, scene->sp[0].pos));
+	light = ft_max(vect_dot(normal, (vect_norm(scene->light.pos))), 0.0f);
+	return (light);
+}
+
 /**
  * @returns a color as int
  * @math
  * circle = (x^2 - a) + (y^2 - b) - r^2 = 0 (a and b are the coord)
  * ray = a + bt (a: origin b: direction t: distance)
  * Substitute ray into circle and solve for t
- * (bx^2 + by^2 + bz^2)t^2 + (2(axbx + ayby + azbz))t + (ax^2 +ay^2 + az^2 - r^2) = 0
+ * (bx^2 + by^2 + bz^2)t^2 + (2(axbx + ayby + azbz))t
+ * + (ax^2 +ay^2 + az^2 - r^2) = 0
  * a : ray origin (scene->camera.pos)
  * b : ray direction (scene->camera.orientation)
  * r : radius (scene->sphere.diameter / 2)
@@ -104,10 +118,7 @@ int	per_pixel(t_pxl p, t_scene *scene)
 	discriminant = intersect_sphere(scene, ray_direction, &t);
 	if (discriminant >= 0)
 	{
-		t_vector hit_pos = vect_sum(scene->camera.pos, vect_mult(ray_direction, t));
-		t_vector normal = vect_norm(vect_sub(hit_pos, scene->sp[0].pos));
-		float light = ft_max(vect_dot(normal, (vect_norm(scene->light.pos))), 0.0f);
-		return (scene->sp->trgb * light);
+		return (scene->sp->trgb * light_coeff(scene, t, ray_direction));
 	}
 	return (apply_ligthing_ratio(scene->ambient.trgb, \
 								scene->ambient.lighting_ratio));
