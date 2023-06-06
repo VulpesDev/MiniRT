@@ -6,24 +6,12 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/06 13:07:23 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/06 16:09:06 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "vector_math.h"
-
-/**
- * Can check interception with just the discriminant of the quadratic formula
- * b^2 - 4ac. If < 0 no intersection, 0 tan, > 0 2 intersections
- * a_quad = (bx^2 + by^2) = camera.direction sum of squares
- * b_quad = (2axbx + 2ayby) = (2 * camera.origin.x * camera.direction.x)
- * c_quad = (ax^2 + bx^2 - r^2) = camera.origin^2 etc.
-*/
-// int	intersect_circle(t_sphere sp, t_pxl p)
-// {
-
-// }
 
 float	ft_max(float a, float b)
 {
@@ -52,8 +40,7 @@ t_point_2d	to_canvas(t_pxl pxl)
 
 	range_x = CANV_MAX_X - CANV_MIN_X;
 	ratio = WIDTH / HEIGHT;
-	// printf("range_x: %f ratio: %f\n", range_x, ratio);
-	ret.x = range_x / WIDTH * pxl.x + CANV_MIN_X;
+	ret.x = -(range_x / WIDTH * pxl.x + CANV_MIN_X);
 	ret.y = -(range_x / WIDTH * ratio * pxl.y + CANV_MIN_Y);
 	return (ret);
 }
@@ -77,14 +64,16 @@ float	calc_hit_point(float discriminant, float a, float b)
 */
 float	intersect_sphere(t_scene *scene, t_vector ray_direction, float *t)
 {
-	float		a;
-	float		b;
-	float		c;
-	float		discriminant;
+	float			a;
+	float			b;
+	float			c;
+	t_point_3d		transl;
+	float			discriminant;
 
 	a = vect_dot(ray_direction, ray_direction);
-	b = 2.0f * vect_dot(scene->camera.pos, ray_direction);
-	c = vect_dot(scene->camera.pos, scene->camera.pos) - pow((scene->sp->diameter / 2), 2);
+	transl = vect_sub(scene->camera.pos, scene->sp[0].pos);
+	b = 2.0f * vect_dot(transl, ray_direction);
+	c = vect_dot(transl, transl) - pow((scene->sp->diameter / 2), 2);
 	discriminant = b * b - (4.0f * a * c);
 	if (discriminant >= 0)
 		*t = calc_hit_point(discriminant, a, b);
