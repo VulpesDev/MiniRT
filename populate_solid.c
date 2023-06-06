@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:31:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/02 18:18:50 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/05 00:47:33 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	validate_plane(t_scene *scene, char **el)
 				NULL, INVALID_ELEMENT));
 	if (extract_xyz(el[1], &pl.pos)
 		|| extract_xyz(el[2], &pl.rotation)
-		|| !validate_3d_range((t_point)pl.rotation, -1.0, 1.0)
+		|| !validate_3d_range((t_point_3d)pl.rotation, -1.0, 1.0)
 		|| extract_rgb(el[3], &pl.trgb))
 		return (ft_warning("invalid argument: ", el[2], \
 					INVALID_ELEMENT));

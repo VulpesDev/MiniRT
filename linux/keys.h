@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 12:22:28 by tfregni           #+#    #+#             */
-/*   Updated: 2023/02/19 13:03:12 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/06 11:44:33 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,14 @@ Keymap
 # define LEFT 65361
 # define RIGHT 65363
 # define ESC 65307
+# define A 97
+# define S 115
+# define D 100
+# define W 119
 # define C 99
 # define R 114
+# define PLUS 61
+# define MINUS 45
 /*
 Mouse map
 */

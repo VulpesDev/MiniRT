@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 09:24:43 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/02 19:28:15 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/03 20:40:42 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,5 +141,6 @@ int	parse_args(t_scene *scene, char *filename)
 		parse_element(scene, line);
 	}
 	close(fd);
+	render_scene(scene);
 	return (0);
 }

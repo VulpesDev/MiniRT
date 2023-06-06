@@ -6,19 +6,27 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/03 16:14:29 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/06 11:52:26 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 # define MINIRT_H
 # include "libft.h"
+# include "keys.h"
 # include <fcntl.h>
 # include <stdio.h>
-# include "keys.h"
 # include <mlx.h>
+# include <math.h>
 # define SPACE "\t\n\f\r\v "
 # define MAX_SOLID 3
+# define HEIGHT 500
+# define WIDTH 500
+# define CANV_MIN_X -1
+# define CANV_MAX_X 1
+# define CANV_MIN_Y -1
+# define CAM_PACE 0.1
+# define LIGHT_PACE 0.3
 
 typedef enum e_err
 {
@@ -56,14 +64,27 @@ typedef struct s_img
 	int			endian;
 }				t_img;
 
-typedef struct s_point
+typedef struct s_point_3d
 {
-	float	x;
-	float	y;
-	float	z;
-}			t_point;
+	double	x;
+	double	y;
+	double	z;
+}			t_point_3d;
 
-typedef t_point	t_vector;
+typedef t_point_3d	t_vector;
+
+typedef struct s_pxl
+{
+	int	x;
+	int	y;
+	int	trgb;
+}			t_pxl;
+
+typedef struct s_point_2d
+{
+	double	x;
+	double	y;
+}			t_point_2d;
 
 typedef struct s_ambient
 {
@@ -73,40 +94,40 @@ typedef struct s_ambient
 
 typedef struct s_camera
 {
-	t_point		pos;
-	t_vector	orientation;
-	uint8_t		fov;
-}				t_camera;
+	t_point_3d		pos;
+	t_vector		orientation;
+	uint8_t			fov;
+}					t_camera;
 
 typedef struct s_light
 {
-	t_point		pos;
-	float		brightness;
-	int			trgb;
-}				t_light;
+	t_point_3d		pos;
+	float			brightness;
+	int				trgb;
+}					t_light;
 
 typedef struct s_sphere
 {
-	t_point		pos;
-	float		diameter;
-	int			trgb;
-}				t_sphere;
+	t_point_3d		pos;
+	float			diameter;
+	int				trgb;
+}					t_sphere;
 
 typedef struct s_plane
 {
-	t_point		pos;
-	t_vector	rotation;
-	int			trgb;
-}				t_plane;
+	t_point_3d		pos;
+	t_vector		rotation;
+	int				trgb;
+}					t_plane;
 
 typedef struct s_cylinder
 {
-	t_point		center;
-	t_vector	rotation;
-	float		diameter;
-	float		height;
-	int			trgb;
-}				t_cylinder;
+	t_point_3d		center;
+	t_vector		rotation;
+	float			diameter;
+	float			height;
+	int				trgb;
+}					t_cylinder;
 
 /**
  * Possible struct for the scene:
@@ -135,15 +156,25 @@ int		validate_plane(t_scene *scene, char **el);
 int		validate_cylinder(t_scene *scene, char **el);
 
 /* PARSE UTILS */
-int		validate_3d_range(t_point point, float min, float max);
-t_err	extract_xyz(char *xyz, t_point *point);
+int		validate_3d_range(t_point_3d point, float min, float max);
+t_err	extract_xyz(char *xyz, t_point_3d *point);
 t_err	extract_rgb(char *rgb, int *ret);
 
 /* GRAPHIC */
 int		create_trgb(int t, int r, int g, int b);
+int		mlx_manage(t_scene *scene);
+void	my_mlx_pixel_put_d(t_img *data, int x, int y, int color);
+t_err	init_img(t_scene *scene);
+
+/* RENDER */
+t_err	render_scene(t_scene *scene);
+void	draw(t_scene *scene);
 
 /* ERROR HANDLING*/
 t_err	ft_error(char *msg, char *arg, int err_code, t_scene *scene);
 t_err	ft_warning(char *msg, char *arg, int err_code);
+
+/* CLEANUP */
+int		free_img(t_img *data);
 
 #endif

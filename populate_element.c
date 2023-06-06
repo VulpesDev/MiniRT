@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:30:47 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/02 19:26:32 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/05 00:47:10 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_err	validate_camera(t_scene *scene, char **el)
 				NULL, INVALID_ELEMENT));
 	if (extract_xyz(el[1], &scene->camera.pos)
 		|| extract_xyz(el[2], &scene->camera.orientation)
-		|| !validate_3d_range((t_point)scene->camera.orientation, -1.0, 1.0))
+		|| !validate_3d_range((t_point_3d)scene->camera.orientation, -1.0, 1.0))
 		return (ft_warning("invalid argument: ", el[2], \
 				INVALID_ELEMENT));
 	scene->camera.fov = ft_atoi(el[3]);

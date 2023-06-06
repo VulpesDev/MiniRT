@@ -6,11 +6,12 @@
 #    By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 20:41:46 by tfregni           #+#    #+#              #
-#    Updated: 2023/06/02 12:37:15 by tfregni          ###   ########.fr        #
+#    Updated: 2023/06/03 20:57:10 by tfregni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS		= main.c parse.c populate_element.c populate_solid.c parse_util.c
+SRCS		= main.c parse.c populate_element.c populate_solid.c parse_util.c \
+				libx.c render.c vector_calcs.c event_handler.c
 UNAME_S		:= $(shell uname -s)
 OBJS		= ${SRCS:.c=.o}
 CC			= cc
