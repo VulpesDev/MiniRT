@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/05 23:55:33 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/06 13:07:23 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,22 @@ float	ft_min(float a, float b)
 	return (b);
 }
 
+/**
+ * range_x / WIDTH = canvas size of 1 pxl on x axis
+ * range_x / WIDTH * ratio = canvas size of 1 pxl on y axis
+ * added - to flip the y axis
+*/
 t_point_2d	to_canvas(t_pxl pxl)
 {
 	t_point_2d	ret;
-	float		range;
+	float		range_x;
 	float		ratio;
 
-	range = CANV_MAX_X - CANV_MIN_X;
+	range_x = CANV_MAX_X - CANV_MIN_X;
 	ratio = WIDTH / HEIGHT;
-	// printf("range: %f ratio: %f\n", range, ratio);
-	ret.x = range * pxl.x / WIDTH + CANV_MIN_X;
-	ret.y = range * ratio * pxl.y / HEIGHT + CANV_MIN_Y;
+	// printf("range_x: %f ratio: %f\n", range_x, ratio);
+	ret.x = range_x / WIDTH * pxl.x + CANV_MIN_X;
+	ret.y = -(range_x / WIDTH * ratio * pxl.y + CANV_MIN_Y);
 	return (ret);
 }
 
@@ -63,12 +68,7 @@ int	apply_ligthing_ratio(int trgb, float lighting_ratio)
 
 float	calc_hit_point(float discriminant, float a, float b)
 {
-	float	t0;
-	float	t1;
-
-	t0 = (-b - sqrt(discriminant)) / (2.0f * a);
-	t1 = (-b + sqrt(discriminant)) / (2.0f * a);
-	return (ft_min(t0, t1));
+	return ((-b - sqrt(discriminant)) / (2.0f * a));
 }
 
 /**
@@ -108,13 +108,13 @@ float	light_coeff(t_scene *scene, float t, t_vector ray_direction)
  * @math
  * circle = (x^2 - a) + (y^2 - b) - r^2 = 0 (a and b are the coord)
  * ray = a + bt (a: origin b: direction t: distance)
- * Substitute ray into circle and solve for t
- * (bx^2 + by^2 + bz^2)t^2 + (2(axbx + ayby + azbz))t
- * + (ax^2 +ay^2 + az^2 - r^2) = 0
  * a : ray origin (scene->camera.pos)
  * b : ray direction (scene->camera.orientation)
  * r : radius (scene->sphere.diameter / 2)
  * t : hit distance
+ * Substitute ray into circle and solve for t
+ * (bx^2 + by^2 + bz^2)t^2 + (2(axbx + ayby + azbz))t
+ * + (ax^2 +ay^2 + az^2 - r^2) = 0
  * Quadratic formula: (-b +- sqrt(b^2 - 4ac))/2a
  * Discriminant: b^2 - 4ac
 */

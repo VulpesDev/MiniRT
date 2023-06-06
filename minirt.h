@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/06 01:04:07 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/06 12:51:37 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 # include <math.h>
 # define SPACE "\t\n\f\r\v "
 # define MAX_SOLID 3
-# define HEIGHT 500
-# define WIDTH 500
+# define WIDTH 1024
+# define HEIGHT 768
 # define CANV_MIN_X -1
 # define CANV_MAX_X 1
 # define CANV_MIN_Y -1
