@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 09:24:43 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/07 10:54:16 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/07 13:05:15 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,9 @@ int	parse_args(t_scene *scene, char *filename)
 	}
 	close(fd);
 	if (flag[0] && flag[1] && flag[2])
-		return (render_scene(scene));
+	{
+		return (printf("Render\n"));
+		// return (render_scene(scene));
+	}
 	return (ft_warning("cannot render", "missing element", MISS_UNIQUE));
 }

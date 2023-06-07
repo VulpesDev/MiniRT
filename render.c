@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/06 16:09:06 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/07 12:52:56 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ float	calc_hit_point(float discriminant, float a, float b)
  * It returns the discriminant. If it's >=0 it assigns to t the value of
  * the closest hit point
 */
-float	intersect_sphere(t_scene *scene, t_vector ray_direction, float *t)
+float	calc_discriminant(t_scene *scene, t_vector ray_direction, float *t, int i)
 {
 	float			a;
 	float			b;
@@ -70,26 +70,65 @@ float	intersect_sphere(t_scene *scene, t_vector ray_direction, float *t)
 	t_point_3d		transl;
 	float			discriminant;
 
+	printf("here\n");
 	a = vect_dot(ray_direction, ray_direction);
-	transl = vect_sub(scene->camera.pos, scene->sp[0].pos);
+	transl = vect_sub(scene->camera.pos, scene->sp[i].pos);
 	b = 2.0f * vect_dot(transl, ray_direction);
-	c = vect_dot(transl, transl) - pow((scene->sp->diameter / 2), 2);
+	c = vect_dot(transl, transl) - pow((scene->sp[i].diameter / 2), 2);
 	discriminant = b * b - (4.0f * a * c);
 	if (discriminant >= 0)
 		*t = calc_hit_point(discriminant, a, b);
 	return (discriminant);
 }
 
-float	light_coeff(t_scene *scene, float t, t_vector ray_direction)
+float	light_coeff(t_scene *scene, float t, t_vector ray_direction, int i)
 {
 	t_vector	hit_pos;
 	t_vector	normal;
 	float		light;
 
 	hit_pos = vect_sum(scene->camera.pos, vect_mult(ray_direction, t));
-	normal = vect_norm(vect_sub(hit_pos, scene->sp[0].pos));
+	normal = vect_norm(vect_sub(hit_pos, scene->sp[i].pos));
 	light = ft_max(vect_dot(normal, vect_inverse((vect_norm(scene->light.pos)))), 0.0f);
 	return (light);
+}
+
+int	intersect_sphere(t_scene *scene, t_vector ray_direction, float *t, int idx)
+{
+	if (calc_discriminant(scene, ray_direction, t, idx) < 0)
+		return (0);
+	return (1);
+}
+
+int	intersect_element(t_scene *scene, t_vector ray_dir, int *color, float *min_t)
+{
+	int		i;
+	int		ret;
+	float	t;
+
+	ret = 0;
+	i = 0;
+	while (scene->sp)
+	{
+		if (intersect_sphere(scene, ray_dir, &t, i) && t < *min_t)
+		{
+			*min_t = t;
+			*color = apply_ligthing_ratio(scene->sp[i].trgb, light_coeff(scene, t, ray_dir, i));
+			ret = 1;
+		}
+		i++;
+	}
+	// i = 0;
+	// while (scene->pl + i * sizeof(t_plane))
+	// {
+	// 	i++;
+	// }
+	// i = 0;
+	// while (scene->cy + i * sizeof(t_cylinder))
+	// {
+	// 	i++;
+	// }
+	return (ret);
 }
 
 /**
@@ -111,15 +150,18 @@ int	per_pixel(t_pxl p, t_scene *scene)
 {
 	t_point_2d	coord;
 	t_vector	ray_direction;
-	float		discriminant;
+	// float		discriminant;
 	float		t;
+	int			color;
 
 	coord = to_canvas(p);
 	ray_direction = vect_norm((t_vector){coord.x, coord.y, -1.0f});
-	discriminant = intersect_sphere(scene, ray_direction, &t);
-	if (discriminant >= 0)
+	// discriminant = intersect_sphere(scene, ray_direction, &t);
+	// if (discriminant >= 0)
+	if (intersect_element(scene, ray_direction, &color, &t))
 	{
-		return (apply_ligthing_ratio(scene->sp[0].trgb, light_coeff(scene, t, ray_direction)));
+		// return (apply_ligthing_ratio(scene->sp[0].trgb, light_coeff(scene, t, ray_direction)));
+		return (color);
 	}
 	return (apply_ligthing_ratio(scene->ambient.trgb, \
 								scene->ambient.lighting_ratio));
@@ -146,9 +188,6 @@ void	draw(t_scene *scene)
 		}
 		p.y++;
 	}
-	// p.x = 250;
-	// t_point_2d point = to_canvas(p);
-	// printf("pxl x: %d y: %d canvas x: %f y: %f\n", p.x, p.y, point.x, point.y);
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img, 0, 0);
 }
 
@@ -158,6 +197,7 @@ t_err	render_scene(t_scene *scene)
 	{
 		draw(scene);
 		mlx_manage(scene);
+		return (SUCCESS);
 	}
-	return (SUCCESS);
+	return (ft_error("render", "couldn't init image", MEM_FAIL, scene));
 }

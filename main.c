@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:42:10 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/03 20:38:38 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/07 12:55:01 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	main(int ac, char **av)
 	if (ac != 2)
 		return (ft_putendl_fd("miniRT: bad arguments", 2), ARG_REQUIRED);
 	scene = malloc(sizeof(t_scene));
-	if (!scene || init_scene(scene))
+	if (!scene || init_scene(scene) != SUCCESS)
 		return (ft_putendl_fd("miniRT: memory fail", 2), MEM_FAIL);
 	if (parse_args(scene, av[1]))
 	{

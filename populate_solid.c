@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:31:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/05 00:47:33 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/07 13:04:13 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	validate_sphere(t_scene *scene, char **el)
 	{
 		sp.diameter = ft_atof(el[2]);
 		scene->sp[i] = sp;
+		printf("sphere %d: %p\n", i, &scene->sp[i]);
 		i++;
 		return (SUCCESS);
 	}
