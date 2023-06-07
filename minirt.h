@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/07 10:43:16 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/07 14:24:51 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # define CANV_MIN_Y -1
 # define CAM_PACE 0.1
 # define LIGHT_PACE 0.3
+# define RAY_LEN 100
 
 typedef enum e_err
 {
@@ -170,6 +171,14 @@ t_err	init_img(t_scene *scene);
 /* RENDER */
 t_err	render_scene(t_scene *scene);
 void	draw(t_scene *scene);
+
+/* SPHERE */
+int		intersect_sphere(t_scene *scene, t_vector ray_direction, \
+						float *t, int i);
+float	sp_light_coeff(t_scene *scene, float t, t_vector ray_direction, int i);
+float	sp_calc_discriminant(t_scene *scene, t_vector ray_direction, \
+							float *t, int i);
+float	sp_calc_hit_point(float discriminant, float a, float b);
 
 /* ERROR HANDLING*/
 t_err	ft_error(char *msg, char *arg, int err_code, t_scene *scene);

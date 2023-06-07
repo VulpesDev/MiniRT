@@ -6,26 +6,12 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/07 13:53:19 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/07 14:33:09 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "vector_math.h"
-
-float	ft_max(float a, float b)
-{
-	if (a > b)
-		return (a);
-	return (b);
-}
-
-float	ft_min(float a, float b)
-{
-	if (a < b)
-		return (a);
-	return (b);
-}
 
 /**
  * range_x / WIDTH = canvas size of 1 pxl on x axis
@@ -53,53 +39,6 @@ int	apply_ligthing_ratio(int trgb, float lighting_ratio)
 			lighting_ratio * (trgb & 0xFF)));
 }
 
-float	calc_hit_point(float discriminant, float a, float b)
-{
-	return ((-b - sqrt(discriminant)) / (2.0f * a));
-}
-
-/**
- * It returns the discriminant. If it's >=0 it assigns to t the value of
- * the closest hit point
-*/
-float	calc_discriminant(t_scene *scene, t_vector ray_direction, float *t, int i)
-{
-	float			a;
-	float			b;
-	float			c;
-	t_point_3d		transl;
-	float			discriminant;
-
-	printf("here\n");
-	a = vect_dot(ray_direction, ray_direction);
-	transl = vect_sub(scene->camera.pos, scene->sp[i].pos);
-	b = 2.0f * vect_dot(transl, ray_direction);
-	c = vect_dot(transl, transl) - pow((scene->sp[i].diameter / 2), 2);
-	discriminant = b * b - (4.0f * a * c);
-	if (discriminant >= 0)
-		*t = calc_hit_point(discriminant, a, b);
-	return (discriminant);
-}
-
-float	light_coeff(t_scene *scene, float t, t_vector ray_direction, int i)
-{
-	t_vector	hit_pos;
-	t_vector	normal;
-	float		light;
-
-	hit_pos = vect_sum(scene->camera.pos, vect_mult(ray_direction, t));
-	normal = vect_norm(vect_sub(hit_pos, scene->sp[i].pos));
-	light = ft_max(vect_dot(normal, vect_inverse((vect_norm(scene->light.pos)))), 0.0f);
-	return (light);
-}
-
-int	intersect_sphere(t_scene *scene, t_vector ray_direction, float *t, int idx)
-{
-	if (calc_discriminant(scene, ray_direction, t, idx) < 0)
-		return (0);
-	return (1);
-}
-
 int	intersect_element(t_scene *scene, t_vector ray_dir, int *color, float *min_t)
 {
 	int		i;
@@ -113,7 +52,7 @@ int	intersect_element(t_scene *scene, t_vector ray_dir, int *color, float *min_t
 		if (intersect_sphere(scene, ray_dir, &t, i) && t < *min_t)
 		{
 			*min_t = t;
-			*color = apply_ligthing_ratio(scene->sp[i].trgb, light_coeff(scene, t, ray_dir, i));
+			*color = apply_ligthing_ratio(scene->sp[i].trgb, sp_light_coeff(scene, t, ray_dir, i));
 			ret = 1;
 		}
 		i++;
@@ -150,17 +89,14 @@ int	per_pixel(t_pxl p, t_scene *scene)
 {
 	t_point_2d	coord;
 	t_vector	ray_direction;
-	// float		discriminant;
 	float		t;
 	int			color;
 
+	t = RAY_LEN;
 	coord = to_canvas(p);
 	ray_direction = vect_norm((t_vector){coord.x, coord.y, -1.0f});
-	// discriminant = intersect_sphere(scene, ray_direction, &t);
-	// if (discriminant >= 0)
 	if (intersect_element(scene, ray_direction, &color, &t))
 	{
-		// return (apply_ligthing_ratio(scene->sp[0].trgb, light_coeff(scene, t, ray_direction)));
 		return (color);
 	}
 	return (apply_ligthing_ratio(scene->ambient.trgb, \
