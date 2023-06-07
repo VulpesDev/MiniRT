@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:31:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/07 13:04:13 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/07 13:51:55 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ int	validate_sphere(t_scene *scene, char **el)
 		&& extract_rgb(el[3], &sp.trgb) == SUCCESS)
 	{
 		sp.diameter = ft_atof(el[2]);
+		// printf("before: sphere %d: %d\n", i, scene->sp[i]);
 		scene->sp[i] = sp;
+		// printf to remove
 		printf("sphere %d: %p\n", i, &scene->sp[i]);
 		i++;
 		return (SUCCESS);

@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/07 12:52:56 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/07 13:53:19 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	intersect_element(t_scene *scene, t_vector ray_dir, int *color, float *min_t
 
 	ret = 0;
 	i = 0;
-	while (scene->sp)
+	while (scene->sp[i].diameter)
 	{
 		if (intersect_sphere(scene, ray_dir, &t, i) && t < *min_t)
 		{
