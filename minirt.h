@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/06 12:51:37 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/07 10:43:16 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef enum e_err
 	INVALID_FILE,
 	INVALID_ELEMENT,
 	INVALID_DUP,
+	MISS_UNIQUE,
 }			t_err;
 
 enum e_unique_el
@@ -176,5 +177,6 @@ t_err	ft_warning(char *msg, char *arg, int err_code);
 
 /* CLEANUP */
 int		free_img(t_img *data);
+void	free_scene(t_scene **scene);
 
 #endif

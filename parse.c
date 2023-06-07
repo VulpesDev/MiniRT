@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 09:24:43 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/03 20:40:42 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/07 10:54:16 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,11 @@
 // }
 
 /**
- * I create a triple flag as int array to check that the unique
+ * I pass it a triple flag as int array to check that the unique
  * elements are not set multiple times.
 */
-t_err	handle_unique(t_scene *scene, char **el)
+t_err	handle_unique(t_scene *scene, char **el, uint8_t *flag)
 {
-	static int	flag[3] = {0};
-
 	if (!ft_strcmp(el[0], "A"))
 	{
 		ft_printf("Ambient\n");
@@ -59,12 +57,12 @@ t_err	handle_unique(t_scene *scene, char **el)
 	}
 	else
 		ft_printf("Element not recognized\n");
-	// print_flag(flag);
 	return (SUCCESS);
 }
 
 /**
- * In case of invalid solid should we exit or move on?
+ * In case of invalid solid we throw a warning
+ * and move on to the next line
 */
 void	handle_solid(t_scene *scene, char **el)
 {
@@ -91,40 +89,37 @@ void	handle_solid(t_scene *scene, char **el)
  * Added support to comment # to make testing scenes easier
  * @returns 0 for success, > 0 for err_code
 */
-int	parse_element(t_scene *scene, char *line)
+int	parse_element(t_scene *scene, char *line, uint8_t *flag)
 {
 	char	**el;
-	int		ret;
 
 	el = ft_split_by_sep(line, SPACE);
 	if (!el)
 		return (ft_warning("invalid element: ", el[0], \
 							INVALID_ELEMENT));
-	ret = 0;
-	if (el[0] && el[0][0])
+	if (el[0] && el[0][0] && el[0][0] != '#')
 	{
-		if (el[0][0] == '#')
-			ret = 1;
-		else if (ft_isalpha(el[0][0]) && el[0][0] <= 'Z')
-			handle_unique(scene, el);
+		if (ft_isalpha(el[0][0]) && el[0][0] <= 'Z')
+			handle_unique(scene, el, flag);
 		else if (ft_isalpha(el[0][0]) && el[0][0] >= 'a')
 			handle_solid(scene, el);
 	}
 	ft_free_str_arr(el);
-	return (ret);
+	return (SUCCESS);
 }
 
 /**
  * @returns 0 for success, > 0 for err_code
+ * It will return an error if the scene doesn't have
+ * an Ambient or a Light or a Camera
 */
 int	parse_args(t_scene *scene, char *filename)
 {
-	int		len;
-	int		fd;
-	char	*line;
+	int					fd;
+	char				*line;
+	static uint8_t		flag[3] = {0};
 
-	len = ft_strlen(filename);
-	if (ft_strncmp(".rt", &filename[len - 3], 4))
+	if (ft_strncmp(".rt", &filename[ft_strlen(filename) - 3], 4))
 		return (ft_warning("invalid file ext", NULL, FILE_EXTENSION));
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
@@ -138,9 +133,10 @@ int	parse_args(t_scene *scene, char *filename)
 			break ;
 		if (!ft_strcmp(line, "\n"))
 			continue ;
-		parse_element(scene, line);
+		parse_element(scene, line, flag);
 	}
 	close(fd);
-	render_scene(scene);
-	return (0);
+	if (flag[0] && flag[1] && flag[2])
+		return (render_scene(scene));
+	return (ft_warning("cannot render", "missing element", MISS_UNIQUE));
 }
