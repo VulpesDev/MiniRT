@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/07 14:24:51 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/09 00:58:25 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@
 # define MAX_SOLID 3
 # define WIDTH 1024
 # define HEIGHT 768
-# define CANV_MIN_X -1
-# define CANV_MAX_X 1
-# define CANV_MIN_Y -1
+# define CANV_MIN_X -1.0f
+# define CANV_MAX_X 1.0f
+# define CANV_MIN_Y -1.0f
+# define CANV_DIST 1
 # define CAM_PACE 0.1
 # define LIGHT_PACE 0.3
 # define RAY_LEN 100
@@ -99,6 +100,10 @@ typedef struct s_camera
 	t_point_3d		pos;
 	t_vector		orientation;
 	uint8_t			fov;
+	float			min_x;
+	float			max_x;
+	float			min_y;
+	float			max_y;
 }					t_camera;
 
 typedef struct s_light
