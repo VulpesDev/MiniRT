@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/07 14:33:09 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/08 09:07:18 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,17 @@ int	intersect_element(t_scene *scene, t_vector ray_dir, int *color, float *min_t
 		}
 		i++;
 	}
-	// i = 0;
-	// while (scene->pl + i * sizeof(t_plane))
-	// {
-	// 	i++;
-	// }
+	i = 0;
+	while (scene->pl[i].valid)
+	{
+		if (intersect_plane(scene, ray_dir, &t, i) && t < *min_t)
+		{
+			*min_t = t;
+			*color = apply_ligthing_ratio(scene->pl[i].trgb, scene->ambient.lighting_ratio);
+			ret = 1;
+		}
+		i++;
+	}
 	// i = 0;
 	// while (scene->cy + i * sizeof(t_cylinder))
 	// {

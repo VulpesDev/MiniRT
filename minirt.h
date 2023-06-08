@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/07 14:24:51 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/07 23:38:08 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ typedef struct s_plane
 	t_point_3d		pos;
 	t_vector		rotation;
 	int				trgb;
+	int				valid;
 }					t_plane;
 
 typedef struct s_cylinder
@@ -179,6 +180,10 @@ float	sp_light_coeff(t_scene *scene, float t, t_vector ray_direction, int i);
 float	sp_calc_discriminant(t_scene *scene, t_vector ray_direction, \
 							float *t, int i);
 float	sp_calc_hit_point(float discriminant, float a, float b);
+
+/* PLANE */
+int		intersect_plane(t_scene *scene, t_vector ray_direction, \
+						float *t, int i);
 
 /* ERROR HANDLING*/
 t_err	ft_error(char *msg, char *arg, int err_code, t_scene *scene);

@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 09:24:43 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/07 13:54:02 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/08 00:11:54 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ t_err	handle_unique(t_scene *scene, char **el, uint8_t *flag)
 */
 void	handle_solid(t_scene *scene, char **el)
 {
+	scene->pl[MAX_SOLID].valid = 0;
 	if (!ft_strcmp(el[0], "sp"))
 	{
 		if (!validate_sphere(scene, el))

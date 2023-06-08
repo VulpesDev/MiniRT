@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:31:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/07 13:51:55 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/08 00:12:42 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	validate_plane(t_scene *scene, char **el)
 	t_plane		pl;
 	static int	i = 0;
 
+	scene->pl[i].valid = 0;
 	if (i == MAX_SOLID)
 		return (ft_warning("not handling these many solids", \
 				NULL, INVALID_FILE));
@@ -55,6 +56,7 @@ int	validate_plane(t_scene *scene, char **el)
 		|| extract_rgb(el[3], &pl.trgb))
 		return (ft_warning("invalid argument: ", el[2], \
 					INVALID_ELEMENT));
+	pl.valid = 1;
 	scene->pl[i] = pl;
 	i++;
 	return (SUCCESS);
