@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/09 15:56:22 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/09 17:04:04 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ t_err	validate_light(t_scene *scene, char **el);
 int		validate_sphere(t_scene *scene, char **el);
 int		validate_plane(t_scene *scene, char **el);
 int		validate_cylinder(t_scene *scene, char **el);
+void	set_camera_canvas(t_camera *c);
 
 /* PARSE UTILS */
 int		validate_3d_range(t_point_3d point, float min, float max);

@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/09 16:04:15 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/09 17:03:26 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,7 @@ void	draw(t_scene *scene)
 	t_img	*data;
 
 	data = scene->img;
+	set_camera_canvas(&scene->camera);
 	set_proj_matrix(scene->camera.m_proj, &scene->camera);
 	p.y = 0;
 	while (p.y < HEIGHT)
