@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:30:47 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/09 01:18:25 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/09 16:22:19 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,34 +30,28 @@ t_err	validate_ambient(t_scene *scene, char **el)
 			el[1], INVALID_ELEMENT));
 }
 
-void	set_y_range(t_camera *c, float range_x)
-{
-	float	ratio;
-	float	range_y;
-	float	mid_y;
-
-	ratio = (float)WIDTH / HEIGHT;
-	range_y = range_x * ratio;
-	printf("range_x: %f ratio: %f\n", range_x, ratio);
-	mid_y = CANV_MIN_Y + (range_y / 2);
-	c->min_y = mid_y - (range_y / 2);
-	c->max_y = c->min_y + range_y;
-}
-
 /**
  * if FOV == 180 the tan explodes
 */
 void	set_camera_canvas(t_camera *c)
 {
-	float	max_range_x;
-	float	mid;
+	float	range_x;
+	float	range_y;
 	float	fov_rad;
+	float	ratio;
 
+	if (c->fov >= 180)
+		c->fov = 179;
+	if (c->fov < 0)
+		c->fov = 0;
+	ratio = (float)WIDTH / HEIGHT;
 	fov_rad = c->fov * (M_PI / 180);
-	// max_range_x = CANV_MAX_X - CANV_MIN_X;
-	max_range_x = 2 * tan(fov_rad / 2);
-	mid = CANV_MIN_X + (max_range_x / 2);
-	printf("range: %f rad: %f mid: %f\n", max_range_x, fov_rad, mid);
+	range_x = 2 * tan(fov_rad / 2) * CANV_DIST;
+	range_y = range_x / ratio;
+	c->top_right = (t_point_2d){range_x / 2 + c->pos.x, range_y / 2 + c->pos.y};
+	c->bot_left = (t_point_2d){(range_x / 2) * -1 + \
+								c->pos.x, -(range_y / 2) + c->pos.y};
+	printf("rad: %f range_x: %f range_y: %f corners: b %f t %f l %f r %f\n", fov_rad, range_x, range_y, c->bot_left.y, c->top_right.y, c->top_right.x, c->bot_left.x);
 }
 
 /**
@@ -79,7 +73,6 @@ t_err	validate_camera(t_scene *scene, char **el)
 		return (ft_warning("invalid argument: ", el[3], \
 				INVALID_ELEMENT));
 	set_camera_canvas(&scene->camera);
-	printf("w: %i h: %i min_x: %f min_y: %f, fov: %i bot_left: %f, %f top_right: %f, %f\n", WIDTH, HEIGHT, CANV_MIN_X, CANV_MIN_Y, scene->camera.fov, scene->camera.min_x, scene->camera.min_y, scene->camera.max_x, scene->camera.max_y);
 	return (SUCCESS);
 }
 

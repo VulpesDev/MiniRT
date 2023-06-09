@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 18:06:27 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/08 18:40:01 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/09 12:01:30 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,6 @@
 
 typedef float	t_matrix_trans[4][4];
 
-t_point_3d	transform(t_point p, t_matrix_trans m);
+t_point_3d	transform(t_point_3d p, t_matrix_trans m);
 
 #endif

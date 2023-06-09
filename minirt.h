@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/09 00:58:25 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/09 15:56:22 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,11 @@
 # define CANV_DIST 1
 # define CAM_PACE 0.1
 # define LIGHT_PACE 0.3
-# define RAY_LEN 100
+# define RAY_LEN 50
+# define ZNEAR CANV_DIST
+# define ZFAR RAY_LEN
+
+typedef float	t_matrix_trans[4][4];
 
 typedef enum e_err
 {
@@ -100,10 +104,9 @@ typedef struct s_camera
 	t_point_3d		pos;
 	t_vector		orientation;
 	uint8_t			fov;
-	float			min_x;
-	float			max_x;
-	float			min_y;
-	float			max_y;
+	t_point_2d		top_right;
+	t_point_2d		bot_left;
+	t_matrix_trans	m_proj;
 }					t_camera;
 
 typedef struct s_light
