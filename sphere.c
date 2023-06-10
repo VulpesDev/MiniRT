@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 14:22:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/07 14:33:27 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/10 13:59:34 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,27 @@ float	sp_calc_discriminant(t_scene *scene, t_vector ray_direction, \
 	return (discriminant);
 }
 
+/**
+ * @param	n: normal vector
+ * 			p: hit point
+ * @returns	a float expressing the light intensity on the point
+*/
+float	diffuse_reflection(t_scene *scene, t_vector n, t_vector p)
+{
+	t_vector	l;
+	float		n_dot_l;
+	float		light;
+	float		len_l;
+
+	l = vect_sub(p, scene->light.pos);
+	n_dot_l = vect_dot(n, l);
+	len_l = vect_mag(l);
+	if (len_l == 0)
+		return (1.0f);
+	light = ft_fmax((scene->light.brightness * n_dot_l / len_l), 0.0f);
+	return (light);
+}
+
 float	sp_light_coeff(t_scene *scene, float t, t_vector ray_direction, int i)
 {
 	t_vector	hit_pos;
@@ -49,8 +70,9 @@ float	sp_light_coeff(t_scene *scene, float t, t_vector ray_direction, int i)
 
 	hit_pos = vect_sum(scene->camera.pos, vect_mult(ray_direction, t));
 	normal = vect_norm(vect_sub(hit_pos, scene->sp[i].pos));
-	light = ft_fmax(\
-		vect_dot(normal, vect_inverse((vect_norm(scene->light.pos)))), 0.0f);
+	light = diffuse_reflection(scene, normal, hit_pos);
+	// light = ft_fmax(\
+	// 	vect_dot(normal, vect_inverse((vect_norm(scene->light.pos)))), 0.0f);
 	return (light);
 }
 

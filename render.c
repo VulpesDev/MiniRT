@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/09 17:03:26 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/10 13:48:37 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_point_2d	to_canvas_new(t_pxl pxl, t_camera *c)
 
 	range_x = c->top_right.x - c->bot_left.x;
 	range_y = c->top_right.y - c->bot_left.y;
-	ret.x = range_x / WIDTH * pxl.x + c->bot_left.x;
+	ret.x = -(range_x / WIDTH * pxl.x + c->bot_left.x);
 	ret.y = range_y / HEIGHT * pxl.y + c->bot_left.y;
 	return (ret);
 }
