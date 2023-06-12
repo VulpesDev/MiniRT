@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 14:22:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/12 15:21:09 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/12 16:09:50 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ float	sp_light_coeff(t_scene *scene, float t, t_ray ray, int i)
 	float		light;
 
 	hit_pos = vect_sum((t_vector)ray.origin, vect_mult(ray.direction, t));
-	normal = vect_norm(vect_sub(hit_pos, scene->shape[i].sp.pos));
+	normal = vect_norm(vect_sub(scene->shape[i].sp.pos, hit_pos));
 	light = diffuse_reflection(scene, normal, hit_pos);
 	// light = ft_fmax(\
 	// 	vect_dot(normal, vect_inverse((vect_norm(scene->light.pos)))), 0.0f);
