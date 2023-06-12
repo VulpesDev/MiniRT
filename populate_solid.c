@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:31:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/12 18:58:43 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/12 19:08:01 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int	validate_plane(t_scene *scene, char **el)
 		|| extract_rgb(el[3], &shape.trgb))
 		return (ft_warning("invalid argument: ", el[2], \
 					INVALID_ELEMENT));
+	shape.intersect = intersect_plane;
 	scene->shape[i] = shape;
 	return (SUCCESS);
 }

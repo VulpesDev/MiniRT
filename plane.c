@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 23:25:30 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/08 09:13:05 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/12 19:06:41 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,15 @@
  * (a + bt - p0)·n = 0 which solved for t is
  * ((p0 - a) · n) / b · n
 */
-int	intersect_plane(t_scene *scene, t_vector ray_direction, float *t, int i)
+int	intersect_plane(t_scene *scene, t_ray ray, float *t, int i)
 {
 	float	denominator;
 	float	numerator;
 
-	denominator = vect_dot(ray_direction, vect_norm(scene->pl[i].rotation));
+	denominator = vect_dot(ray.direction, vect_norm(scene->shape[i].pl.rotation));
 	if (denominator > 1e-6)
 	{
-		numerator = vect_dot(vect_sub(scene->pl[i].pos, scene->camera.pos), vect_norm(scene->pl[i].rotation));
+		numerator = vect_dot(vect_sub(scene->shape[i].pl.pos, scene->camera.pos), vect_norm(scene->shape[i].pl.rotation));
 		*t = numerator / denominator;
 		return (1);
 	}
