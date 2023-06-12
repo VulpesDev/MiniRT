@@ -6,29 +6,87 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/08 09:07:18 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/12 18:59:02 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "vector_math.h"
+#include "matrix_math.h"
 
 /**
  * range_x / WIDTH = canvas size of 1 pxl on x axis
  * range_x / WIDTH * ratio = canvas size of 1 pxl on y axis
- * added - to flip the y axis
+ * added - to flip the axis
 */
-t_point_2d	to_canvas(t_pxl pxl)
+// t_point_2d	to_canvas(t_pxl pxl)
+// {
+// 	t_point_2d	ret;
+// 	float		range_x;
+// 	float		ratio;
+
+// 	range_x = CANV_MAX_X - CANV_MIN_X;
+// 	ratio = WIDTH / HEIGHT;
+// 	ret.x = -(range_x / WIDTH * pxl.x + CANV_MIN_X);
+// 	ret.y = -(range_x / WIDTH * ratio * pxl.y + CANV_MIN_Y);
+// 	return (ret);
+// }
+
+t_point_2d	to_canvas_new(t_pxl pxl, t_camera *c)
 {
 	t_point_2d	ret;
 	float		range_x;
-	float		ratio;
+	float		range_y;
 
-	range_x = CANV_MAX_X - CANV_MIN_X;
-	ratio = WIDTH / HEIGHT;
-	ret.x = -(range_x / WIDTH * pxl.x + CANV_MIN_X);
-	ret.y = -(range_x / WIDTH * ratio * pxl.y + CANV_MIN_Y);
+	range_x = c->top_right.x - c->bot_left.x;
+	range_y = c->top_right.y - c->bot_left.y;
+	ret.x = range_x / WIDTH * pxl.x + c->bot_left.x;
+	ret.y = range_y / HEIGHT * pxl.y + c->bot_left.y;
 	return (ret);
+}
+
+void	print_4x4(t_matrix_trans m)
+{
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+			printf("%f\t", m[i][j]);
+		printf("\n");
+	}
+	printf("\n");
+}
+
+void	set_proj_matrix(t_matrix_trans proj, t_camera *c)
+{
+	proj[0][0] = (2 * ZNEAR) / (c->top_right.x - c->bot_left.x);
+	proj[0][1] = 0.0f;
+	proj[0][2] = 0.0f;
+	proj[0][3] = 0.0f;
+	proj[1][0] = 0.0f;
+	proj[1][1] = (2 * ZNEAR) / (c->top_right.y - c->bot_left.y);
+	proj[1][2] = 0.0f;
+	proj[1][3] = 0.0f;
+	proj[2][0] = (c->top_right.x + c->bot_left.x) / (c->top_right.x - c->bot_left.x);
+	proj[2][1] = (c->top_right.y + c->bot_left.y) / (c->top_right.y - c->bot_left.y);
+	proj[2][2] = -((ZFAR + ZNEAR) / (ZFAR - ZNEAR));
+	proj[2][3] = -1.0f;
+	proj[3][0] = 0.0f;
+	proj[3][1] = 0.0f;
+	proj[3][2] = -((2 * ZFAR * ZNEAR) / (ZFAR - ZNEAR));
+	proj[3][3] = 0.0f;
+	print_4x4(proj);
+}
+
+/**
+ * As in openGL, we state that the projection plane coinincides
+ * with the near clipping plane.
+ * https://www.scratchapixel.com/lessons/3d-basic-rendering
+ * /perspective-and-orthographic-projection-matrix
+ * /opengl-perspective-projection-matrix.html
+*/
+t_point_3d	world_to_cam(t_point_3d p, t_matrix_trans proj)
+{
+	return (transform(p, proj));
 }
 
 int	apply_ligthing_ratio(int trgb, float lighting_ratio)
@@ -39,40 +97,26 @@ int	apply_ligthing_ratio(int trgb, float lighting_ratio)
 			lighting_ratio * (trgb & 0xFF)));
 }
 
-int	intersect_element(t_scene *scene, t_vector ray_dir, int *color, float *min_t)
+int	intersect_element(t_scene *scene, t_ray ray, int *color, float *min_t)
 {
 	int		i;
 	int		ret;
 	float	t;
 
 	ret = 0;
-	i = 0;
-	while (scene->sp[i].diameter)
+	i = scene->shape_count - 1;
+	while (i >= 0)
 	{
-		if (intersect_sphere(scene, ray_dir, &t, i) && t < *min_t)
+		// printf("shape[%d] i: %d\n", scene->shape_count, i);
+		if (scene->shape[i].intersect(scene, ray, &t, i) && t < *min_t && t > 0)
 		{
 			*min_t = t;
-			*color = apply_ligthing_ratio(scene->sp[i].trgb, sp_light_coeff(scene, t, ray_dir, i));
+			*color = apply_ligthing_ratio(scene->shape[i].trgb, \
+											sp_light_coeff(scene, t, ray, i));
 			ret = 1;
 		}
-		i++;
+		i--;
 	}
-	i = 0;
-	while (scene->pl[i].valid)
-	{
-		if (intersect_plane(scene, ray_dir, &t, i) && t < *min_t)
-		{
-			*min_t = t;
-			*color = apply_ligthing_ratio(scene->pl[i].trgb, scene->ambient.lighting_ratio);
-			ret = 1;
-		}
-		i++;
-	}
-	// i = 0;
-	// while (scene->cy + i * sizeof(t_cylinder))
-	// {
-	// 	i++;
-	// }
 	return (ret);
 }
 
@@ -93,15 +137,19 @@ int	intersect_element(t_scene *scene, t_vector ray_dir, int *color, float *min_t
 */
 int	per_pixel(t_pxl p, t_scene *scene)
 {
-	t_point_2d	coord;
-	t_vector	ray_direction;
-	float		t;
-	int			color;
+	t_point_2d		coord;
+	t_ray			ray;
+	float			t;
+	int				color;
+	t_point_3d		p3;
 
 	t = RAY_LEN;
-	coord = to_canvas(p);
-	ray_direction = vect_norm((t_vector){coord.x, coord.y, -1.0f});
-	if (intersect_element(scene, ray_direction, &color, &t))
+	coord = to_canvas_new(p, &scene->camera);
+	p3 = (t_point_3d){coord.x, coord.y, -1.0f};
+	world_to_cam(p3, scene->camera.m_proj);
+	ray.origin = scene->camera.pos;
+	ray.direction = vect_norm((t_vector){p3.x, p3.y, p3.z});
+	if (intersect_element(scene, ray, &color, &t))
 	{
 		return (color);
 	}
@@ -119,6 +167,8 @@ void	draw(t_scene *scene)
 	t_img	*data;
 
 	data = scene->img;
+	set_camera_canvas(&scene->camera);
+	set_proj_matrix(scene->camera.m_proj, &scene->camera);
 	p.y = 0;
 	while (p.y < HEIGHT)
 	{

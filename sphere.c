@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 14:22:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/07 14:33:27 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/12 18:41:00 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ float	sp_calc_hit_point(float discriminant, float a, float b)
  * It returns the discriminant. If it's >=0 it assigns to t the value of
  * the closest hit point
 */
-float	sp_calc_discriminant(t_scene *scene, t_vector ray_direction, \
+float	sp_calc_discriminant(t_scene *scene, t_ray ray, \
 							float *t, int i)
 {
 	float			a;
@@ -31,32 +31,73 @@ float	sp_calc_discriminant(t_scene *scene, t_vector ray_direction, \
 	t_point_3d		transl;
 	float			discriminant;
 
-	a = vect_dot(ray_direction, ray_direction);
-	transl = vect_sub(scene->camera.pos, scene->sp[i].pos);
-	b = 2.0f * vect_dot(transl, ray_direction);
-	c = vect_dot(transl, transl) - pow((scene->sp[i].diameter / 2), 2);
+	a = vect_dot(ray.direction, ray.direction);
+	transl = vect_sub(ray.origin, scene->shape[i].sp.pos);
+	b = 2.0f * vect_dot(transl, ray.direction);
+	c = vect_dot(transl, transl) - pow((scene->shape[i].sp.diameter / 2), 2);
 	discriminant = b * b - (4.0f * a * c);
 	if (discriminant >= 0)
 		*t = sp_calc_hit_point(discriminant, a, b);
 	return (discriminant);
 }
 
-float	sp_light_coeff(t_scene *scene, float t, t_vector ray_direction, int i)
+int	cast_shadow(t_scene *scene, t_ray ray)
+{
+	int		i;
+	float	t;
+
+	i = scene->shape_count - 1;
+	while (i >= 0)
+	{
+		if (scene->shape[i].intersect(scene, ray, &t, i) && t > 0.000001f && t < 1)
+			return (1);
+		i--;
+	}
+	return (0);
+}
+
+/**
+ * @param n: normal vector
+ * @param p: hit point
+ * @returns	a float expressing the light intensity on the point
+*/
+float	diffuse_reflection(t_scene *scene, t_vector n, t_vector p)
+{
+	t_vector	l;
+	float		n_dot_l;
+	float		light;
+	float		len_l;
+	t_ray		ray;
+
+	l = vect_sub(p, scene->light.pos);
+	ray = (t_ray){p, vect_inverse(l)};
+	if (cast_shadow(scene, ray))
+		return (0.1f);
+	n_dot_l = vect_dot(n, l);
+	len_l = vect_mag(l);
+	if (len_l == 0)
+		return (1.0f);
+	light = ft_fmax((scene->light.brightness * n_dot_l / len_l), 0.0f);
+	return (light);
+}
+
+float	sp_light_coeff(t_scene *scene, float t, t_ray ray, int i)
 {
 	t_vector	hit_pos;
 	t_vector	normal;
 	float		light;
 
-	hit_pos = vect_sum(scene->camera.pos, vect_mult(ray_direction, t));
-	normal = vect_norm(vect_sub(hit_pos, scene->sp[i].pos));
-	light = ft_fmax(\
-		vect_dot(normal, vect_inverse((vect_norm(scene->light.pos)))), 0.0f);
+	hit_pos = vect_sum((t_vector)ray.origin, vect_mult(ray.direction, t));
+	normal = vect_norm(vect_sub(scene->shape[i].sp.pos, hit_pos));
+	light = diffuse_reflection(scene, normal, hit_pos);
+	// light = ft_fmax(\
+	// 	vect_dot(normal, vect_inverse((vect_norm(scene->light.pos)))), 0.0f);
 	return (light);
 }
 
-int	intersect_sphere(t_scene *scene, t_vector ray_direction, float *t, int i)
+int	intersect_sphere(t_scene *scene, t_ray ray, float *t, int i)
 {
-	if (sp_calc_discriminant(scene, ray_direction, t, i) < 0)
+	if (sp_calc_discriminant(scene, ray, t, i) < 0)
 		return (0);
 	return (1);
 }

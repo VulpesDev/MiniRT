@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 09:24:43 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/08 00:11:54 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/12 18:58:15 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,17 +70,26 @@ void	handle_solid(t_scene *scene, char **el)
 	if (!ft_strcmp(el[0], "sp"))
 	{
 		if (!validate_sphere(scene, el))
-			ft_printf("Sphere\n");
+		{
+			printf("Sphere\n");
+			scene->shape_count++;
+		}
 	}
 	else if (!ft_strcmp(el[0], "pl"))
 	{
 		if (!validate_plane(scene, el))
+		{
+			scene->shape_count++;
 			ft_printf("Plane\n");
+		}
 	}
 	else if (!ft_strcmp(el[0], "cy"))
 	{
 		if (!validate_cylinder(scene, el))
+		{
+			scene->shape_count++;
 			ft_printf("Cylinder\n");
+		}
 	}
 	else
 		ft_printf("Solid not recognized\n");
@@ -139,12 +148,6 @@ int	parse_args(t_scene *scene, char *filename)
 	close(fd);
 	if (flag[0] && flag[1] && flag[2])
 	{
-		// while ((*scene->sp).diameter)
-		// {
-		// 	printf("SPHERE\n");
-		// 	scene->sp++;
-		// }
-		// exit (printf("Render\n"));
 		return (render_scene(scene));
 	}
 	return (ft_warning("cannot render", "missing element", MISS_UNIQUE));

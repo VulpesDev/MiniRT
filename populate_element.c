@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:30:47 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/05 00:47:10 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/09 16:22:19 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,30 @@ t_err	validate_ambient(t_scene *scene, char **el)
 }
 
 /**
+ * if FOV == 180 the tan explodes
+*/
+void	set_camera_canvas(t_camera *c)
+{
+	float	range_x;
+	float	range_y;
+	float	fov_rad;
+	float	ratio;
+
+	if (c->fov >= 180)
+		c->fov = 179;
+	if (c->fov < 0)
+		c->fov = 0;
+	ratio = (float)WIDTH / HEIGHT;
+	fov_rad = c->fov * (M_PI / 180);
+	range_x = 2 * tan(fov_rad / 2) * CANV_DIST;
+	range_y = range_x / ratio;
+	c->top_right = (t_point_2d){range_x / 2 + c->pos.x, range_y / 2 + c->pos.y};
+	c->bot_left = (t_point_2d){(range_x / 2) * -1 + \
+								c->pos.x, -(range_y / 2) + c->pos.y};
+	printf("rad: %f range_x: %f range_y: %f corners: b %f t %f l %f r %f\n", fov_rad, range_x, range_y, c->bot_left.y, c->top_right.y, c->top_right.x, c->bot_left.x);
+}
+
+/**
  * Shall we set limits for the position? Maybe macroed in the header file
  * @returns 0 for success
 */
@@ -48,6 +72,7 @@ t_err	validate_camera(t_scene *scene, char **el)
 	if (scene->camera.fov < 0 || scene->camera.fov > 180)
 		return (ft_warning("invalid argument: ", el[3], \
 				INVALID_ELEMENT));
+	set_camera_canvas(&scene->camera);
 	return (SUCCESS);
 }
 
