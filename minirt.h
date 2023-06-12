@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/12 16:12:44 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/12 16:51:04 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,6 +203,7 @@ t_err	init_img(t_scene *scene);
 /* RENDER */
 t_err	render_scene(t_scene *scene);
 void	draw(t_scene *scene);
+int		intersect_element(t_scene *scene, t_ray ray, int *color, float *min_t);
 
 /* SPHERE */
 int		intersect_sphere(t_scene *scene, t_ray ray, float *t, int i);

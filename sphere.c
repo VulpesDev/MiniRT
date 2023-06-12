@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 14:22:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/12 16:09:50 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/12 17:45:28 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,21 @@ float	sp_calc_discriminant(t_scene *scene, t_ray ray, \
 	return (discriminant);
 }
 
+int	cast_shadow(t_scene *scene, t_ray ray)
+{
+	int		i;
+	float	t;
+
+	i = scene->shape_count - 1;
+	while (i >= 0)
+	{
+		if (scene->shape[i].intersect(scene, ray, &t, i) && t > 0.000001f && t < 1)
+			return (1);
+		i--;
+	}
+	return (0);
+}
+
 /**
  * @param n: normal vector
  * @param p: hit point
@@ -52,8 +67,12 @@ float	diffuse_reflection(t_scene *scene, t_vector n, t_vector p)
 	float		n_dot_l;
 	float		light;
 	float		len_l;
+	t_ray		ray;
 
 	l = vect_sub(p, scene->light.pos);
+	ray = (t_ray){p, vect_norm(vect_inverse(l))};
+	if (cast_shadow(scene, ray))
+		return (0.1f);
 	n_dot_l = vect_dot(n, l);
 	len_l = vect_mag(l);
 	if (len_l == 0)
