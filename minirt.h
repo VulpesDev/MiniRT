@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/09 17:04:04 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/12 15:31:17 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,11 @@
 # define ZNEAR CANV_DIST
 # define ZFAR RAY_LEN
 
-typedef float	t_matrix_trans[4][4];
+typedef float			t_matrix_trans[4][4];
+typedef struct s_scene	t_scene;
+typedef struct s_ray	t_ray;
+typedef int				(*t_hit_func)(t_scene *scene, t_ray ray, \
+							float *t, int i);
 
 typedef enum e_err
 {
@@ -78,7 +82,7 @@ typedef struct s_point_3d
 	double	z;
 }			t_point_3d;
 
-typedef t_point_3d	t_vector;
+typedef t_point_3d		t_vector;
 
 typedef struct s_pxl
 {
@@ -139,6 +143,25 @@ typedef struct s_cylinder
 	int				trgb;
 }					t_cylinder;
 
+typedef struct s_ray
+{
+	t_point_3d	origin;
+	t_vector	direction;
+}			t_ray;
+
+typedef struct s_shape
+{
+	union {
+		t_sphere	sp;
+		t_plane		pl;
+		t_cylinder	cy;
+	};
+	t_vector		rotation;
+	t_hit_func		intersect;
+	t_matrix_trans	transform;
+	int				trgb;
+}			t_shape;
+
 /**
  * Possible struct for the scene:
  * one value for each unique element (A, C, L),
@@ -151,9 +174,8 @@ typedef struct s_scene
 	t_ambient	ambient;
 	t_camera	camera;
 	t_light		light;
-	t_sphere	*sp;
-	t_plane		*pl;
-	t_cylinder	*cy;
+	t_shape		*shape;
+	int			shape_count;
 }				t_scene;
 
 /* PARSE */
@@ -182,10 +204,9 @@ t_err	render_scene(t_scene *scene);
 void	draw(t_scene *scene);
 
 /* SPHERE */
-int		intersect_sphere(t_scene *scene, t_vector ray_direction, \
-						float *t, int i);
-float	sp_light_coeff(t_scene *scene, float t, t_vector ray_direction, int i);
-float	sp_calc_discriminant(t_scene *scene, t_vector ray_direction, \
+int		intersect_sphere(t_scene *scene, t_ray ray, float *t, int i);
+float	sp_light_coeff(t_scene *scene, float t, t_ray ray, int i);
+float	sp_calc_discriminant(t_scene *scene, t_ray ray, \
 							float *t, int i);
 float	sp_calc_hit_point(float discriminant, float a, float b);
 

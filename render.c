@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/10 13:48:37 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/12 15:28:39 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,34 +97,26 @@ int	apply_ligthing_ratio(int trgb, float lighting_ratio)
 			lighting_ratio * (trgb & 0xFF)));
 }
 
-int	intersect_element(t_scene *scene, t_vector ray_dir, int *color, float *min_t)
+int	intersect_element(t_scene *scene, t_ray ray, int *color, float *min_t)
 {
 	int		i;
 	int		ret;
 	float	t;
 
 	ret = 0;
-	i = 0;
-	while (scene->sp[i].diameter)
+	i = scene->shape_count - 1;
+	while (i >= 0)
 	{
-		if (intersect_sphere(scene, ray_dir, &t, i) && t < *min_t)
+		// printf("shape[%d] i: %d\n", scene->shape_count, i);
+		if (scene->shape[i].intersect(scene, ray, &t, i) && t < *min_t)
 		{
 			*min_t = t;
-			*color = apply_ligthing_ratio(scene->sp[i].trgb, sp_light_coeff(scene, t, ray_dir, i));
+			*color = apply_ligthing_ratio(scene->shape[i].trgb, \
+											sp_light_coeff(scene, t, ray, i));
 			ret = 1;
 		}
-		i++;
+		i--;
 	}
-	// i = 0;
-	// while (scene->pl + i * sizeof(t_plane))
-	// {
-	// 	i++;
-	// }
-	// i = 0;
-	// while (scene->cy + i * sizeof(t_cylinder))
-	// {
-	// 	i++;
-	// }
 	return (ret);
 }
 
@@ -146,7 +138,7 @@ int	intersect_element(t_scene *scene, t_vector ray_dir, int *color, float *min_t
 int	per_pixel(t_pxl p, t_scene *scene)
 {
 	t_point_2d		coord;
-	t_vector		ray_direction;
+	t_ray			ray;
 	float			t;
 	int				color;
 	t_point_3d		p3;
@@ -155,8 +147,9 @@ int	per_pixel(t_pxl p, t_scene *scene)
 	coord = to_canvas_new(p, &scene->camera);
 	p3 = (t_point_3d){coord.x, coord.y, -1.0f};
 	world_to_cam(p3, scene->camera.m_proj);
-	ray_direction = vect_norm((t_vector){p3.x, p3.y, p3.z});
-	if (intersect_element(scene, ray_direction, &color, &t))
+	ray.origin = scene->camera.pos;
+	ray.direction = vect_norm((t_vector){p3.x, p3.y, p3.z});
+	if (intersect_element(scene, ray, &color, &t))
 	{
 		return (color);
 	}

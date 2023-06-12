@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:42:10 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/08 23:49:05 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/12 15:30:33 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,8 @@
 
 void	free_scene(t_scene **scene)
 {
-	free((*scene)->sp);
-	free((*scene)->pl);
-	free((*scene)->cy);
-	(*scene)->sp = NULL;
-	(*scene)->pl = NULL;
-	(*scene)->cy = NULL;
+	free((*scene)->shape);
+	(*scene)->shape = NULL;
 	free(*scene);
 	*scene = NULL;
 }
@@ -64,11 +60,10 @@ t_err	ft_error(char *msg, char *arg, int err_code, t_scene *scene)
 */
 t_err	init_scene(t_scene *scene)
 {
-	scene->sp = ft_calloc(sizeof(t_sphere), (MAX_SOLID + 1));
-	scene->pl = ft_calloc(sizeof(t_plane), (MAX_SOLID + 1));
-	scene->cy = ft_calloc(sizeof(t_cylinder), (MAX_SOLID + 1));
-	if (!scene->sp || !scene->pl || !scene->cy)
+	scene->shape = ft_calloc(sizeof(t_shape), (MAX_SOLID + 1));
+	if (!scene->shape)
 		return (MEM_FAIL);
+	scene->shape_count = 0;
 	return (SUCCESS);
 }
 
