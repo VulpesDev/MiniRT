@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 18:05:50 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/09 13:02:15 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/12 19:44:32 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,16 @@ t_point_3d	transform(t_point_3d p, t_matrix_trans m)
 		ret.z = ret.z / w;
 	}
 	return (ret);
+}
+
+static t_matrix	orient_xform(t_vector forward, t_vector left, t_vector true_up)
+{
+	const double	table[MAX][MAX] = {
+	{left.x, left.y, left.z, 0},
+	{true_up.x, true_up.y, true_up.z, 0},
+	{-forward.x, -forward.y, -forward.z, 0},
+	{0, 0, 0, 1},
+	};
+
+	return (create_matrix(table, MAX));
 }

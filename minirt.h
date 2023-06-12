@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/12 19:04:26 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/12 20:23:41 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_scene	t_scene;
 typedef struct s_ray	t_ray;
 typedef int				(*t_hit_func)(t_scene *scene, t_ray ray, \
 							float *t, int i);
+typedef struct s_camera	t_camera;
 
 typedef enum e_err
 {
@@ -58,11 +59,11 @@ enum e_unique_el
 	LIGHT,
 };
 
-// typedef enum e_bool
-// {
-// 	FALSE,
-// 	TRUE,
-// }			t_bool;
+typedef struct s_matrix
+{
+	double	matrix[4][4];
+	size_t	size;
+}	t_matrix;
 
 typedef struct s_img
 {
@@ -111,8 +112,42 @@ typedef struct s_camera
 	uint8_t			fov;
 	t_point_2d		top_right;
 	t_point_2d		bot_left;
+	float			pixel_size;
 	t_matrix_trans	m_proj;
+	t_matrix		transform;
+	t_matrix		inverse;
+	t_matrix		transpose;
 }					t_camera;
+
+/**
+ * @brief The structure of type t_camera contains the necessary information for
+ *        camera configuration, rendering and transformation.
+ * @param hsize Stores the horizontal size (in pixels).
+ * @param vsize Stores the vertical size (in pixels).
+ * @param field_of_view This field stores angle that describes how much the
+ *                      camera can see. When the field of view is small, the
+ *                      view will be "zoomed in", magnifying a smaller area of
+ *                      the scene.
+ * @param half_width Stores the camera's half hsize value.
+ * @param half_height Stores the camera's half vsize value.
+ * @param pixel_size Stores the camera's pixel size calculated from half_width
+ *                   and hsize values.
+ * @param transform Stores the transformation matrix for the camera.
+ * @param inverse Stores the inverse matrix for the camera.
+ * @param transpose Stores the transpose matrix for the camera.
+ */
+// typedef struct s_camera
+// {
+// 	float		hsize;
+// 	float		vsize;
+// 	float		field_of_view;
+// 	float		half_width;
+// 	float		half_height;
+// 	float		pixel_size;
+// 	t_matrix	transform;
+// 	t_matrix	inverse;
+// 	t_matrix	transpose;
+// }	t_camera;
 
 typedef struct s_light
 {
