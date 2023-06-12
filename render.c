@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/12 16:05:00 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/12 16:17:26 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	intersect_element(t_scene *scene, t_ray ray, int *color, float *min_t)
 	while (i >= 0)
 	{
 		// printf("shape[%d] i: %d\n", scene->shape_count, i);
-		if (scene->shape[i].intersect(scene, ray, &t, i) && t < *min_t)
+		if (scene->shape[i].intersect(scene, ray, &t, i) && t < *min_t && t > 0)
 		{
 			*min_t = t;
 			*color = apply_ligthing_ratio(scene->shape[i].trgb, \
