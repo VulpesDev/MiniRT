@@ -6,11 +6,13 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:30:47 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/09 16:22:19 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/13 10:15:00 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+#include "matrix_math.h"
+#include "vector_math.h"
 
 /**
  * @returns 0 for success
@@ -51,11 +53,62 @@ void	set_camera_canvas(t_camera *c)
 	c->top_right = (t_point_2d){range_x / 2 + c->pos.x, range_y / 2 + c->pos.y};
 	c->bot_left = (t_point_2d){(range_x / 2) * -1 + \
 								c->pos.x, -(range_y / 2) + c->pos.y};
+	c->pixel_size = range_x / WIDTH;
 	printf("rad: %f range_x: %f range_y: %f corners: b %f t %f l %f r %f\n", fov_rad, range_x, range_y, c->bot_left.y, c->top_right.y, c->top_right.x, c->bot_left.x);
 }
 
+// static void	set_pixel_size(t_camera *camera)
+// {
+// 	float	half_view;
+// 	float	aspect;
+
+// 	half_view = tanf(camera->fov / 2);
+// 	aspect = camera->hsize / camera->vsize;
+// 	if (aspect >= 1)
+// 	{
+// 		camera->half_width = half_view;
+// 		camera->half_height = half_view / aspect;
+// 	}
+// 	else
+// 	{
+// 		camera->half_width = half_view * aspect;
+// 		camera->half_height = half_view;
+// 	}
+// 	camera->pixel_size = (camera->half_width * 2) / camera->hsize;
+// }
+
 /**
- * Shall we set limits for the position? Maybe macroed in the header file
+ * @brief Computes the view transformation matrix given the position of the
+ *        camera and the point to look at.
+ *
+ * This function returns a transformation matrix that orients the world
+ * relative to the camera's eye. You specify the position of the camera with
+ * the `from` parameter, the point to look at with the `to` parameter,
+ * and a vector indicating which direction is up with the `up` parameter.
+ *
+ * @param from The position of the camera in the world.
+ * @param to The point in the world to look at.
+ * @param up A vector indicating which direction is up.
+ * @return Returns the view transformation matrix.
+ */
+t_matrix	view_transform(t_point_3d from, t_point_3d to, t_vector up)
+{
+	t_point_3d		forward;
+	t_point_3d		left;
+	t_vector		true_up;
+	t_matrix		orientation;
+
+	forward = (t_point_3d)vect_norm(vect_sub(to, from));
+	left = vect_cross(forward, vect_norm(up));
+	true_up = vect_cross(left, forward);
+	orientation = orient_xform(forward, left, true_up);
+	return (multiply_mx_mx(
+			orientation,
+			translation(-from.x, -from.y, -from.z))
+	);
+}
+
+/**
  * @returns 0 for success
 */
 t_err	validate_camera(t_scene *scene, char **el)
@@ -73,6 +126,7 @@ t_err	validate_camera(t_scene *scene, char **el)
 		return (ft_warning("invalid argument: ", el[3], \
 				INVALID_ELEMENT));
 	set_camera_canvas(&scene->camera);
+	scene->camera.transform = get_identity_matrix();
 	return (SUCCESS);
 }
 

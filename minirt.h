@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/12 20:23:41 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/13 09:39:50 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,12 @@ enum e_unique_el
 	CAMERA,
 	LIGHT,
 };
+
+typedef enum e_bool
+{
+	FALSE,
+	TRUE,
+}	t_bool;
 
 typedef struct s_matrix
 {

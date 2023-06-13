@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 12:48:28 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/06/05 15:20:07 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/13 10:14:28 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,16 @@ t_vector	vect_mult(t_vector v, float a)
 	result.z = v.z * a;
 	return (result);
 }
+
+t_vector	vect_cross(t_vector a, t_vector b)
+{
+	return ((t_vector){
+		(a.y * b.z - a.z * b.y,
+			a.z * b.x - a.x * b.z,
+			a.x * b.y - a.y * b.x)}
+	);
+}
+
 
 float	vect_mag(t_vector v)
 {
