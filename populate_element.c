@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:30:47 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/13 14:28:58 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/13 18:10:04 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	set_camera_canvas(t_camera *c)
 	c->bot_left = (t_point_2d){(range_x / 2) * -1 + \
 								c->pos.x, -(range_y / 2) + c->pos.y};
 	printf("rad: %f range_x: %f range_y: %f corners: b %f t %f l %f r %f\n", fov_rad, range_x, range_y, c->bot_left.y, c->top_right.y, c->top_right.x, c->bot_left.x);
+	printf("pos: %f %f %f, fov: %d, orient %f %f %f\n", c->pos.x, c->pos.y, c->pos.z, c->fov, c->orientation.x, c->orientation.y, c->orientation.z);
 }
 
 void	set_transform_mx(t_camera *c)
@@ -60,7 +61,9 @@ void	set_transform_mx(t_camera *c)
 	c->transform = mx_get_identity();
 	print_4x4(c->transform.matrix);
 	c->transform = mx_rotate_x(c->transform, c->orientation.x);
-	printf("here\n");
+	c->transform = mx_rotate_y(c->transform, c->orientation.y);
+	c->transform = mx_rotate_z(c->transform, c->orientation.z);
+	//c->transform = mx_transl(c->transform, c->pos);
 	print_4x4(c->transform.matrix);
 }
 

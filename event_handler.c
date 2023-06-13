@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 12:29:38 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/06/13 14:32:03 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/13 18:10:58 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,23 @@ int	key_handle(int keycode, t_scene *scene)
 	return (0);
 }
 
+int	track_delta(int button, int x, int y, t_scene *scene)
+{
+	t_camera	*c;
+
+	c = &scene->camera;
+	if (button == LEFT_BUTTON)
+	{
+		// H : 1 = d : x
+		// printf("Dist: %f %f\n", (x - c->delta.x) / HEIGHT, (c->delta.y - y) / HEIGHT);
+		c->orientation.x += (x - c->delta.x) / HEIGHT;
+		c->orientation.y += (c->delta.y - y) / HEIGHT;
+		c->delta = (t_point_2d){0, 0};
+		draw(scene);
+	}
+	return (0);
+}
+
 int	mouse_handle(int button, int x, int y, t_scene *scene)
 {
 	t_img	*data;
@@ -61,10 +78,13 @@ int	mouse_handle(int button, int x, int y, t_scene *scene)
 	(void) x;
 	(void) y;
 	data = scene->img;
-	if (button == WHEEL_UP)
-		scene->camera.pos.z -= CAM_PACE;
-	else if (button == WHEEL_DOWN)
-		scene->camera.pos.z += CAM_PACE;
-	draw(scene);
+	if (button == WHEEL_UP && scene->camera.fov < 180)
+		scene->camera.fov -= CAM_PACE;
+	else if (button == WHEEL_DOWN && scene->camera.fov > 180)
+		scene->camera.fov += CAM_PACE;
+	if (button == LEFT_BUTTON)
+		scene->camera.delta = (t_point_2d){x, y};
+	if (button != LEFT_BUTTON)
+		draw(scene);
 	return (0);
 }

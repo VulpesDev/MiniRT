@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/13 14:29:39 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/13 17:54:02 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,37 +119,8 @@ typedef struct s_camera
 	t_matrix		transform;
 	t_matrix		inverse;
 	t_matrix		transpose;
+	t_point_2d		delta;
 }					t_camera;
-
-/**
- * @brief The structure of type t_camera contains the necessary information for
- *        camera configuration, rendering and transformation.
- * @param hsize Stores the horizontal size (in pixels).
- * @param vsize Stores the vertical size (in pixels).
- * @param field_of_view This field stores angle that describes how much the
- *                      camera can see. When the field of view is small, the
- *                      view will be "zoomed in", magnifying a smaller area of
- *                      the scene.
- * @param half_width Stores the camera's half hsize value.
- * @param half_height Stores the camera's half vsize value.
- * @param pixel_size Stores the camera's pixel size calculated from half_width
- *                   and hsize values.
- * @param transform Stores the transformation matrix for the camera.
- * @param inverse Stores the inverse matrix for the camera.
- * @param transpose Stores the transpose matrix for the camera.
- */
-// typedef struct s_camera
-// {
-// 	float		hsize;
-// 	float		vsize;
-// 	float		field_of_view;
-// 	float		half_width;
-// 	float		half_height;
-// 	float		pixel_size;
-// 	t_matrix	transform;
-// 	t_matrix	inverse;
-// 	t_matrix	transpose;
-// }	t_camera;
 
 typedef struct s_light
 {
