@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 18:06:27 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/13 10:18:24 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/13 10:32:51 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_matrix	translation(double x, double y, double z);
 t_matrix	scaling(double x, double y, double z);
 t_matrix	shearing(t_shearing x, t_shearing y, t_shearing z);
 t_matrix	rotation_matrix(t_vector vector);
-static void	calculate_rotation_angles(t_vector vec, double *x, double *z);
+void	calculate_rotation_angles(t_vector vec, double *x, double *z);
 t_matrix	rotation_x(double rad);
 t_matrix	rotation_y(double rad);
 t_matrix	rotation_z(double rad);

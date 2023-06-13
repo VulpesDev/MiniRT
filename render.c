@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/12 18:59:02 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/13 10:54:01 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,23 @@ int	intersect_element(t_scene *scene, t_ray ray, int *color, float *min_t)
 	return (ret);
 }
 
+t_ray	ray_for_pixel(t_camera *c, t_pxl p)
+{
+	float		world_x;
+	float		world_y;
+	t_tuple		pxl;
+	t_tuple		origin;
+	t_vector	direction;
+
+	world_x = c->bot_left.x + (p.x * c->pixel_size);
+	world_y = c->bot_left.y + (p.y * c->pixel_size);
+	pxl = multiply_tp_mx(c->transform, create_point(world_x, world_y, -1));
+	origin = multiply_tp_mx(c->transform, create_point(0, 0, 0));
+	direction = vect_norm(vect_sub((t_vector){pxl.x, pxl.y, pxl.z},
+				(t_vector){origin.x, origin.y, origin.z}));
+	return ((t_ray){(t_point_3d){origin.x, origin.y, origin.z}, direction});
+}
+
 /**
  * @returns a color as int
  * @math
@@ -137,18 +154,19 @@ int	intersect_element(t_scene *scene, t_ray ray, int *color, float *min_t)
 */
 int	per_pixel(t_pxl p, t_scene *scene)
 {
-	t_point_2d		coord;
+	// t_point_2d		coord;
 	t_ray			ray;
 	float			t;
 	int				color;
-	t_point_3d		p3;
+	// t_point_3d		p3;
 
 	t = RAY_LEN;
-	coord = to_canvas_new(p, &scene->camera);
-	p3 = (t_point_3d){coord.x, coord.y, -1.0f};
-	world_to_cam(p3, scene->camera.m_proj);
-	ray.origin = scene->camera.pos;
-	ray.direction = vect_norm((t_vector){p3.x, p3.y, p3.z});
+	// coord = to_canvas_new(p, &scene->camera);
+	// p3 = (t_point_3d){coord.x, coord.y, -1.0f};
+	// world_to_cam(p3, scene->camera.m_proj);
+	// ray.origin = scene->camera.pos;
+	// ray.direction = vect_norm((t_vector){p3.x, p3.y, p3.z});
+	ray = ray_for_pixel(&scene->camera, p);
 	if (intersect_element(scene, ray, &color, &t))
 	{
 		return (color);

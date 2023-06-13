@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:30:47 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/13 10:15:00 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/13 10:31:44 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ t_err	validate_camera(t_scene *scene, char **el)
 				INVALID_ELEMENT));
 	set_camera_canvas(&scene->camera);
 	scene->camera.transform = get_identity_matrix();
+	scene->camera.transform = view_transform(scene->camera.pos, (t_point_3d){0, 1, 0}, scene->camera.orientation);
 	return (SUCCESS);
 }
 

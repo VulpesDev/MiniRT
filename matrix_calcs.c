@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 18:05:50 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/13 10:17:41 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/13 10:34:59 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ t_matrix	shearing(t_shearing x, t_shearing y, t_shearing z)
 	return (create_matrix(shear, MAX));
 }
 
-static void	calculate_rotation_angles(t_vector vec, double *x, double *z);
+void	calculate_rotation_angles(t_vector vec, double *x, double *z);
 
 t_matrix	rotation_matrix(t_vector vector)
 {
@@ -122,7 +122,7 @@ t_matrix	rotation_matrix(t_vector vector)
  * @param z A pointer to the variable that will store the rotation angle
  *          around the z-axis.
  */
-static void	calculate_rotation_angles(t_vector vec, double *x, double *z)
+void	calculate_rotation_angles(t_vector vec, double *x, double *z)
 {
 	double	ratio;
 
