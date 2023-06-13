@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/12 20:23:41 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/13 14:29:39 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,11 @@ enum e_unique_el
 
 typedef struct s_matrix
 {
-	double	matrix[4][4];
+	float	matrix[4][4];
 	size_t	size;
 }	t_matrix;
+
+// typedef t_matrix_trans	t_matrix;
 
 typedef struct s_img
 {
@@ -224,6 +226,7 @@ int		validate_sphere(t_scene *scene, char **el);
 int		validate_plane(t_scene *scene, char **el);
 int		validate_cylinder(t_scene *scene, char **el);
 void	set_camera_canvas(t_camera *c);
+void	set_transform_mx(t_camera *c);
 
 /* PARSE UTILS */
 int		validate_3d_range(t_point_3d point, float min, float max);
@@ -259,5 +262,9 @@ t_err	ft_warning(char *msg, char *arg, int err_code);
 /* CLEANUP */
 int		free_img(t_img *data);
 void	free_scene(t_scene **scene);
+
+
+/* DEBUG */
+void	print_4x4(t_matrix_trans m);
 
 #endif

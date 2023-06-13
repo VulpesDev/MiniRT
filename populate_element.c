@@ -6,11 +6,12 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:30:47 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/09 16:22:19 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/13 14:28:58 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+#include "matrix_math.h"
 
 /**
  * @returns 0 for success
@@ -54,6 +55,15 @@ void	set_camera_canvas(t_camera *c)
 	printf("rad: %f range_x: %f range_y: %f corners: b %f t %f l %f r %f\n", fov_rad, range_x, range_y, c->bot_left.y, c->top_right.y, c->top_right.x, c->bot_left.x);
 }
 
+void	set_transform_mx(t_camera *c)
+{
+	c->transform = mx_get_identity();
+	print_4x4(c->transform.matrix);
+	c->transform = mx_rotate_x(c->transform, c->orientation.x);
+	printf("here\n");
+	print_4x4(c->transform.matrix);
+}
+
 /**
  * Shall we set limits for the position? Maybe macroed in the header file
  * @returns 0 for success
@@ -72,6 +82,7 @@ t_err	validate_camera(t_scene *scene, char **el)
 	if (scene->camera.fov < 0 || scene->camera.fov > 180)
 		return (ft_warning("invalid argument: ", el[3], \
 				INVALID_ELEMENT));
+	set_transform_mx(&scene->camera);
 	set_camera_canvas(&scene->camera);
 	return (SUCCESS);
 }

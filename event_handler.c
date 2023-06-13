@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 12:29:38 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/06/06 16:12:13 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/13 14:32:03 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ int	key_handle(int keycode, t_scene *scene)
 	else if (keycode == MINUS)
 		scene->ambient.lighting_ratio -= 0.1;
 	else if (keycode == UP)
-		scene->camera.pos.y += CAM_PACE;
+		scene->camera.orientation.x += 0.01;
 	else if (keycode == DOWN)
-		scene->camera.pos.y -= CAM_PACE;
+		scene->camera.orientation.x -= 0.01;
 	else if (keycode == LEFT)
 		scene->camera.pos.x -= CAM_PACE;
 	else if (keycode == RIGHT)
