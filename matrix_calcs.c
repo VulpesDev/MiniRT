@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 18:05:50 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/13 17:19:19 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/14 10:45:24 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,4 +175,15 @@ t_matrix	mx_transl(t_matrix mx, t_point_3d p)
 
 	cross = mx_cross(mx, create_matrix(mx_tr, 16));
 	return (cross);
+}
+
+t_matrix	mx_combine(t_matrix mx, t_vector orient)
+{
+	t_matrix	comb;
+
+	comb = mx;
+	comb = mx_rotate_x(comb, orient.x);
+	comb = mx_rotate_y(comb, orient.y);
+	comb = mx_rotate_z(comb, orient.z);
+	return (comb);
 }

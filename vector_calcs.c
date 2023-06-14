@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 12:48:28 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/06/05 15:20:07 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/14 11:05:38 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,17 @@ float	vect_dot(t_vector a, t_vector b)
 	return (result.x + result.y + result.z);
 }
 
+t_vector	vect_cross(t_vector u, t_vector v)
+{
+	return ((t_vector){
+		u.y * v.z - u.z * v.y,
+		u.z * v.x - u.x * v.z,
+		u.x * v.y - u.y * v.x
+	});
+}
+
 t_vector	vect_inverse(t_vector a)
 {
 	return ((t_vector){-a.x, -a.y, -a.z});
 }
+

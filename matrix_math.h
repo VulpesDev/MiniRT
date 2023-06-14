@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 18:06:27 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/13 17:20:37 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/14 10:16:30 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_matrix	mx_rotate_x(t_matrix mx, float x);
 t_matrix	mx_rotate_y(t_matrix mx, float y);
 t_matrix	mx_rotate_z(t_matrix mx, float z);
 t_matrix	mx_transl(t_matrix mx, t_point_3d p);
+t_matrix	mx_combine(t_matrix mx, t_vector orient);
 t_point_3d	transform(t_point_3d p, t_matrix_trans m);
 /* OPERATIONS */
 t_matrix	mx_cross(t_matrix a, t_matrix b);

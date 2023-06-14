@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 12:49:11 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/06/05 15:20:28 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/14 11:04:26 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 t_vector	vect_sum(t_vector a, t_vector b);
 t_vector	vect_sub(t_vector a, t_vector b);
 float		vect_dot(t_vector a, t_vector b);
+t_vector	vect_cross(t_vector u, t_vector v);
 t_vector	vect_norm(t_vector v);
 float		vect_mag(t_vector v);
 t_vector	vect_mult(t_vector v, float a);

@@ -6,12 +6,13 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:30:47 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/13 18:10:04 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/14 12:43:46 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "matrix_math.h"
+#include "vector_math.h"
 
 /**
  * @returns 0 for success
@@ -59,16 +60,19 @@ void	set_camera_canvas(t_camera *c)
 void	set_transform_mx(t_camera *c)
 {
 	c->transform = mx_get_identity();
-	print_4x4(c->transform.matrix);
-	c->transform = mx_rotate_x(c->transform, c->orientation.x);
-	c->transform = mx_rotate_y(c->transform, c->orientation.y);
-	c->transform = mx_rotate_z(c->transform, c->orientation.z);
-	//c->transform = mx_transl(c->transform, c->pos);
+	// print_4x4(c->transform.matrix);
+	// c->transform = mx_transl(c->transform, c->pos);
+	c->transform = mx_combine(c->transform, c->orientation);
+	c->vup = (t_vector){0, 1, 0};
+	t_point_3d look_at = mx_mult(c->transform, (t_point_3d)c->vup);
+	// t_vector forward = vect_norm(vect_sub(c->pos, look_at));
+	// t_vector right = vect_norm(vect_cross(c->vup, forward));
+	// t_vector up = vect_cross(forward, right);
+	printf("LookAt: %f %f %f\n", look_at.x, look_at.y, look_at.z);
 	print_4x4(c->transform.matrix);
 }
 
 /**
- * Shall we set limits for the position? Maybe macroed in the header file
  * @returns 0 for success
 */
 t_err	validate_camera(t_scene *scene, char **el)

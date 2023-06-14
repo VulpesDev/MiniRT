@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/13 18:22:53 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/14 12:02:35 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,9 @@ typedef struct s_camera
 	t_point_2d		top_right;
 	t_point_2d		bot_left;
 	float			pixel_size;
+	t_vector		vup;
+	t_vector		up;
+	t_vector		right;
 	t_matrix_trans	m_proj;
 	t_matrix		transform;
 	t_matrix		inverse;
