@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 09:24:43 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/12 19:05:48 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/14 15:34:27 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ int	parse_args(t_scene *scene, char *filename)
 	close(fd);
 	if (flag[0] && flag[1] && flag[2])
 	{
+		printf("rendering scene\n");
 		return (render_scene(scene));
 	}
 	return (ft_warning("cannot render", "missing element", MISS_UNIQUE));

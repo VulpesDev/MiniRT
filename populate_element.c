@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   populate_element.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:30:47 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/14 12:43:46 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/14 17:01:03 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ t_err	validate_ambient(t_scene *scene, char **el)
 */
 void	set_camera_canvas(t_camera *c)
 {
-	float	range_x;
-	float	range_y;
 	float	fov_rad;
 	float	ratio;
 
@@ -48,28 +46,42 @@ void	set_camera_canvas(t_camera *c)
 		c->fov = 0;
 	ratio = (float)WIDTH / HEIGHT;
 	fov_rad = c->fov * (M_PI / 180);
-	range_x = 2 * tan(fov_rad / 2) * CANV_DIST;
-	range_y = range_x / ratio;
-	c->top_right = (t_point_2d){range_x / 2 + c->pos.x, range_y / 2 + c->pos.y};
-	c->bot_left = (t_point_2d){(range_x / 2) * -1 + \
-								c->pos.x, -(range_y / 2) + c->pos.y};
-	printf("rad: %f range_x: %f range_y: %f corners: b %f t %f l %f r %f\n", fov_rad, range_x, range_y, c->bot_left.y, c->top_right.y, c->top_right.x, c->bot_left.x);
-	printf("pos: %f %f %f, fov: %d, orient %f %f %f\n", c->pos.x, c->pos.y, c->pos.z, c->fov, c->orientation.x, c->orientation.y, c->orientation.z);
+	c->viewport_width = 2 * tanf(fov_rad / 2) * CANV_DIST;
+	c->viewport_heigth = c->viewport_width  / ratio;
+	printf("viewport_w: %f \nviewport_h: %f\n", c->viewport_width, c->viewport_heigth);
+	// c->top_right = (t_point_2d){range_x / 2 + c->pos.x, range_y / 2 + c->pos.y};
+	// c->bot_left = (t_point_2d){(range_x / 2) * -1 + \
+	// 							c->pos.x, -(range_y / 2) + c->pos.y};
+	// printf("rad: %f range_x: %f range_y: %f corners: b %f t %f l %f r %f\n", fov_rad, range_x, range_y, c->bot_left.y, c->top_right.y, c->top_right.x, c->bot_left.x);
+	// printf("pos: %f %f %f, fov: %d, orient %f %f %f\n", c->pos.x, c->pos.y, c->pos.z, c->fov, c->orientation.x, c->orientation.y, c->orientation.z);
 }
 
 void	set_transform_mx(t_camera *c)
 {
 	c->transform = mx_get_identity();
-	// print_4x4(c->transform.matrix);
-	// c->transform = mx_transl(c->transform, c->pos);
+	print_4x4(c->transform.matrix);
+	//c->transform = mx_transl(c->transform, c->pos);
 	c->transform = mx_combine(c->transform, c->orientation);
 	c->vup = (t_vector){0, 1, 0};
-	t_point_3d look_at = mx_mult(c->transform, (t_point_3d)c->vup);
-	// t_vector forward = vect_norm(vect_sub(c->pos, look_at));
-	// t_vector right = vect_norm(vect_cross(c->vup, forward));
-	// t_vector up = vect_cross(forward, right);
+	// t_point_3d look_at = mx_mult(c->transform, (t_point_3d)c->vup);
+	t_point_3d look_at = (t_vector){0, 0, 0};
+	t_point_3d look_from = c->pos;
+	t_vector w = vect_norm(vect_sub(look_at, look_from));
+	t_vector u = vect_norm(vect_cross(c->vup, w));
+	t_vector v = vect_cross(w, u);
+	vect_print("w", w);
+	vect_print("u", u);
+	vect_print("v", v);
+	c->horizontal = vect_mult(u, c->viewport_width);
+	c->vertical = vect_mult(v, c->viewport_heigth);
+	
+	vect_print("Horizontal", c->horizontal);
+	vect_print("Vertical", c->vertical);
+	c->lower_left_corner = vect_sub(vect_sub(c->pos, vect_dev(c->horizontal, 2)), vect_sub(vect_dev(c->vertical, 2), w));
+	vect_print("Lower_left_corner", c->lower_left_corner);
+
 	printf("LookAt: %f %f %f\n", look_at.x, look_at.y, look_at.z);
-	print_4x4(c->transform.matrix);
+	// print_4x4(c->transform.matrix);
 }
 
 /**
@@ -89,8 +101,8 @@ t_err	validate_camera(t_scene *scene, char **el)
 	if (scene->camera.fov < 0 || scene->camera.fov > 180)
 		return (ft_warning("invalid argument: ", el[3], \
 				INVALID_ELEMENT));
-	set_transform_mx(&scene->camera);
 	set_camera_canvas(&scene->camera);
+	set_transform_mx(&scene->camera);
 	return (SUCCESS);
 }
 

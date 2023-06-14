@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   keys.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 12:22:28 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/06 11:44:33 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/14 12:56:02 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ Keymap
 # define W 119
 # define C 99
 # define R 114
+# define Q 113
+# define E 101
 # define PLUS 61
 # define MINUS 45
 /*

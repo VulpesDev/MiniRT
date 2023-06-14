@@ -3,14 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   vector_calcs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 12:48:28 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/06/14 11:05:38 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/14 16:00:14 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+void	vect_print(char *name, t_vector point)
+{
+	printf("%s (%f, %f, %f)\n", name, point.x, point.y, point.z);
+}
+
+t_vector	vect_dev(t_vector v, float a)
+{
+	t_vector	result;
+
+	result.x = v.x / a;
+	result.y = v.y / a;
+	result.z = v.z / a;
+	return (result);
+}
 
 t_vector	vect_mult(t_vector v, float a)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/14 12:02:35 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/14 15:56:45 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,11 @@ typedef struct s_camera
 	t_matrix		inverse;
 	t_matrix		transpose;
 	t_point_2d		delta;
+	t_point_3d		lower_left_corner;
+	t_vector		horizontal;
+	t_vector		vertical;
+	float			viewport_width;
+	float			viewport_heigth;
 }					t_camera;
 
 typedef struct s_light

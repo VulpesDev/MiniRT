@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/13 14:30:10 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/14 17:00:34 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,26 @@ t_point_2d	to_canvas_new(t_pxl pxl, t_camera *c)
 	range_y = c->top_right.y - c->bot_left.y;
 	ret.x = range_x / WIDTH * pxl.x + c->bot_left.x;
 	ret.y = range_y / HEIGHT * pxl.y + c->bot_left.y;
+	return (ret);
+}
+
+float	ft_absf(float f)
+{
+	if (f < 0)
+		return (-f);
+	return (f);
+}
+
+t_point_2d	to_canvas_we(t_pxl pxl, t_camera *c)
+{
+	t_point_2d	ret;
+	float		range_x;
+	float		range_y;
+
+	range_x = ft_absf(2 * c->lower_left_corner.x);
+	range_y = ft_absf(2 * c->lower_left_corner.y);
+	ret.x = range_x / WIDTH * pxl.x + c->lower_left_corner.x;
+	ret.y = range_y / HEIGHT * pxl.y + c->lower_left_corner.y;
 	return (ret);
 }
 
@@ -125,6 +145,18 @@ int	intersect_element(t_scene *scene, t_ray ray, int *color, float *min_t)
 	return (ret);
 }
 
+t_ray	get_cam_ray( t_camera c, float x, float y)
+{
+	t_ray		ray;
+	t_vector	temp;
+	
+	ray.origin = c.pos;
+	temp = vect_sum(c.lower_left_corner, vect_mult(c.horizontal, x));
+	temp = vect_sum(temp, vect_mult(c.vertical, y));
+	ray.direction = vect_sub(temp, c.pos);
+	return (ray);
+}
+
 // t_ray	ray_for_pixel(t_camera *c, t_pxl p)
 // {
 // 	float		world_x;
@@ -166,11 +198,13 @@ int	per_pixel(t_pxl p, t_scene *scene)
 	t_point_3d		p3;
 
 	t = RAY_LEN;
-	coord = to_canvas_new(p, &scene->camera);
-	p3 = (t_point_3d){coord.x, coord.y, -1.0f};
+	coord = to_canvas_we(p, &scene->camera);
+	p3 = (t_point_3d){coord.x, coord.y, ZNEAR};
 	p3 = world_to_cam_new(p3, scene->camera.transform);
-	ray.origin = scene->camera.pos;
-	ray.direction = vect_norm((t_vector){p3.x, p3.y, p3.z});
+	//ray.origin = scene->camera.pos;
+	//ray.direction = vect_norm((t_vector){p3.x, p3.y, p3.z});
+	ray = get_cam_ray(scene->camera, p3.x, p3.y);
+	//ray.direction.z = ray.direction.z * -1;
 	// ray = ray_for_pixel(&scene->camera, p);
 	if (intersect_element(scene, ray, &color, &t))
 	{
@@ -191,7 +225,7 @@ void	draw(t_scene *scene)
 
 	data = scene->img;
 	set_camera_canvas(&scene->camera);
-	// set_proj_matrix(scene->camera.m_proj, &scene->camera);
+	//set_proj_matrix(scene->camera.m_proj, &scene->camera);
 	set_transform_mx(&scene->camera);
 	p.y = 0;
 	while (p.y < HEIGHT)
@@ -211,6 +245,7 @@ t_err	render_scene(t_scene *scene)
 {
 	if (!init_img(scene))
 	{
+		printf("hey\n");
 		draw(scene);
 		mlx_manage(scene);
 		return (SUCCESS);
