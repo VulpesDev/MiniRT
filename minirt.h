@@ -6,22 +6,23 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/14 12:02:35 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/15 14:13:18 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 # define MINIRT_H
-# include "libft.h"
-# include "keys.h"
 # include <fcntl.h>
 # include <stdio.h>
 # include <mlx.h>
 # include <math.h>
+# include "libft.h"
+# include "keys.h"
+# include "camera.h"
 # define SPACE "\t\n\f\r\v "
 # define MAX_SOLID 3
-# define WIDTH 1024
-# define HEIGHT 768
+// # define WIDTH 1024
+// # define HEIGHT 768
 # define CANV_MIN_X -1.0f
 # define CANV_MAX_X 1.0f
 # define CANV_MIN_Y -1.0f
@@ -80,14 +81,14 @@ typedef struct s_img
 	int			endian;
 }				t_img;
 
-typedef struct s_point_3d
-{
-	double	x;
-	double	y;
-	double	z;
-}			t_point_3d;
+// typedef struct s_point_3d
+// {
+// 	double	x;
+// 	double	y;
+// 	double	z;
+// }			t_point_3d;
 
-typedef t_point_3d		t_vector;
+// typedef t_point_3d		t_vector;
 
 typedef struct s_pxl
 {
@@ -108,23 +109,23 @@ typedef struct s_ambient
 	int		trgb;
 }				t_ambient;
 
-typedef struct s_camera
-{
-	t_point_3d		pos;
-	t_vector		orientation;
-	uint8_t			fov;
-	t_point_2d		top_right;
-	t_point_2d		bot_left;
-	float			pixel_size;
-	t_vector		vup;
-	t_vector		up;
-	t_vector		right;
-	t_matrix_trans	m_proj;
-	t_matrix		transform;
-	t_matrix		inverse;
-	t_matrix		transpose;
-	t_point_2d		delta;
-}					t_camera;
+// typedef struct s_camera
+// {
+// 	t_point_3d		pos;
+// 	t_vector		orientation;
+// 	uint8_t			fov;
+// 	t_point_2d		top_right;
+// 	t_point_2d		bot_left;
+// 	float			pixel_size;
+// 	t_vector		vup;
+// 	t_vector		up;
+// 	t_vector		right;
+// 	t_matrix_trans	m_proj;
+// 	t_matrix		transform;
+// 	t_matrix		inverse;
+// 	t_matrix		transpose;
+// 	t_point_2d		delta;
+// }					t_camera;
 
 typedef struct s_light
 {

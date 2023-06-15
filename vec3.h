@@ -6,13 +6,12 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:40:31 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/15 12:11:07 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/15 14:03:52 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VEC3_H
 # define VEC3_H
-# include "minirt.h"
 
 typedef struct s_vec3
 {
@@ -22,6 +21,8 @@ typedef struct s_vec3
 }				t_vec3;
 
 typedef t_vec3	t_point3;
+typedef t_vec3	t_point_3d;
+typedef t_vec3	t_vector;
 
 typedef struct s_color
 {
@@ -30,5 +31,15 @@ typedef struct s_color
 	int	g;
 	int	b;
 }			t_color;
+
+t_vec3	vec3(double x, double y, double z);
+t_vec3	vec3_sum(t_vec3 a, t_vec3 b);
+t_vec3	vec3_mult(t_vec3 a, double b);
+t_vec3	vec3_sub(t_vec3 a, t_vec3 b);
+double	vec3_dot(t_vec3 a, t_vec3 b);
+t_vec3	vec3_div(t_vec3 a, double b);
+double	vec3_len_squared(t_vec3 a);
+double	vec3_len(t_vec3 a);
+t_vec3	vec3_unit(t_vec3 a);
 
 #endif

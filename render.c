@@ -6,14 +6,13 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/15 12:23:13 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/15 14:05:25 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-#include "vector_math.h"
+// #include "vector_math.h"
 #include "matrix_math.h"
-#include "vec3.h"
 
 /**
  * range_x / WIDTH = canvas size of 1 pxl on x axis
@@ -33,18 +32,18 @@
 // 	return (ret);
 // }
 
-t_point_2d	to_canvas_new(t_pxl pxl, t_camera *c)
-{
-	t_point_2d	ret;
-	float		range_x;
-	float		range_y;
+// t_point_2d	to_canvas_new(t_pxl pxl, t_camera *c)
+// {
+// 	t_point_2d	ret;
+// 	float		range_x;
+// 	float		range_y;
 
-	range_x = c->top_right.x - c->bot_left.x;
-	range_y = c->top_right.y - c->bot_left.y;
-	ret.x = range_x / WIDTH * pxl.x + c->bot_left.x;
-	ret.y = range_y / HEIGHT * pxl.y + c->bot_left.y;
-	return (ret);
-}
+// 	range_x = c->top_right.x - c->bot_left.x;
+// 	range_y = c->top_right.y - c->bot_left.y;
+// 	ret.x = range_x / WIDTH * pxl.x + c->bot_left.x;
+// 	ret.y = range_y / HEIGHT * pxl.y + c->bot_left.y;
+// 	return (ret);
+// }
 
 void	print_4x4(t_matrix_trans m)
 {
@@ -57,26 +56,26 @@ void	print_4x4(t_matrix_trans m)
 	printf("\n");
 }
 
-void	set_proj_matrix(t_matrix_trans proj, t_camera *c)
-{
-	proj[0][0] = (2 * ZNEAR) / (c->top_right.x - c->bot_left.x);
-	proj[0][1] = 0.0f;
-	proj[0][2] = 0.0f;
-	proj[0][3] = 0.0f;
-	proj[1][0] = 0.0f;
-	proj[1][1] = (2 * ZNEAR) / (c->top_right.y - c->bot_left.y);
-	proj[1][2] = 0.0f;
-	proj[1][3] = 0.0f;
-	proj[2][0] = (c->top_right.x + c->bot_left.x) / (c->top_right.x - c->bot_left.x);
-	proj[2][1] = (c->top_right.y + c->bot_left.y) / (c->top_right.y - c->bot_left.y);
-	proj[2][2] = -((ZFAR + ZNEAR) / (ZFAR - ZNEAR));
-	proj[2][3] = -1.0f;
-	proj[3][0] = 0.0f;
-	proj[3][1] = 0.0f;
-	proj[3][2] = -((2 * ZFAR * ZNEAR) / (ZFAR - ZNEAR));
-	proj[3][3] = 0.0f;
-	print_4x4(proj);
-}
+// void	set_proj_matrix(t_matrix_trans proj, t_camera *c)
+// {
+// 	proj[0][0] = (2 * ZNEAR) / (c->top_right.x - c->bot_left.x);
+// 	proj[0][1] = 0.0f;
+// 	proj[0][2] = 0.0f;
+// 	proj[0][3] = 0.0f;
+// 	proj[1][0] = 0.0f;
+// 	proj[1][1] = (2 * ZNEAR) / (c->top_right.y - c->bot_left.y);
+// 	proj[1][2] = 0.0f;
+// 	proj[1][3] = 0.0f;
+// 	proj[2][0] = (c->top_right.x + c->bot_left.x) / (c->top_right.x - c->bot_left.x);
+// 	proj[2][1] = (c->top_right.y + c->bot_left.y) / (c->top_right.y - c->bot_left.y);
+// 	proj[2][2] = -((ZFAR + ZNEAR) / (ZFAR - ZNEAR));
+// 	proj[2][3] = -1.0f;
+// 	proj[3][0] = 0.0f;
+// 	proj[3][1] = 0.0f;
+// 	proj[3][2] = -((2 * ZFAR * ZNEAR) / (ZFAR - ZNEAR));
+// 	proj[3][3] = 0.0f;
+// 	print_4x4(proj);
+// }
 
 /**
  * As in openGL, we state that the projection plane coinincides
@@ -143,6 +142,22 @@ int	intersect_element(t_scene *scene, t_ray ray, int *color, float *min_t)
 // 	return ((t_ray){(t_point_3d){origin.x, origin.y, origin.z}, direction});
 // }
 
+t_ray	create_cam_ray(t_camera *c, double u, double v)
+{
+	t_ray	ray;
+	t_vec3	temp;
+	t_vec3	scale_hor;
+	t_vec3	scale_ver;
+
+	ray.origin = c->pos;
+	scale_hor = vec3_mult(c->horizontal, u);
+	scale_ver = vec3_mult(c->vertical, v);
+	temp = vec3_sum(scale_hor, scale_ver);
+	ray.direction = vec3_sub(c->lower_left_corner, ray.origin);
+	ray.direction = vec3_sum(ray.direction, temp);
+	return (ray);
+}
+
 /**
  * @returns a color as int
  * @math
@@ -160,23 +175,13 @@ int	intersect_element(t_scene *scene, t_ray ray, int *color, float *min_t)
 */
 int	per_pixel(t_pxl p, t_scene *scene)
 {
-	t_point_2d		coord;
-	t_ray			ray;
-	float			t;
-	int				color;
-	t_point_3d		p3;
+	double	u;
+	double	v;
+	t_ray	r;
 
-	t = RAY_LEN;
-	coord = to_canvas_new(p, &scene->camera);
-	p3 = (t_point_3d){coord.x, coord.y, -1.0f};
-	p3 = world_to_cam_new(p3, scene->camera.transform);
-	ray.origin = scene->camera.pos;
-	ray.direction = vect_norm((t_vector){p3.x, p3.y, p3.z});
-	// ray = ray_for_pixel(&scene->camera, p);
-	if (intersect_element(scene, ray, &color, &t))
-	{
-		return (color);
-	}
+	u = (double)p.x / (WIDTH - 1);
+	v = (double)p.y / (HEIGHT - 1);
+	r = create_cam_ray(&scene->camera, u, v);
 	return (apply_ligthing_ratio(scene->ambient.trgb, \
 								scene->ambient.lighting_ratio));
 }
