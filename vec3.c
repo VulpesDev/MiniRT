@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:42:25 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/15 12:30:07 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/15 15:59:55 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,27 @@
 t_vec3	vec3(double x, double y, double z)
 {
 	t_vec3	result;
+
+	result.x = x;
+	result.y = y;
+	result.z = z;
+	return (result);
+}
+
+t_color	color(double t, double r, double g, double b)
+{
+	t_color	result;
+
+	result.t = t;
+	result.r = r;
+	result.g = g;
+	result.b = b;
+	return (result);
+}
+
+t_point3	point(double x, double y, double z)
+{
+	t_point3	result;
 
 	result.x = x;
 	result.y = y;

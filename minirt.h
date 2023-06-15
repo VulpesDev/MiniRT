@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/15 14:13:18 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/15 16:13:52 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include "libft.h"
 # include "keys.h"
 # include "camera.h"
+# include "sphere.h"
 # define SPACE "\t\n\f\r\v "
 # define MAX_SOLID 3
 // # define WIDTH 1024
@@ -60,6 +61,12 @@ enum e_unique_el
 	CAMERA,
 	LIGHT,
 };
+
+typedef enum e_bool
+{
+	FALSE,
+	TRUE,
+}			t_bool;
 
 typedef struct s_matrix
 {
@@ -134,12 +141,12 @@ typedef struct s_light
 	int				trgb;
 }					t_light;
 
-typedef struct s_sphere
-{
-	t_point_3d		pos;
-	float			diameter;
-	int				trgb;
-}					t_sphere;
+// typedef struct s_sphere
+// {
+// 	t_point_3d		pos;
+// 	float			diameter;
+// 	int				trgb;
+// }					t_sphere;
 
 typedef struct s_plane
 {
@@ -158,11 +165,11 @@ typedef struct s_cylinder
 	int				trgb;
 }					t_cylinder;
 
-typedef struct s_ray
-{
-	t_point_3d	origin;
-	t_vector	direction;
-}			t_ray;
+// typedef struct s_ray
+// {
+// 	t_point_3d	origin;
+// 	t_vector	direction;
+// }			t_ray;
 
 typedef struct s_shape
 {

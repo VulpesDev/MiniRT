@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 14:22:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/12 18:41:00 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/15 16:16:13 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,5 +100,23 @@ int	intersect_sphere(t_scene *scene, t_ray ray, float *t, int i)
 	if (sp_calc_discriminant(scene, ray, t, i) < 0)
 		return (0);
 	return (1);
+}
+
+double	sp_hit(t_point3 center, double diameter, t_ray r)
+{
+	t_vec3	oc;
+	double	a;
+	double	b;
+	double	c;
+	double	discriminant;
+
+	oc = vec3_sub(r.origin, center);
+	a = vec3_dot(r.direction, r.direction);
+	b = 2.0 * vec3_dot(oc, r.direction);
+	c = vec3_dot(oc, oc) - pow(diameter / 2, 2);
+	discriminant = b * b - 4 * a * c;
+	if (discriminant < 0)
+		return (-1);
+	return ((-b - sqrt(discriminant)) / (2.0 * a));
 }
 

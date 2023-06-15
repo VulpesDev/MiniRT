@@ -6,11 +6,12 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/15 14:05:25 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/15 16:41:22 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+#include "ray.h"
 // #include "vector_math.h"
 #include "matrix_math.h"
 
@@ -146,17 +147,61 @@ t_ray	create_cam_ray(t_camera *c, double u, double v)
 {
 	t_ray	ray;
 	t_vec3	temp;
-	t_vec3	scale_hor;
-	t_vec3	scale_ver;
+	t_vec3	gradient_hor;
+	t_vec3	gradient_ver;
 
 	ray.origin = c->pos;
-	scale_hor = vec3_mult(c->horizontal, u);
-	scale_ver = vec3_mult(c->vertical, v);
-	temp = vec3_sum(scale_hor, scale_ver);
+	gradient_hor = vec3_mult(c->horizontal, u);
+	gradient_ver = vec3_mult(c->vertical, v);
+	temp = vec3_sum(gradient_hor, gradient_ver);
 	ray.direction = vec3_sub(c->lower_left_corner, ray.origin);
 	ray.direction = vec3_sum(ray.direction, temp);
 	return (ray);
 }
+
+/**
+ * A lerp is always of the form
+ * blendedValue=(1−t)⋅startValue+t⋅endValue,
+*/
+t_color	ray_color(t_ray ray)
+{
+	t_vec3	unit_direction;
+	double	t;
+	t_vec3	normal;
+	t_vec3	blend;
+
+	t = sp_hit(point(0, 0, -1), 1, ray);
+	if (t > 0.0)
+	{
+		normal = vec3_unit(vec3_sub(ray_at(ray, t), vec3(0, 0, -1)));
+		return (color(0.5, (normal.x + 1) * 0.5, (normal.y + 1) * 0.5, (normal.z + 1) * 0.5));
+	}
+	unit_direction = vec3_unit(ray.direction);
+	t = 0.5 * (unit_direction.y + 1.0);
+	blend = vec3_sum(vec3_mult(vec3(1, 1, 1), 1.0 - t), vec3_mult(vec3(0.5, 0.7, 1.0), t));
+	return (color(0, blend.x, blend.y, blend.z));
+}
+
+/**
+ * @brief converts a color struct with double values in range [0, 1]
+ * to an int in trgb format
+ * @param c color struct
+ * @return int in trgb format
+*/
+int	convert_trgb(t_color c)
+{
+	int		t;
+	int		r;
+	int		g;
+	int		b;
+
+	t = (int)(c.t * 255.999);
+	r = (int)(c.r * 255.999);
+	g = (int)(c.g * 255.999);
+	b = (int)(c.b * 255.999);
+	return (t << 24 | r << 16 | g << 8 | b);
+}
+
 
 /**
  * @returns a color as int
@@ -178,12 +223,14 @@ int	per_pixel(t_pxl p, t_scene *scene)
 	double	u;
 	double	v;
 	t_ray	r;
+	t_color	c;
 
+	// Between 0 and 1
 	u = (double)p.x / (WIDTH - 1);
 	v = (double)p.y / (HEIGHT - 1);
 	r = create_cam_ray(&scene->camera, u, v);
-	return (apply_ligthing_ratio(scene->ambient.trgb, \
-								scene->ambient.lighting_ratio));
+	c = ray_color(r);
+	return (convert_trgb(c));
 }
 
 /**
@@ -194,20 +241,22 @@ void	draw(t_scene *scene)
 {
 	t_pxl	p;
 	t_img	*data;
-	int		color;
+	int		c;
 
 	data = scene->img;
-	p.y = HEIGHT - 1;
-	while (p.y >= 0)
+	p.y = 0;
+	while (p.y < HEIGHT)
 	{
+		// printf("Scanlines remaining: %d\n", HEIGHT - 1 - p.y);
 		p.x = 0;
 		while (p.x < WIDTH)
 		{
-			color = per_pixel(p, scene);
-			my_mlx_pixel_put_d(data, p.x, p.y, color);
+			// c = convert_trgb(color(0, (double)p.x / (WIDTH - 1), (double)p.y / (HEIGHT - 1), 0.25));
+			c = per_pixel(p, scene);
+			my_mlx_pixel_put_d(data, p.x, p.y, c);
 			p.x++;
 		}
-		p.y--;
+		p.y++;
 	}
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img, 0, 0);
 }
