@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:54:25 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/15 15:35:26 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/16 00:22:28 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,18 @@ void	cam_setup(t_camera *c)
 	temp = vec3_sub(temp, half_ver);
 	c->lower_left_corner = vec3_sub(temp, vec3(0, 0, c->focal_length));
 	printf("Camera: vp_w: %f, vp_h: %f, lower_left: %f %f %f\n", c->viewport_width, c->viewport_height, c->lower_left_corner.x, c->lower_left_corner.y, c->lower_left_corner.z);
+}
+
+/**
+ * @brief Given the forward vector and a vector with 3 rotation angles,
+ * it gives the look_at point
+*/
+t_point3	look_at(t_vec3 forward, t_vec3 rot)
+{
+	t_point3	look_at;
+
+	look_at.x = forward.x + cos(rot.x) * cos(rot.y);
+	look_at.y = forward.y + sin(rot.x);
+	look_at.z = forward.z + cos(rot.x) * sin(rot.y);
+	return (look_at);
 }
