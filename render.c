@@ -6,13 +6,14 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/13 14:30:10 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/15 12:23:13 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "vector_math.h"
 #include "matrix_math.h"
+#include "vec3.h"
 
 /**
  * range_x / WIDTH = canvas size of 1 pxl on x axis
@@ -188,21 +189,20 @@ void	draw(t_scene *scene)
 {
 	t_pxl	p;
 	t_img	*data;
+	int		color;
 
 	data = scene->img;
-	set_camera_canvas(&scene->camera);
-	// set_proj_matrix(scene->camera.m_proj, &scene->camera);
-	set_transform_mx(&scene->camera);
-	p.y = 0;
-	while (p.y < HEIGHT)
+	p.y = HEIGHT - 1;
+	while (p.y >= 0)
 	{
 		p.x = 0;
 		while (p.x < WIDTH)
 		{
-			my_mlx_pixel_put_d(scene->img, p.x, p.y, per_pixel(p, scene));
+			color = per_pixel(p, scene);
+			my_mlx_pixel_put_d(data, p.x, p.y, color);
 			p.x++;
 		}
-		p.y++;
+		p.y--;
 	}
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img, 0, 0);
 }
