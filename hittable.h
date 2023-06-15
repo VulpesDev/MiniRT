@@ -1,29 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sphere.h                                           :+:      :+:    :+:   */
+/*   hittable.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/15 16:10:11 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/15 18:11:42 by tfregni          ###   ########.fr       */
+/*   Created: 2023/06/15 17:26:52 by tfregni           #+#    #+#             */
+/*   Updated: 2023/06/15 23:22:50 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SPHERE_H
-# define SPHERE_H
+#ifndef HITTABLE_H
+# define HITTABLE_H
+# include <stdbool.h>
 # include "vec3.h"
-# include "ray.h"
-# include "hittable.h"
 
-typedef struct s_shape	t_shape;
-typedef struct s_sphere
+typedef struct s_hit_record
 {
-	t_point_3d		pos;
-	float			diameter;
-	int				trgb;
-}					t_sphere;
+	t_point3	p;
+	t_vec3		normal;
+	double		t;
+	int			color;
+}				t_hit_record;
 
-bool	sp_hit(t_shape *shape, t_ray r, t_hit_record *rec);
-t_vec3	sp_normal(t_point3 hit, t_point3 center);
 #endif

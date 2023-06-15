@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:31:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/15 16:02:08 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/15 18:08:46 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	validate_sphere(t_scene *scene, char **el)
 		shape.sp.diameter = ft_atof(el[2]);
 		// printf("before: sphere %d: %p\n", i, &scene->shape[i]);
 		shape.intersect = intersect_sphere;
+		shape.hit = sp_hit;
 		scene->shape[i] = shape;
 		// printf to remove
 		printf("sphere %d: %p\n", i, &scene->shape[i]);

@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/15 16:41:22 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/15 23:54:38 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,43 @@ int	intersect_element(t_scene *scene, t_ray ray, int *color, float *min_t)
 	return (ret);
 }
 
+/**
+ * @brief converts an int in trgb format to a color struct with double values
+ * in range [0, 1]
+ * @param trgb int in trgb format
+ * @return color struct
+*/
+t_color	convert_color(int trgb)
+{
+	t_color	c;
+
+	c.t = ((trgb >> 24) & 0xFF) / 255.999;
+	c.r = ((trgb >> 16) & 0xFF) / 255.999;
+	c.g = ((trgb >> 8) & 0xFF) / 255.999;
+	c.b = (trgb & 0xFF) / 255.999;
+	return (c);
+}
+
+/**
+ * @brief converts a color struct with double values in range [0, 1]
+ * to an int in trgb format
+ * @param c color struct
+ * @return int in trgb format
+*/
+int	convert_trgb(t_color c)
+{
+	int		t;
+	int		r;
+	int		g;
+	int		b;
+
+	t = (int)(c.t * 255.999);
+	r = (int)(c.r * 255.999);
+	g = (int)(c.g * 255.999);
+	b = (int)(c.b * 255.999);
+	return (t << 24 | r << 16 | g << 8 | b);
+}
+
 // t_ray	ray_for_pixel(t_camera *c, t_pxl p)
 // {
 // 	float		world_x;
@@ -159,49 +196,44 @@ t_ray	create_cam_ray(t_camera *c, double u, double v)
 	return (ray);
 }
 
+bool	hit_element(t_scene *scene, t_ray ray, t_hit_record *rec)
+{
+	bool	hit_anything;
+	int		i;
+
+	hit_anything = false;
+	rec->t = RAY_LEN;
+	i = scene->shape_count - 1;
+	while (i >= 0)
+	{
+		if (scene->shape[i].hit(&scene->shape[i], ray, rec) && rec->t > 0.001f)
+		{
+			hit_anything = true;
+		}
+		i--;
+	}
+	return (hit_anything);
+}
+
 /**
  * A lerp is always of the form
  * blendedValue=(1−t)⋅startValue+t⋅endValue,
 */
-t_color	ray_color(t_ray ray)
+t_color	ray_color(t_scene *scene, t_ray ray)
 {
-	t_vec3	unit_direction;
-	double	t;
-	t_vec3	normal;
-	t_vec3	blend;
+	t_vec3			unit_direction;
+	double			t;
+	t_vec3			blend;
+	t_hit_record	rec;
 
-	t = sp_hit(point(0, 0, -1), 1, ray);
-	if (t > 0.0)
-	{
-		normal = vec3_unit(vec3_sub(ray_at(ray, t), vec3(0, 0, -1)));
-		return (color(0.5, (normal.x + 1) * 0.5, (normal.y + 1) * 0.5, (normal.z + 1) * 0.5));
-	}
+	// return (color(0.5, (normal.x + 1) * 0.5, (normal.y + 1) * 0.5, (normal.z + 1) * 0.5));
+	if (hit_element(scene, ray, &rec))
+		return (convert_color(rec.color));
 	unit_direction = vec3_unit(ray.direction);
 	t = 0.5 * (unit_direction.y + 1.0);
 	blend = vec3_sum(vec3_mult(vec3(1, 1, 1), 1.0 - t), vec3_mult(vec3(0.5, 0.7, 1.0), t));
 	return (color(0, blend.x, blend.y, blend.z));
 }
-
-/**
- * @brief converts a color struct with double values in range [0, 1]
- * to an int in trgb format
- * @param c color struct
- * @return int in trgb format
-*/
-int	convert_trgb(t_color c)
-{
-	int		t;
-	int		r;
-	int		g;
-	int		b;
-
-	t = (int)(c.t * 255.999);
-	r = (int)(c.r * 255.999);
-	g = (int)(c.g * 255.999);
-	b = (int)(c.b * 255.999);
-	return (t << 24 | r << 16 | g << 8 | b);
-}
-
 
 /**
  * @returns a color as int
@@ -229,7 +261,7 @@ int	per_pixel(t_pxl p, t_scene *scene)
 	u = (double)p.x / (WIDTH - 1);
 	v = (double)p.y / (HEIGHT - 1);
 	r = create_cam_ray(&scene->camera, u, v);
-	c = ray_color(r);
+	c = ray_color(scene, r);
 	return (convert_trgb(c));
 }
 

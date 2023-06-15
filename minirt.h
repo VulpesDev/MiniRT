@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/15 16:13:52 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/15 18:09:37 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "keys.h"
 # include "camera.h"
 # include "sphere.h"
+# include "hittable.h"
 # define SPACE "\t\n\f\r\v "
 # define MAX_SOLID 3
 // # define WIDTH 1024
@@ -38,9 +39,12 @@
 
 typedef float			t_matrix_trans[4][4];
 typedef struct s_scene	t_scene;
+typedef struct s_shape	t_shape;
 typedef struct s_ray	t_ray;
 typedef int				(*t_hit_func)(t_scene *scene, t_ray ray, \
 							float *t, int i);
+typedef bool			(*t_hit)(t_shape *shape, t_ray ray, t_hit_record *rec);
+typedef t_vec3			(*t_normal)(t_shape *shape, t_point3 hit);
 typedef struct s_camera	t_camera;
 
 typedef enum e_err
@@ -180,6 +184,8 @@ typedef struct s_shape
 	};
 	t_vector		rotation;
 	t_hit_func		intersect;
+	t_hit			hit;
+	t_normal		normal;
 	t_matrix_trans	transform;
 	int				trgb;
 }			t_shape;
