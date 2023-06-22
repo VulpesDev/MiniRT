@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:42:25 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/15 15:59:55 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/17 16:46:03 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,4 +97,9 @@ double	vec3_len(t_vec3 a)
 t_vec3	vec3_unit(t_vec3 a)
 {
 	return (vec3_div(a, vec3_len(a)));
+}
+
+t_vec3	vec3_inv(t_vec3 a)
+{
+	return (vec3_mult(a, -1));
 }

@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/15 18:09:37 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/17 16:17:10 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include "sphere.h"
 # include "hittable.h"
 # define SPACE "\t\n\f\r\v "
-# define MAX_SOLID 3
+# define MAX_SOLID 5
 // # define WIDTH 1024
 // # define HEIGHT 768
 # define CANV_MIN_X -1.0f
@@ -188,6 +188,7 @@ typedef struct s_shape
 	t_normal		normal;
 	t_matrix_trans	transform;
 	int				trgb;
+	t_color			color;
 }			t_shape;
 
 /**
@@ -224,6 +225,7 @@ t_err	extract_rgb(char *rgb, int *ret);
 
 /* GRAPHIC */
 int		create_trgb(int t, int r, int g, int b);
+t_color	convert_color(int trgb);
 int		mlx_manage(t_scene *scene);
 void	my_mlx_pixel_put_d(t_img *data, int x, int y, int color);
 t_err	init_img(t_scene *scene);

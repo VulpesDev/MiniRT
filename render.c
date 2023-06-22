@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/15 23:54:38 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/17 16:46:40 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,12 @@ int	apply_ligthing_ratio(int trgb, float lighting_ratio)
 			lighting_ratio * ((trgb >> 16) & 0xFF),
 			lighting_ratio * ((trgb >> 8) & 0xFF),
 			lighting_ratio * (trgb & 0xFF)));
+}
+
+t_color	apply_light_to_color(t_color c, double light)
+{
+	// printf("color: %f %f %f\n", c.r, c.g, c.b);
+	return (color(0.0, c.r * light, c.g * light, c.b * light));
 }
 
 int	intersect_element(t_scene *scene, t_ray ray, int *color, float *min_t)
@@ -219,7 +225,7 @@ bool	hit_element(t_scene *scene, t_ray ray, t_hit_record *rec)
  * A lerp is always of the form
  * blendedValue=(1−t)⋅startValue+t⋅endValue,
 */
-t_color	ray_color(t_scene *scene, t_ray ray)
+t_color	ray_color(t_scene *scene, t_ray r)
 {
 	t_vec3			unit_direction;
 	double			t;
@@ -227,9 +233,13 @@ t_color	ray_color(t_scene *scene, t_ray ray)
 	t_hit_record	rec;
 
 	// return (color(0.5, (normal.x + 1) * 0.5, (normal.y + 1) * 0.5, (normal.z + 1) * 0.5));
-	if (hit_element(scene, ray, &rec))
-		return (convert_color(rec.color));
-	unit_direction = vec3_unit(ray.direction);
+	if (hit_element(scene, r, &rec))
+	{
+		double light = ft_fmax((vec3_dot(rec.normal, vec3_inv(vec3_unit(scene->light.pos)))), 0.0f);
+		// rec.trgb = ft_fmax(rec.trgb * light, 0.0f);
+		return (apply_light_to_color(rec.color, light));
+	}
+	unit_direction = vec3_unit(r.direction);
 	t = 0.5 * (unit_direction.y + 1.0);
 	blend = vec3_sum(vec3_mult(vec3(1, 1, 1), 1.0 - t), vec3_mult(vec3(0.5, 0.7, 1.0), t));
 	return (color(0, blend.x, blend.y, blend.z));
@@ -276,6 +286,7 @@ void	draw(t_scene *scene)
 	int		c;
 
 	data = scene->img;
+	cam_setup(&scene->camera);
 	p.y = 0;
 	while (p.y < HEIGHT)
 	{

@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 16:10:11 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/15 18:11:42 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/17 16:16:26 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ typedef struct s_sphere
 {
 	t_point_3d		pos;
 	float			diameter;
-	int				trgb;
 }					t_sphere;
 
 bool	sp_hit(t_shape *shape, t_ray r, t_hit_record *rec);

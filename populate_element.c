@@ -6,15 +6,13 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:30:47 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/15 14:09:04 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/06/17 16:14:59 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "matrix_math.h"
 #include "vector_math.h"
-// #include "vec3.h"
-// #include "camera.h"
 
 /**
  * @returns 0 for success
@@ -88,6 +86,8 @@ t_err	validate_camera(t_scene *scene, char **el)
 	if (scene->camera.fov < 0 || scene->camera.fov > 180)
 		return (ft_warning("invalid argument: ", el[3], \
 				INVALID_ELEMENT));
+	scene->camera.focal_length = 1.0f;
+	scene->camera.look_at = vec3_unit(point(scene->camera.pos.x, scene->camera.pos.y, scene->camera.pos.z - scene->camera.focal_length));
 	cam_setup(&scene->camera);
 	return (SUCCESS);
 }
