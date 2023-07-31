@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/17 16:17:10 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/07/31 15:37:19 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,7 @@ typedef struct s_shape
 		t_plane		pl;
 		t_cylinder	cy;
 	};
+	char*			type;
 	t_vector		rotation;
 	t_hit_func		intersect;
 	t_hit			hit;
@@ -243,8 +244,8 @@ float	sp_calc_discriminant(t_scene *scene, t_ray ray, \
 float	sp_calc_hit_point(float discriminant, float a, float b);
 
 /* PLANE */
-int		intersect_plane(t_scene *scene, t_ray ray, \
-						float *t, int i);
+int	intersect_plane(t_scene *scene, t_ray ray, float *t, int i);
+bool	pl_hit(t_shape *shape, t_ray r, t_hit_record *rec);
 
 /* ERROR HANDLING*/
 t_err	ft_error(char *msg, char *arg, int err_code, t_scene *scene);

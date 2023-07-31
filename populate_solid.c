@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   populate_solid.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:31:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/17 16:17:26 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/07/31 16:11:24 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,11 @@ int	validate_sphere(t_scene *scene, char **el)
 		&& extract_rgb(el[3], &shape.trgb) == SUCCESS)
 	{
 		shape.sp.diameter = ft_atof(el[2]);
-		// printf("before: sphere %d: %p\n", i, &scene->shape[i]);
+		shape.type = ft_strdup("sphere");
 		shape.intersect = intersect_sphere;
 		shape.hit = sp_hit;
 		shape.color = convert_color(shape.trgb);
 		scene->shape[i] = shape;
-		// printf to remove
-		printf("sphere %d: %p\n", i, &scene->shape[i]);
 		return (SUCCESS);
 	}
 	return (ft_warning("sphere", "invalid argument", INVALID_ELEMENT));
@@ -59,7 +57,11 @@ int	validate_plane(t_scene *scene, char **el)
 		|| extract_rgb(el[3], &shape.trgb))
 		return (ft_warning("invalid argument: ", el[2], \
 					INVALID_ELEMENT));
+	printf("SHAPE ROTATION: (%f, %f, %f)\n\n", shape.rotation.x, shape.rotation.y, shape.rotation.z);
+	shape.type = ft_strdup("plane");
 	shape.intersect = intersect_plane;
+	shape.hit = pl_hit;
+	shape.color = convert_color(shape.trgb);
 	scene->shape[i] = shape;
 	return (SUCCESS);
 }
