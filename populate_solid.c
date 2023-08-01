@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:31:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/07/31 16:11:24 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/08/01 16:40:33 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,10 @@ int	validate_cylinder(t_scene *scene, char **el)
 			return (ft_warning("invalid argument", \
 					NULL, INVALID_ELEMENT));
 	}
+	shape.type = ft_strdup("cylinder");
+	shape.intersect = intersect_cylinder;
+	shape.hit = cy_hit;
+	shape.color = convert_color(shape.trgb);
 	scene->shape[i] = shape;
 	return (SUCCESS);
 }

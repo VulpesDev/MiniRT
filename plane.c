@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 23:25:30 by tfregni           #+#    #+#             */
-/*   Updated: 2023/07/31 20:20:05 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/08/01 16:40:16 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,10 @@ int	intersect_plane(t_scene *scene, t_ray ray, float *t, int i)
 	t_vector l0 = ray.origin;
 	t_vector l = ray.direction;
 	float denom = vect_dot(n, l);
-	printf("Hello\n");
 	if (denom > 1e-6)
 	{
 		t_vector p0l0 = vect_sub(p0, l0);
 		*t = vect_dot(p0l0, n) / denom;
-		printf("Plane intersect\n");
 		return (*t >= 0);
 	}
 	return (0);

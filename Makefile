@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+         #
+#    By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 20:41:46 by tfregni           #+#    #+#              #
-#    Updated: 2023/06/15 16:14:33 by tfregni          ###   ########.fr        #
+#    Updated: 2023/08/01 16:41:15 by tvasilev         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS		= main.c parse.c populate_element.c populate_solid.c parse_util.c \
 				libx.c render.c sphere.c plane.c vector_calcs.c event_handler.c \
-				matrix_calcs.c camera.c vec3.c ray.c
+				matrix_calcs.c camera.c vec3.c ray.c cylinder.c
 UNAME_S		:= $(shell uname -s)
 OBJS		= ${SRCS:.c=.o}
 CC			= cc

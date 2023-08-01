@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/07/31 15:37:19 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/08/01 16:40:14 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,6 +246,10 @@ float	sp_calc_hit_point(float discriminant, float a, float b);
 /* PLANE */
 int	intersect_plane(t_scene *scene, t_ray ray, float *t, int i);
 bool	pl_hit(t_shape *shape, t_ray r, t_hit_record *rec);
+
+/* CYLINDER */
+int	intersect_cylinder(t_scene *scene, t_ray ray, float *t, int i);
+bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec);
 
 /* ERROR HANDLING*/
 t_err	ft_error(char *msg, char *arg, int err_code, t_scene *scene);
