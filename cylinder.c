@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:18:37 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/08/01 16:47:03 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/08/03 11:48:03 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,8 @@ bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 		rec->p = ray_at(ray, t);
 		rec->normal = shape->rotation;
 		rec->color = shape->color;
-		printf("It HIT !!!\n");
 		return (true);
 	}
-	printf("It did not ???\n");
 	return (false);
 }
 
@@ -53,15 +51,22 @@ bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 	double	a;
 	double	b;
 	double	c;
+	double t1,t2,t;
 	double discriminant;
 	t_vector	X;
 
+	r.direction = vect_cross(r.direction, shape->rotation);
 	X = vect_sub(r.origin, shape->cy.center);
-	a = vect_dot(r.direction, r.direction) - (vect_dot(r.direction, shape->rotation)*vect_dot(r.direction, shape->cy.rotation));
-	b = 2*(vect_dot(r.direction, X) - (vect_dot(r.direction, shape->rotation))*(vect_dot(X, shape->rotation)));
-	c = vect_dot(X, X) - (vect_dot(X, shape->rotation)*vect_dot(X, shape->rotation)) - shape->cy.diameter;
+	a = vect_dot(r.direction, r.direction);
+	b = 2 * vect_dot(r.direction, vect_cross(X, shape->rotation));
+	c = vect_dot(vect_cross(X, shape->rotation), vect_cross(X, shape->rotation)) - ((shape->cy.diameter / 2) * (shape->cy.diameter / 2));
 	discriminant = b * b - 4 * a * c;
 	if (discriminant < 0)
 		return (false);
-	return (cy_hit_record((-b - sqrt(discriminant)) / (2.0 * a), shape, rec, r));
+	t1 = (-b - sqrt(discriminant)) / (2.0 * a);
+	t2 = (-b + sqrt(discriminant)) / (2.0 * a);
+	if (t2 < 0)
+		return (false);
+	t = t1 > 0 ? t1 : t2;
+	return (cy_hit_record(t, shape, rec, r));
 }
