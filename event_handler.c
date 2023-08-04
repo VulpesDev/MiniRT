@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   event_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 12:29:38 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/06/14 17:33:35 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/04 16:49:45 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,35 @@ int	key_handle(int keycode, t_scene *scene)
 	else if (keycode == RIGHT)
 		scene->camera.pos.x += CAM_PACE;
 	else if (keycode == Q)
-		scene->camera.orientation.z -= ORIENT_PACE;
+	{
+		if (scene->shape[0].rotation.x < 1)
+		scene->shape[0].rotation.x+= 0.1;
+	}
 	else if (keycode == E)
-		scene->camera.orientation.z += ORIENT_PACE;
+	{
+		if (scene->shape[0].rotation.x > 0)
+		scene->shape[0].rotation.x -= 0.1;
+	}
 	else if (keycode == A)
-		scene->camera.orientation.y -= ORIENT_PACE;
+	{
+		if (scene->shape[0].rotation.y < 1)
+		scene->shape[0].rotation.y += 0.1;
+	}
 	else if (keycode == D)
-		scene->camera.orientation.y += ORIENT_PACE;
+	{
+		if (scene->shape[0].rotation.y > 0)
+			scene->shape[0].rotation.y -= 0.1;
+	}
 	else if (keycode == W)
-		scene->camera.orientation.x += ORIENT_PACE;
+	{
+		if (scene->shape[0].rotation.z < 1)
+			scene->shape[0].rotation.z += 0.1;
+	}
 	else if (keycode == S)
-		scene->camera.orientation.x -= ORIENT_PACE;
+	{
+		if (scene->shape[0].rotation.z > 0)
+			scene->shape[0].rotation.z -= 0.1;
+	}
 	else
 		ft_printf("KeyCode: %d\n", keycode);
 	if (keycode != ESC)
