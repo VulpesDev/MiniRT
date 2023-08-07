@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 12:29:38 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/08/04 16:49:45 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/08/07 15:47:30 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	key_handle(int keycode, t_scene *scene)
 	}
 	else if (keycode == E)
 	{
-		if (scene->shape[0].rotation.x > 0)
+		if (scene->shape[0].rotation.x > -1)
 		scene->shape[0].rotation.x -= 0.1;
 	}
 	else if (keycode == A)
@@ -56,7 +56,7 @@ int	key_handle(int keycode, t_scene *scene)
 	}
 	else if (keycode == D)
 	{
-		if (scene->shape[0].rotation.y > 0)
+		if (scene->shape[0].rotation.y > -1)
 			scene->shape[0].rotation.y -= 0.1;
 	}
 	else if (keycode == W)
@@ -66,13 +66,14 @@ int	key_handle(int keycode, t_scene *scene)
 	}
 	else if (keycode == S)
 	{
-		if (scene->shape[0].rotation.z > 0)
+		if (scene->shape[0].rotation.z > -1)
 			scene->shape[0].rotation.z -= 0.1;
 	}
 	else
 		ft_printf("KeyCode: %d\n", keycode);
 	if (keycode != ESC)
 		draw(scene);
+	printf("Noromal vect (%f, %f, %f)\n", scene->shape[0].rotation.x, scene->shape[0].rotation.y, scene->shape[0].rotation.z);
 	return (0);
 }
 

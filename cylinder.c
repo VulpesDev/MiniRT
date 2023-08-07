@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:18:37 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/08/04 16:39:13 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/08/07 15:44:00 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 	t_vector	olddir;
 	t_vector	X;
 
-	r.direction = vect_norm(r.direction);
+	//r.direction = vect_norm(r.direction);
+	shape->rotation = vect_norm(shape->rotation);
 	olddir = r.direction;
 	r.direction = vect_cross(r.direction, shape->rotation);
 	X = vect_sub(r.origin, shape->cy.center);
