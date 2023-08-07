@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 12:29:38 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/08/07 15:47:30 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/08/07 15:54:50 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ int	key_handle(int keycode, t_scene *scene)
 		ft_printf("KeyCode: %d\n", keycode);
 	if (keycode != ESC)
 		draw(scene);
-	printf("Noromal vect (%f, %f, %f)\n", scene->shape[0].rotation.x, scene->shape[0].rotation.y, scene->shape[0].rotation.z);
 	return (0);
 }
 
