@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 12:29:38 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/08/07 15:54:50 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/08/07 18:13:04 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,32 +42,32 @@ int	key_handle(int keycode, t_scene *scene)
 	else if (keycode == Q)
 	{
 		if (scene->shape[0].rotation.x < 1)
-		scene->shape[0].rotation.x+= 0.1;
+		scene->shape[0].rotation.x+= 0.3;
 	}
 	else if (keycode == E)
 	{
 		if (scene->shape[0].rotation.x > -1)
-		scene->shape[0].rotation.x -= 0.1;
+		scene->shape[0].rotation.x -= 0.3;
 	}
 	else if (keycode == A)
 	{
 		if (scene->shape[0].rotation.y < 1)
-		scene->shape[0].rotation.y += 0.1;
+		scene->shape[0].rotation.y += 0.3;
 	}
 	else if (keycode == D)
 	{
 		if (scene->shape[0].rotation.y > -1)
-			scene->shape[0].rotation.y -= 0.1;
+			scene->shape[0].rotation.y -= 0.3;
 	}
 	else if (keycode == W)
 	{
 		if (scene->shape[0].rotation.z < 1)
-			scene->shape[0].rotation.z += 0.1;
+			scene->shape[0].rotation.z += 0.3;
 	}
 	else if (keycode == S)
 	{
 		if (scene->shape[0].rotation.z > -1)
-			scene->shape[0].rotation.z -= 0.1;
+			scene->shape[0].rotation.z -= 0.3;
 	}
 	else
 		ft_printf("KeyCode: %d\n", keycode);

@@ -6,13 +6,14 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:18:37 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/08/07 18:11:14 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/08/08 14:01:08 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "vector_math.h"
 
+//! not really needed I think
 int	intersect_cylinder(t_scene *scene, t_ray ray, float *t, int i)
 {
 	double	a;
@@ -46,27 +47,34 @@ bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray, doubl
 	return (false);
 }
 
-bool	cy_hit_cap(t_ray r, t_hit_record *rec, t_vector Ce, t_vector N)
+bool	cy_hit_cap_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 {
-	t_shape	cap;
-
-	cap.rotation = N;
-	cap.pl.pos = Ce;
-	bool	result;
-	result = pl_hit(&cap, r, rec);
-	printf("Result: %i\n", result);
-	return (result);
+	if (t > 0.000001f && t < rec->t)
+	{
+		rec->t = t;
+		rec->p = ray_at(ray, t);
+		//rec->normal = vect_norm();
+		rec->color = shape->color;
+		return (true);
+	}
+	return (false);
 }
 
-bool	cap(t_shape *shape, t_vector p, t_vector Ce)
+//make so it only takes the first t
+bool	cap(t_shape *shape, double t, t_ray ray, t_vector Ce, t_hit_record *rec)
 {
 	t_vector V;
+	t_vector p;
 
+	p = ray_at(ray, t);
 	V = vect_sub(p, Ce);
-	return (vect_mag(V) <= shape->cy.diameter/2);
+	if (vect_mag(V) <= shape->cy.diameter/2)
+		return (cy_hit_cap_record(t, shape, rec, ray));
+	return (false);
 }
 
-bool	hit_plane_top(t_shape *shape, t_ray r)
+
+bool	hit_plane_top(t_shape *shape, t_ray r, t_hit_record *rec)
 {
 	t_vector p0 = vect_sum(shape->cy.center, vect_mult(shape->rotation, shape->cy.height));
 	t_vector n = vect_inverse(vect_norm(shape->rotation));
@@ -76,13 +84,13 @@ bool	hit_plane_top(t_shape *shape, t_ray r)
 	if (denom > 1e-6)
 	{
 		t_vector p0l0 = vect_sub(p0, l0);
-		return (cap(shape, ray_at(r, (vect_dot(p0l0, n) / denom)),p0));
+		return (cap(shape, vect_dot(p0l0, n) / denom, r, p0, rec));
 	}
 	return (false);
 }
 
 
-bool	hit_plane_bot(t_shape *shape, t_ray r)
+bool	hit_plane_bot(t_shape *shape, t_ray r, t_hit_record *rec)
 {
 	t_vector p0 = shape->cy.center;
 	t_vector n = vect_norm(shape->rotation);
@@ -92,7 +100,7 @@ bool	hit_plane_bot(t_shape *shape, t_ray r)
 	if (denom > 1e-6)
 	{
 		t_vector p0l0 = vect_sub(p0, l0);
-		return (cap(shape, ray_at(r, (vect_dot(p0l0, n) / denom)),p0));
+		return (cap(shape, vect_dot(p0l0, n) / denom, r, p0, rec));
 	}
 	return (false);
 }
@@ -112,9 +120,9 @@ bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 
 	t = m = 0;
 	//r.direction = vect_norm(r.direction);
-	if (hit_plane_top(shape, r) || hit_plane_bot(shape, r))
-		return (true);
 	shape->rotation = vect_norm(shape->rotation);
+	if (hit_plane_top(shape, r, rec) || hit_plane_bot(shape, r, rec))
+		return (true);
 	olddir = r.direction;
 	r.direction = vect_cross(r.direction, shape->rotation);
 	X = vect_sub(r.origin, shape->cy.center);
@@ -142,6 +150,5 @@ bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 	}
 	else
 		return (false);
-	//check if it hits a plane and if t is smaller than the plane hit t
 	return (cy_hit_record(t, shape, rec, r, m));
 }
