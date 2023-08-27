@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 17:26:52 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/27 17:57:49 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/27 18:40:22 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ t_vec3	sp_normal(t_shape *sp, t_point3 hit);
 /* PLANE */
 int		intersect_plane(t_scene *scene, t_ray ray, float *t, int i);
 bool	pl_hit(t_shape *shape, t_ray r, t_hit_record *rec);
+t_vec3	pl_normal(t_shape *pl, t_point3 hit);
 
 /* CYLINDER */
 int		intersect_cylinder(t_scene *scene, t_ray ray, float *t, int i);

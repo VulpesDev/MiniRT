@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 23:25:30 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/27 17:21:22 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/27 18:46:49 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,21 +67,19 @@ int	intersect_plane(t_scene *scene, t_ray ray, float *t, int i)
 	return (0);
 }
 
-t_vec3	pl_normal(t_point3 hit, t_point3 center)
+t_vec3	pl_normal(t_shape *pl, t_point3 hit)
 {
-	t_vec3	normal;
-
-	normal = vec3_unit(vec3_sub(hit, center));
-	return (normal);
+	(void) hit;
+	return (pl->rotation);
 }
 
 bool	pl_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 {
-	if (t > 0.000001f && t < rec->t)
+	if (t > EPSILON && t < rec->t)
 	{
 		rec->t = t;
 		rec->p = ray_at(ray, t);
-		rec->normal = shape->rotation; //? maybe this should just be pl.rotation
+		rec->normal = pl_normal(shape, rec->p);
 		rec->color = shape->color;
 		return (true);
 	}
@@ -90,12 +88,12 @@ bool	pl_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 
 bool	pl_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 {
-	t_vector p0 = shape->pl.pos;
-	t_vector n = vect_norm(shape->rotation);
-	t_vector l0 = r.origin;
-	t_vector l = vect_norm(r.direction);
+	t_vector	p0 = shape->pl.pos;
+	t_vector	n = vect_norm(shape->rotation);
+	t_vector	l0 = r.origin;
+	t_vector	l = vect_norm(r.direction);
 	float denom = vect_dot(n, l);
-	if (denom > 1e-6)
+	if (denom > EPSILON)
 	{
 		t_vector p0l0 = vect_sub(p0, l0);
 		return (pl_hit_record((vect_dot(p0l0, n) / denom), shape, rec, r));

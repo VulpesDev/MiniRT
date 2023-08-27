@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/27 16:15:03 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/27 18:56:22 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,7 @@ void	draw(t_scene *scene);
 int		intersect_element(t_scene *scene, t_ray ray, int *color, float *min_t);
 
 /* SHADE */
+float	light_coeff(t_scene *scene, t_hit_record *hit);
 float	diffuse_reflection(t_scene *scene, t_vector n, t_vector p);
 int		cast_shadow(t_scene *scene, t_ray ray);
 

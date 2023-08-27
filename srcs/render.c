@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/27 18:11:54 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/27 18:56:00 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,28 +109,28 @@ t_color	apply_light_to_color(t_color c, double light)
 	return (color(0.0, c.r * light, c.g * light, c.b * light));
 }
 
-int	intersect_element(t_scene *scene, t_ray ray, int *color, float *min_t)
-{
-	int		i;
-	int		ret;
-	float	t;
+// int	intersect_element(t_scene *scene, t_ray ray, int *color, float *min_t)
+// {
+// 	int		i;
+// 	int		ret;
+// 	float	t;
 
-	ret = 0;
-	i = scene->shape_count - 1;
-	while (i >= 0)
-	{
-		// printf("shape[%d] i: %d\n", scene->shape_count, i);
-		if (scene->shape[i].intersect(scene, ray, &t, i) && t < *min_t && t > 0)
-		{
-			*min_t = t;
-			*color = apply_ligthing_ratio(scene->shape[i].trgb, \
-											sp_light_coeff(scene, t, ray, i));
-			ret = 1;
-		}
-		i--;
-	}
-	return (ret);
-}
+// 	ret = 0;
+// 	i = scene->shape_count - 1;
+// 	while (i >= 0)
+// 	{
+// 		// printf("shape[%d] i: %d\n", scene->shape_count, i);
+// 		if (scene->shape[i].intersect(scene, ray, &t, i) && t < *min_t && t > 0)
+// 		{
+// 			*min_t = t;
+// 			*color = apply_ligthing_ratio(scene->shape[i].trgb, \
+// 											sp_light_coeff(scene, t, ray, i));
+// 			ret = 1;
+// 		}
+// 		i--;
+// 	}
+// 	return (ret);
+// }
 
 /**
  * @brief converts an int in trgb format to a color struct with double values
@@ -186,6 +186,9 @@ int	convert_trgb(t_color c)
 // 	return ((t_ray){(t_point_3d){origin.x, origin.y, origin.z}, direction});
 // }
 
+/**
+ * @brief creates a ray from the camera to the canvas
+*/
 t_ray	create_cam_ray(t_camera *c, double u, double v)
 {
 	t_ray	ray;
@@ -202,6 +205,12 @@ t_ray	create_cam_ray(t_camera *c, double u, double v)
 	return (ray);
 }
 
+/**
+ * Former intersect_element function
+ * @brief Checks if the ray hits any element in the scene
+ * In the scene->shape[i].hit(&scene->shape[i], ray, rec) call
+ * the ray is updated with hit distance, hit point, normal and color
+*/
 bool	hit_element(t_scene *scene, t_ray ray, t_hit_record *rec)
 {
 	bool	hit_anything;
@@ -212,7 +221,7 @@ bool	hit_element(t_scene *scene, t_ray ray, t_hit_record *rec)
 	i = scene->shape_count - 1;
 	while (i >= 0)
 	{
-		if (scene->shape[i].hit(&scene->shape[i], ray, rec) && rec->t > 0.001f)
+		if (scene->shape[i].hit(&scene->shape[i], ray, rec) && rec->t > EPSILON)
 		{
 			hit_anything = true;
 		}
@@ -222,23 +231,22 @@ bool	hit_element(t_scene *scene, t_ray ray, t_hit_record *rec)
 }
 
 /**
- * A lerp is always of the form
- * blendedValue=(1−t)⋅startValue+t⋅endValue,
+ * @brief Creates a hit record that gets updated if the ray hits an element
+ * @returns the color of the hit element
 */
 t_color	ray_color(t_scene *scene, t_ray r)
 {
 	double			light;
-	t_color			bg;
 	t_hit_record	rec;
 
 	if (hit_element(scene, r, &rec))
 	{
 		light = ft_fmax((vec3_dot(rec.normal, \
 			vec3_inv(vec3_unit(scene->light.pos)))), 0.0f);
+		light = light_coeff(scene, &rec);
 		return (apply_light_to_color(rec.color, light));
 	}
-	bg = convert_color(scene->ambient.trgb);
-	return (bg);
+	return (convert_color(scene->ambient.trgb));
 }
 
 /**
