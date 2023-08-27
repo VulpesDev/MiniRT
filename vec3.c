@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:42:25 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/26 12:15:53 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/26 15:59:36 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,4 +112,9 @@ t_vec3	vec3_unit(t_vec3 a)
 t_vec3	vec3_inv(t_vec3 a)
 {
 	return (vec3_mult(a, -1));
+}
+
+void	vec3_print(t_vec3 v)
+{
+	printf("(%f, %f, %f)", v.x, v.y, v.z);
 }

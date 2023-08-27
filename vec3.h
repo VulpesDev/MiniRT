@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:40:31 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/26 12:14:56 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/26 15:57:25 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,7 @@ t_vec3		vec3_inv(t_vec3 a);
 t_point3	point(double x, double y, double z);
 
 t_color		color(double t, double r, double g, double b);
+
+// DEBUG
+void		vec3_print(t_vec3 v);
 #endif

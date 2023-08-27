@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:39:08 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/16 15:35:24 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/27 12:42:42 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <stdint.h>
 # include <math.h>
 # include "vec3.h"
+# include "matrix_math.h"
 
 # define WIDTH 1024
 # define HEIGHT 768
@@ -31,12 +32,13 @@ typedef struct s_camera
 	t_point3		lower_left_corner;
 	t_vec3			horizontal;
 	t_vec3			vertical;
-	t_vec3			vup;
+	t_vec3			vert_up;
 	t_vec3			up;
 	t_vec3			right;
+	t_matrix		mx;
 }					t_camera;
 
 void		cam_setup(t_camera *c);
-t_point3	cam_look_at(t_vec3 forward, t_vec3 rot);
+void		cam_look_at(t_camera *c);
 
 #endif

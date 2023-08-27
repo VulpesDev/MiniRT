@@ -6,13 +6,20 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 18:06:27 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/14 10:16:30 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/27 12:00:44 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MATRIX_MATH_H
 # define MATRIX_MATH_H
-# include "minirt.h"
+# include "vec3.h"
+# include <stddef.h>
+
+typedef struct s_matrix
+{
+	float	matrix[4][4];
+	size_t	size;
+}	t_matrix;
 
 typedef float	t_matrix_trans[4][4];
 

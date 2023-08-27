@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/01 16:40:14 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/08/27 13:50:01 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <math.h>
 # include "libft.h"
 # include "keys.h"
+# include "matrix_math.h"
 # include "camera.h"
 # include "sphere.h"
 # include "hittable.h"
@@ -28,7 +29,7 @@
 # define CANV_MIN_X -1.0f
 # define CANV_MAX_X 1.0f
 # define CANV_MIN_Y -1.0f
-# define CANV_DIST 1
+# define CANV_DIST 1.0f
 # define CAM_PACE 0.1
 # define LIGHT_PACE 0.3
 # define ORIENT_PACE 0.01
@@ -36,6 +37,7 @@
 # define BOUNCES 2
 # define ZNEAR CANV_DIST
 # define ZFAR RAY_LEN
+# define EPSILON 1e-6
 
 typedef float			t_matrix_trans[4][4];
 typedef struct s_scene	t_scene;
@@ -72,11 +74,11 @@ typedef enum e_bool
 	TRUE,
 }			t_bool;
 
-typedef struct s_matrix
-{
-	float	matrix[4][4];
-	size_t	size;
-}	t_matrix;
+// typedef struct s_matrix
+// {
+// 	float	matrix[4][4];
+// 	size_t	size;
+// }	t_matrix;
 
 // typedef t_matrix_trans	t_matrix;
 
@@ -182,7 +184,7 @@ typedef struct s_shape
 		t_plane		pl;
 		t_cylinder	cy;
 	};
-	char*			type;
+	char			*type;
 	t_vector		rotation;
 	t_hit_func		intersect;
 	t_hit			hit;
@@ -218,6 +220,7 @@ int		validate_plane(t_scene *scene, char **el);
 int		validate_cylinder(t_scene *scene, char **el);
 void	set_camera_canvas(t_camera *c);
 void	set_transform_mx(t_camera *c);
+void	calculate_camera_vectors(t_scene *s, t_vec3 *right, t_vec3 *up);
 
 /* PARSE UTILS */
 int		validate_3d_range(t_point_3d point, float min, float max);
@@ -226,6 +229,7 @@ t_err	extract_rgb(char *rgb, int *ret);
 
 /* GRAPHIC */
 int		create_trgb(int t, int r, int g, int b);
+int		apply_lighting_ratio(int trgb, float lighting_ratio);
 t_color	convert_color(int trgb);
 int		mlx_manage(t_scene *scene);
 void	my_mlx_pixel_put_d(t_img *data, int x, int y, int color);
@@ -244,11 +248,11 @@ float	sp_calc_discriminant(t_scene *scene, t_ray ray, \
 float	sp_calc_hit_point(float discriminant, float a, float b);
 
 /* PLANE */
-int	intersect_plane(t_scene *scene, t_ray ray, float *t, int i);
+int		intersect_plane(t_scene *scene, t_ray ray, float *t, int i);
 bool	pl_hit(t_shape *shape, t_ray r, t_hit_record *rec);
 
 /* CYLINDER */
-int	intersect_cylinder(t_scene *scene, t_ray ray, float *t, int i);
+int		intersect_cylinder(t_scene *scene, t_ray ray, float *t, int i);
 bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec);
 
 /* ERROR HANDLING*/
@@ -258,7 +262,6 @@ t_err	ft_warning(char *msg, char *arg, int err_code);
 /* CLEANUP */
 int		free_img(t_img *data);
 void	free_scene(t_scene **scene);
-
 
 /* DEBUG */
 void	print_4x4(t_matrix_trans m);

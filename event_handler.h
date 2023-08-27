@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 12:32:50 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/06/13 17:53:29 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/26 12:24:17 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,6 @@
 // int	close_window(t_img *data);
 int		key_handle(int keycode, t_scene *scene);
 int		mouse_handle(int button, int x, int y, t_scene *scene);
-int	track_delta(int button, int x, int y, t_scene *scene);
+int		track_delta(int button, int x, int y, t_scene *scene);
 
 #endif
