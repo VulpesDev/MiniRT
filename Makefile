@@ -6,7 +6,7 @@
 #    By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 20:41:46 by tfregni           #+#    #+#              #
-#    Updated: 2023/08/27 16:24:42 by tfregni          ###   ########.fr        #
+#    Updated: 2023/08/27 17:08:34 by tfregni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,11 +16,13 @@ SRCS		= $(addprefix $(SRCS_DIR)/, main.c parse.c populate_element.c populate_sol
 UNAME_S		:= $(shell uname -s)
 OBJS		= ${SRCS:.c=.o}
 SRCS_DIR 	= srcs
+OBJS_DIR 	= objs
+INC_DIR		= includes
 CC			= cc
 CFLAGS		= -O3 -Wall -Wextra -Werror -g
 NAME		= minirt
 LINKS		= -lm -Llibft -lft
-INC			= -Ilibft -Iincludes
+INC			= -Ilibft -I$(INC_DIR)
 RE_LIBFT	= "$(wildcard ./libft/libft.a)"
 DSYM		= *.dSYM
 RM			= rm -rf
@@ -59,7 +61,7 @@ ${NAME}	: ${OBJS}
 	@echo "done"
 
 %.o:%.c
-	@${CC} ${CFLAGS} ${INC} -c $< -o $@
+	${CC} ${CFLAGS} ${INC} -c $< -o $@
 
 all		: mlx
 
