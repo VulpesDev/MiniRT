@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:42:10 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/12 15:30:33 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/27 15:58:30 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	free_scene(t_scene **scene)
 {
+	// free((*scene)->shape->type);
 	free((*scene)->shape);
 	(*scene)->shape = NULL;
 	free(*scene);

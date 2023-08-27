@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   populate_solid.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:31:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/01 16:40:33 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/08/27 15:50:57 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	validate_sphere(t_scene *scene, char **el)
 	int			i;
 
 	i = scene->shape_count;
-	if (i == MAX_SOLID)
+	if (i >= MAX_SOLID)
 		return (ft_warning("not handling these many solids", \
 				NULL, INVALID_FILE));
 	if (ft_arrlen(el) != 4)
@@ -45,7 +45,7 @@ int	validate_plane(t_scene *scene, char **el)
 	int			i;
 
 	i = scene->shape_count;
-	if (i == MAX_SOLID)
+	if (i >= MAX_SOLID)
 		return (ft_warning("not handling these many solids", \
 				NULL, INVALID_FILE));
 	if (ft_arrlen(el) != 4)
@@ -72,7 +72,7 @@ int	validate_cylinder(t_scene *scene, char **el)
 	int			i;
 
 	i = scene->shape_count;
-	if (i == MAX_SOLID)
+	if (i >= MAX_SOLID)
 		return (ft_warning("not handling these many solids", \
 				NULL, INVALID_FILE));
 	if (ft_arrlen(el) != 6)

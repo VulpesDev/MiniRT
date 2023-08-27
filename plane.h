@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sphere.h                                           :+:      :+:    :+:   */
+/*   plane.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/15 16:10:11 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/27 16:04:26 by tfregni          ###   ########.fr       */
+/*   Created: 2023/08/27 16:00:30 by tfregni           #+#    #+#             */
+/*   Updated: 2023/08/27 16:03:40 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SPHERE_H
-# define SPHERE_H
-# include "vec3.h"
-# include "ray.h"
-# include "hittable.h"
+#ifndef PLANE_H
+# define PLANE_H
+
+
 
 #endif

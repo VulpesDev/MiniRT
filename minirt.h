@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/27 14:10:45 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/27 16:15:03 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,9 @@
 # include "keys.h"
 # include "matrix_math.h"
 # include "camera.h"
-# include "sphere.h"
 # include "hittable.h"
 # define SPACE "\t\n\f\r\v "
 # define MAX_SOLID 5
-// # define WIDTH 1024
-// # define HEIGHT 768
 # define CANV_MIN_X -1.0f
 # define CANV_MAX_X 1.0f
 # define CANV_MIN_Y -1.0f
@@ -37,16 +34,13 @@
 # define BOUNCES 2
 # define ZNEAR CANV_DIST
 # define ZFAR RAY_LEN
+# define EPSILON 1e-6
 
-typedef float			t_matrix_trans[4][4];
-typedef struct s_scene	t_scene;
-typedef struct s_shape	t_shape;
 typedef struct s_ray	t_ray;
 typedef int				(*t_hit_func)(t_scene *scene, t_ray ray, \
 							float *t, int i);
 typedef bool			(*t_hit)(t_shape *shape, t_ray ray, t_hit_record *rec);
 typedef t_vec3			(*t_normal)(t_shape *shape, t_point3 hit);
-typedef struct s_camera	t_camera;
 
 typedef enum e_err
 {
@@ -85,15 +79,6 @@ typedef struct s_img
 	int			endian;
 }				t_img;
 
-// typedef struct s_point_3d
-// {
-// 	double	x;
-// 	double	y;
-// 	double	z;
-// }			t_point_3d;
-
-// typedef t_point_3d		t_vector;
-
 typedef struct s_pxl
 {
 	int	x;
@@ -113,60 +98,12 @@ typedef struct s_ambient
 	int		trgb;
 }				t_ambient;
 
-// typedef struct s_camera
-// {
-// 	t_point_3d		pos;
-// 	t_vector		orientation;
-// 	uint8_t			fov;
-// 	t_point_2d		top_right;
-// 	t_point_2d		bot_left;
-// 	float			pixel_size;
-// 	t_vector		vup;
-// 	t_vector		up;
-// 	t_vector		right;
-// 	t_matrix_trans	m_proj;
-// 	t_matrix		transform;
-// 	t_matrix		inverse;
-// 	t_matrix		transpose;
-// 	t_point_2d		delta;
-// }					t_camera;
-
 typedef struct s_light
 {
 	t_point_3d		pos;
 	float			brightness;
 	int				trgb;
 }					t_light;
-
-// typedef struct s_sphere
-// {
-// 	t_point_3d		pos;
-// 	float			diameter;
-// 	int				trgb;
-// }					t_sphere;
-
-typedef struct s_plane
-{
-	t_point_3d		pos;
-	t_vector		rotation;
-	int				trgb;
-	int				valid;
-}					t_plane;
-
-typedef struct s_cylinder
-{
-	t_point_3d		center;
-	t_vector		rotation;
-	float			diameter;
-	float			height;
-	int				trgb;
-}					t_cylinder;
-
-// typedef struct s_ray
-// {
-// 	t_point_3d	origin;
-// 	t_vector	direction;
-// }			t_ray;
 
 typedef struct s_shape
 {
@@ -185,12 +122,6 @@ typedef struct s_shape
 	t_color			color;
 }			t_shape;
 
-/**
- * Possible struct for the scene:
- * one value for each unique element (A, C, L),
- * an array for each solid. Plus a pointer
- * to the image.
-*/
 typedef struct s_scene
 {
 	t_img		*img;
@@ -229,20 +160,9 @@ t_err	render_scene(t_scene *scene);
 void	draw(t_scene *scene);
 int		intersect_element(t_scene *scene, t_ray ray, int *color, float *min_t);
 
-/* SPHERE */
-int		intersect_sphere(t_scene *scene, t_ray ray, float *t, int i);
-float	sp_light_coeff(t_scene *scene, float t, t_ray ray, int i);
-float	sp_calc_discriminant(t_scene *scene, t_ray ray, \
-							float *t, int i);
-float	sp_calc_hit_point(float discriminant, float a, float b);
-
-/* PLANE */
-int	intersect_plane(t_scene *scene, t_ray ray, float *t, int i);
-bool	pl_hit(t_shape *shape, t_ray r, t_hit_record *rec);
-
-/* CYLINDER */
-int	intersect_cylinder(t_scene *scene, t_ray ray, float *t, int i);
-bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec);
+/* SHADE */
+float	diffuse_reflection(t_scene *scene, t_vector n, t_vector p);
+int		cast_shadow(t_scene *scene, t_ray ray);
 
 /* ERROR HANDLING*/
 t_err	ft_error(char *msg, char *arg, int err_code, t_scene *scene);
