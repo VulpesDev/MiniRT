@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 14:22:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/27 18:10:31 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/27 19:01:31 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,23 @@ float	sp_calc_discriminant(t_scene *scene, t_ray ray, \
 	return (discriminant);
 }
 
-/**
- * @param t: hit distance
- * @brief: calculates the light intensity on the hit point
-*/
-float	sp_light_coeff(t_scene *scene, float t, t_ray ray, int i)
-{
-	t_vector	hit_pos;
-	t_vector	normal;
-	float		light;
+// /**
+//  * @param t: hit distance
+//  * @brief: calculates the light intensity on the hit point
+// */
+// float	sp_light_coeff(t_scene *scene, float t, t_ray ray, int i)
+// {
+// 	t_vector	hit_pos;
+// 	t_vector	normal;
+// 	float		light;
 
-	hit_pos = vect_sum((t_vector)ray.origin, vect_mult(ray.direction, t));
-	normal = vect_norm(vect_sub(scene->shape[i].sp.pos, hit_pos));
-	light = diffuse_reflection(scene, normal, hit_pos);
-	// light = ft_fmax(\
-	// 	vect_dot(normal, vect_inverse((vect_norm(scene->light.pos)))), 0.0f);
-	return (light);
-}
+// 	hit_pos = vect_sum((t_vector)ray.origin, vect_mult(ray.direction, t));
+// 	normal = vect_norm(vect_sub(scene->shape[i].sp.pos, hit_pos));
+// 	light = diffuse_reflection(scene, normal, hit_pos);
+// 	// light = ft_fmax(\
+// 	// 	vect_dot(normal, vect_inverse((vect_norm(scene->light.pos)))), 0.0f);
+// 	return (light);
+// }
 
 /**
  * @returns 1 if the ray hits the sphere, 0 otherwise
