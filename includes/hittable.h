@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 17:26:52 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/27 16:10:21 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/27 17:57:49 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ float	sp_calc_discriminant(t_scene *scene, t_ray ray, \
 							float *t, int i);
 float	sp_calc_hit_point(float discriminant, float a, float b);
 bool	sp_hit(t_shape *shape, t_ray r, t_hit_record *rec);
-t_vec3	sp_normal(t_point3 hit, t_point3 center);
+t_vec3	sp_normal(t_shape *sp, t_point3 hit);
 
 /* PLANE */
 int		intersect_plane(t_scene *scene, t_ray ray, float *t, int i);

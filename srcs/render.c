@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/08 13:44:28 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/08/27 18:11:54 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,22 +227,18 @@ bool	hit_element(t_scene *scene, t_ray ray, t_hit_record *rec)
 */
 t_color	ray_color(t_scene *scene, t_ray r)
 {
-	t_vec3			unit_direction;
-	double			t;
-	t_vec3			blend;
+	double			light;
+	t_color			bg;
 	t_hit_record	rec;
 
-	// return (color(0.5, (normal.x + 1) * 0.5, (normal.y + 1) * 0.5, (normal.z + 1) * 0.5));
 	if (hit_element(scene, r, &rec))
 	{
-		double light = ft_fmax((vec3_dot(rec.normal, vec3_inv(vec3_unit(scene->light.pos)))), 0.0f);
-		// rec.trgb = ft_fmax(rec.trgb * light, 0.0f);
+		light = ft_fmax((vec3_dot(rec.normal, \
+			vec3_inv(vec3_unit(scene->light.pos)))), 0.0f);
 		return (apply_light_to_color(rec.color, light));
 	}
-	unit_direction = vec3_unit(r.direction);
-	t = 0.5 * (unit_direction.y + 1.0);
-	blend = vec3_sum(vec3_mult(vec3(1, 1, 1), 1.0 - t), vec3_mult(vec3(0.5, 0.7, 1.0), t));
-	return (color(0, blend.x, blend.y, blend.z));
+	bg = convert_color(scene->ambient.trgb);
+	return (bg);
 }
 
 /**

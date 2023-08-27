@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 14:22:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/27 15:46:01 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/27 18:10:31 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,22 +75,30 @@ int	intersect_sphere(t_scene *scene, t_ray ray, float *t, int i)
  * @param hit: hit point
  * @param center: center of the sphere
  * @returns a normalized vector perpendicular to the surface of the sphere
+ * t_vec3			(*t_normal)(t_shape *shape, t_point3 hit);
 */
-t_vec3	sp_normal(t_point3 hit, t_point3 center)
+t_vec3	sp_normal(t_shape *sp, t_point3 hit)
 {
-	t_vec3	normal;
+	t_vec3		normal;
+	t_point3	center;
 
+	center = sp->sp.pos;
 	normal = vec3_unit(vec3_sub(hit, center));
 	return (normal);
 }
 
+/**
+ * @param t: hit distance
+ * @param rec: t_hit_record if there's a hit the value gets updated
+ * @returns true if there's a hit, false otherwise
+*/
 bool	sp_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 {
-	if (t > 0.000001f && t < rec->t)
+	if (t > EPSILON && t < rec->t)
 	{
 		rec->t = t;
 		rec->p = ray_at(ray, t);
-		rec->normal = sp_normal(rec->p, shape->sp.pos);
+		rec->normal = sp_normal(shape, rec->p);
 		rec->color = shape->color;
 		return (true);
 	}
@@ -108,7 +116,6 @@ bool	sp_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 	double	c;
 	double	discriminant;
 
-	(void) rec;
 	oc = vec3_sub(r.origin, shape->sp.pos);
 	a = vec3_dot(r.direction, r.direction);
 	b = 2.0 * vec3_dot(oc, r.direction);

@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:31:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/27 15:50:57 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/27 17:55:26 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int	validate_sphere(t_scene *scene, char **el)
 		shape.type = ft_strdup("sphere");
 		shape.intersect = intersect_sphere;
 		shape.hit = sp_hit;
+		shape.normal = sp_normal;
 		shape.color = convert_color(shape.trgb);
 		scene->shape[i] = shape;
 		return (SUCCESS);

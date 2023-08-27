@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   plane.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 23:25:30 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/01 16:40:16 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/08/27 17:21:22 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "vector_math.h"
+#include "vec3.h"
 
 /**
  * ray: p = a + bt
@@ -50,11 +51,13 @@
 !!! important !!! pass in normalized vectors*/
 int	intersect_plane(t_scene *scene, t_ray ray, float *t, int i)
 {
-	t_vector p0 = scene->shape[i].pl.pos;
-	t_vector n = scene->shape[i].pl.rotation;
-	t_vector l0 = ray.origin;
-	t_vector l = ray.direction;
-	float denom = vect_dot(n, l);
+	const t_vector	p0 = scene->shape[i].pl.pos;
+	const t_vector	n = scene->shape[i].pl.rotation;
+	const t_vector	l0 = ray.origin;
+	const t_vector	l = ray.direction;
+	float			denom;
+
+	denom = vec3_dot(n, l);
 	if (denom > 1e-6)
 	{
 		t_vector p0l0 = vect_sub(p0, l0);
