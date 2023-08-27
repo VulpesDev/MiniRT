@@ -6,20 +6,21 @@
 #    By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 20:41:46 by tfregni           #+#    #+#              #
-#    Updated: 2023/08/27 15:47:13 by tfregni          ###   ########.fr        #
+#    Updated: 2023/08/27 16:24:42 by tfregni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS		= main.c parse.c populate_element.c populate_solid.c parse_util.c \
+SRCS		= $(addprefix $(SRCS_DIR)/, main.c parse.c populate_element.c populate_solid.c parse_util.c \
 				libx.c render.c sphere.c plane.c vector_calcs.c event_handler.c \
-				matrix_calcs.c camera.c shade.c vec3.c ray.c cylinder.c
+				matrix_calcs.c camera.c shade.c vec3.c ray.c cylinder.c)
 UNAME_S		:= $(shell uname -s)
 OBJS		= ${SRCS:.c=.o}
+SRCS_DIR 	= srcs
 CC			= cc
 CFLAGS		= -O3 -Wall -Wextra -Werror -g
 NAME		= minirt
 LINKS		= -lm -Llibft -lft
-INC			= -Ilibft
+INC			= -Ilibft -Iincludes
 RE_LIBFT	= "$(wildcard ./libft/libft.a)"
 DSYM		= *.dSYM
 RM			= rm -rf
