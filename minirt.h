@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/01 16:40:14 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/08/27 14:10:45 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <math.h>
 # include "libft.h"
 # include "keys.h"
+# include "matrix_math.h"
 # include "camera.h"
 # include "sphere.h"
 # include "hittable.h"
@@ -28,7 +29,7 @@
 # define CANV_MIN_X -1.0f
 # define CANV_MAX_X 1.0f
 # define CANV_MIN_Y -1.0f
-# define CANV_DIST 1
+# define CANV_DIST 1.0f
 # define CAM_PACE 0.1
 # define LIGHT_PACE 0.3
 # define ORIENT_PACE 0.01
@@ -71,14 +72,6 @@ typedef enum e_bool
 	FALSE,
 	TRUE,
 }			t_bool;
-
-typedef struct s_matrix
-{
-	float	matrix[4][4];
-	size_t	size;
-}	t_matrix;
-
-// typedef t_matrix_trans	t_matrix;
 
 typedef struct s_img
 {
@@ -182,7 +175,7 @@ typedef struct s_shape
 		t_plane		pl;
 		t_cylinder	cy;
 	};
-	char*			type;
+	char			*type;
 	t_vector		rotation;
 	t_hit_func		intersect;
 	t_hit			hit;
@@ -258,7 +251,6 @@ t_err	ft_warning(char *msg, char *arg, int err_code);
 /* CLEANUP */
 int		free_img(t_img *data);
 void	free_scene(t_scene **scene);
-
 
 /* DEBUG */
 void	print_4x4(t_matrix_trans m);
