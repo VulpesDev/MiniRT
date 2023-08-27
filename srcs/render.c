@@ -6,45 +6,15 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/27 18:56:00 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/27 21:41:31 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "ray.h"
-// #include "vector_math.h"
 #include "matrix_math.h"
 
-/**
- * range_x / WIDTH = canvas size of 1 pxl on x axis
- * range_x / WIDTH * ratio = canvas size of 1 pxl on y axis
- * added - to flip the axis
-*/
-// t_point_2d	to_canvas(t_pxl pxl)
-// {
-// 	t_point_2d	ret;
-// 	float		range_x;
-// 	float		ratio;
-
-// 	range_x = CANV_MAX_X - CANV_MIN_X;
-// 	ratio = WIDTH / HEIGHT;
-// 	ret.x = -(range_x / WIDTH * pxl.x + CANV_MIN_X);
-// 	ret.y = -(range_x / WIDTH * ratio * pxl.y + CANV_MIN_Y);
-// 	return (ret);
-// }
-
-// t_point_2d	to_canvas_new(t_pxl pxl, t_camera *c)
-// {
-// 	t_point_2d	ret;
-// 	float		range_x;
-// 	float		range_y;
-
-// 	range_x = c->top_right.x - c->bot_left.x;
-// 	range_y = c->top_right.y - c->bot_left.y;
-// 	ret.x = range_x / WIDTH * pxl.x + c->bot_left.x;
-// 	ret.y = range_y / HEIGHT * pxl.y + c->bot_left.y;
-// 	return (ret);
-// }
+#ifdef DEBUG
 
 void	print_4x4(t_matrix_trans m)
 {
@@ -56,27 +26,7 @@ void	print_4x4(t_matrix_trans m)
 	}
 	printf("\n");
 }
-
-// void	set_proj_matrix(t_matrix_trans proj, t_camera *c)
-// {
-// 	proj[0][0] = (2 * ZNEAR) / (c->top_right.x - c->bot_left.x);
-// 	proj[0][1] = 0.0f;
-// 	proj[0][2] = 0.0f;
-// 	proj[0][3] = 0.0f;
-// 	proj[1][0] = 0.0f;
-// 	proj[1][1] = (2 * ZNEAR) / (c->top_right.y - c->bot_left.y);
-// 	proj[1][2] = 0.0f;
-// 	proj[1][3] = 0.0f;
-// 	proj[2][0] = (c->top_right.x + c->bot_left.x) / (c->top_right.x - c->bot_left.x);
-// 	proj[2][1] = (c->top_right.y + c->bot_left.y) / (c->top_right.y - c->bot_left.y);
-// 	proj[2][2] = -((ZFAR + ZNEAR) / (ZFAR - ZNEAR));
-// 	proj[2][3] = -1.0f;
-// 	proj[3][0] = 0.0f;
-// 	proj[3][1] = 0.0f;
-// 	proj[3][2] = -((2 * ZFAR * ZNEAR) / (ZFAR - ZNEAR));
-// 	proj[3][3] = 0.0f;
-// 	print_4x4(proj);
-// }
+#endif
 
 /**
  * As in openGL, we state that the projection plane coinincides
@@ -95,7 +45,7 @@ t_point_3d	world_to_cam_new(t_point_3d p, t_matrix transform)
 	return (mx_mult(transform, p));
 }
 
-int	apply_ligthing_ratio(int trgb, float lighting_ratio)
+int	apply_lighting_ratio(int trgb, float lighting_ratio)
 {
 	return (create_trgb(0, \
 			lighting_ratio * ((trgb >> 16) & 0xFF),
@@ -105,32 +55,11 @@ int	apply_ligthing_ratio(int trgb, float lighting_ratio)
 
 t_color	apply_light_to_color(t_color c, double light)
 {
-	// printf("color: %f %f %f\n", c.r, c.g, c.b);
-	return (color(0.0, c.r * light, c.g * light, c.b * light));
+	t_color	ret;
+
+	ret = color(0.0, c.r * light, c.g * light, c.b * light);
+	return (ret);
 }
-
-// int	intersect_element(t_scene *scene, t_ray ray, int *color, float *min_t)
-// {
-// 	int		i;
-// 	int		ret;
-// 	float	t;
-
-// 	ret = 0;
-// 	i = scene->shape_count - 1;
-// 	while (i >= 0)
-// 	{
-// 		// printf("shape[%d] i: %d\n", scene->shape_count, i);
-// 		if (scene->shape[i].intersect(scene, ray, &t, i) && t < *min_t && t > 0)
-// 		{
-// 			*min_t = t;
-// 			*color = apply_ligthing_ratio(scene->shape[i].trgb, \
-// 											sp_light_coeff(scene, t, ray, i));
-// 			ret = 1;
-// 		}
-// 		i--;
-// 	}
-// 	return (ret);
-// }
 
 /**
  * @brief converts an int in trgb format to a color struct with double values
@@ -168,23 +97,6 @@ int	convert_trgb(t_color c)
 	b = (int)(c.b * 255.999);
 	return (t << 24 | r << 16 | g << 8 | b);
 }
-
-// t_ray	ray_for_pixel(t_camera *c, t_pxl p)
-// {
-// 	float		world_x;
-// 	float		world_y;
-// 	t_tuple		pxl;
-// 	t_tuple		origin;
-// 	t_vector	direction;
-
-// 	world_x = c->bot_left.x + (p.x * c->pixel_size);
-// 	world_y = c->bot_left.y + (p.y * c->pixel_size);
-// 	pxl = multiply_tp_mx(c->transform, create_point(world_x, world_y, -1));
-// 	origin = multiply_tp_mx(c->transform, create_point(0, 0, 0));
-// 	direction = vect_norm(vect_sub((t_vector){pxl.x, pxl.y, pxl.z},
-// 				(t_vector){origin.x, origin.y, origin.z}));
-// 	return ((t_ray){(t_point_3d){origin.x, origin.y, origin.z}, direction});
-// }
 
 /**
  * @brief creates a ray from the camera to the canvas
@@ -241,9 +153,9 @@ t_color	ray_color(t_scene *scene, t_ray r)
 
 	if (hit_element(scene, r, &rec))
 	{
-		light = ft_fmax((vec3_dot(rec.normal, \
-			vec3_inv(vec3_unit(scene->light.pos)))), 0.0f);
-		light = light_coeff(scene, &rec);
+		light = ft_fmin(light_coeff(scene, &rec), 1);
+		if (light < 0 || light > 1)
+			printf("Light out of bound %f\n", light);
 		return (apply_light_to_color(rec.color, light));
 	}
 	return (convert_color(scene->ambient.trgb));
@@ -251,7 +163,7 @@ t_color	ray_color(t_scene *scene, t_ray r)
 
 /**
  * @returns a color as int
- * @math
+ * @math:
  * circle = (x^2 - a) + (y^2 - b) - r^2 = 0 (a and b are the coord)
  * ray = a + bt (a: origin b: direction t: distance)
  * a : ray origin (scene->camera.pos)

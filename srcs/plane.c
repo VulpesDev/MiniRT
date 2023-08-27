@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 23:25:30 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/27 18:46:49 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/27 22:09:44 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,10 @@ int	intersect_plane(t_scene *scene, t_ray ray, float *t, int i)
 	float			denom;
 
 	denom = vec3_dot(n, l);
-	if (denom > 1e-6)
+	if (denom > EPSILON)
 	{
-		t_vector p0l0 = vect_sub(p0, l0);
-		*t = vect_dot(p0l0, n) / denom;
+		// t_vector p0l0 = vect_sub(p0, l0);
+		*t = vect_dot(vect_sub(p0, l0), n) / denom;
 		return (*t >= 0);
 	}
 	return (0);
@@ -86,17 +86,25 @@ bool	pl_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 	return (false);
 }
 
+double	ft_abs_double(double n)
+{
+	if (n < 0)
+		return (-n);
+	return (n);
+}
+
 bool	pl_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 {
-	t_vector	p0 = shape->pl.pos;
-	t_vector	n = vect_norm(shape->rotation);
-	t_vector	l0 = r.origin;
-	t_vector	l = vect_norm(r.direction);
-	float denom = vect_dot(n, l);
-	if (denom > EPSILON)
+	const t_vector	p0 = shape->pl.pos;
+	const t_vector	n = vect_norm(shape->rotation);
+	const t_vector	l0 = r.origin;
+	const t_vector	l = vect_norm(r.direction);
+	const float		denom = vect_dot(n, l);
+
+	if (ft_abs_double(denom) > EPSILON)
 	{
-		t_vector p0l0 = vect_sub(p0, l0);
-		return (pl_hit_record((vect_dot(p0l0, n) / denom), shape, rec, r));
+		return (pl_hit_record(((vect_dot(vect_sub(p0, l0), n)) / denom), \
+		shape, rec, r));
 	}
 	return (false);
 }

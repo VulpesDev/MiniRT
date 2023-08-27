@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   event_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 12:29:38 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/08/07 18:13:04 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/08/27 20:44:48 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ int	key_handle(int keycode, t_scene *scene)
 	else if (keycode == MINUS)
 		scene->ambient.lighting_ratio -= 0.1;
 	else if (keycode == UP)
-		scene->camera.pos.x += CAM_PACE;
+		scene->camera.pos.y += CAM_PACE;
 	else if (keycode == DOWN)
-		scene->camera.pos.x -= CAM_PACE;
+		scene->camera.pos.y -= CAM_PACE;
 	else if (keycode == LEFT)
 		scene->camera.pos.x -= CAM_PACE;
 	else if (keycode == RIGHT)

@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 15:45:15 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/27 18:56:11 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/27 21:44:44 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,11 @@ float	diffuse_reflection(t_scene *scene, t_vector n, t_vector p)
 	float		n_dot_l;
 	float		light;
 	float		len_l;
-	t_ray		ray;
+	t_ray		rebound;
 
 	l = vec3_sub(p, scene->light.pos);
-	ray = (t_ray){p, vec3_inv(l)};
-	if (cast_shadow(scene, ray))
+	rebound = (t_ray){p, vec3_inv(l)};
+	if (cast_shadow(scene, rebound))
 		return (0.1f);
 	n_dot_l = vec3_dot(n, l);
 	len_l = vec3_len(l);
