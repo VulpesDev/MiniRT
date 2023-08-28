@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:42:25 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/17 16:46:03 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/28 19:28:53 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,16 @@ t_vec3	vec3_mult(t_vec3 a, double b)
 	return (result);
 }
 
+t_vec3	vec3_cross(t_vec3 a, t_vec3 b)
+{
+	t_vec3	result;
+
+	result.x = a.y * b.z - a.z * b.y;
+	result.y = a.z * b.x - a.x * b.z;
+	result.z = a.x * b.y - a.y * b.x;
+	return (result);
+}
+
 t_vec3	vec3_sub(t_vec3 a, t_vec3 b)
 {
 	t_vec3	result;
@@ -102,4 +112,9 @@ t_vec3	vec3_unit(t_vec3 a)
 t_vec3	vec3_inv(t_vec3 a)
 {
 	return (vec3_mult(a, -1));
+}
+
+void	vec3_print(t_vec3 a)
+{
+	printf("x: %f, y: %f, z: %f", a.x, a.y, a.z);
 }

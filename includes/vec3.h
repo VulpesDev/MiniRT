@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:40:31 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/17 16:46:23 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/28 19:28:22 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_color
 t_vec3	vec3(double x, double y, double z);
 t_vec3	vec3_sum(t_vec3 a, t_vec3 b);
 t_vec3	vec3_mult(t_vec3 a, double b);
+t_vec3	vec3_cross(t_vec3 a, t_vec3 b);
 t_vec3	vec3_sub(t_vec3 a, t_vec3 b);
 double	vec3_dot(t_vec3 a, t_vec3 b);
 t_vec3	vec3_div(t_vec3 a, double b);
@@ -42,6 +43,7 @@ double	vec3_len_squared(t_vec3 a);
 double	vec3_len(t_vec3 a);
 t_vec3	vec3_unit(t_vec3 a);
 t_vec3	vec3_inv(t_vec3 a);
+void	vec3_print(t_vec3 a);
 
 t_point3	point(double x, double y, double z);
 
