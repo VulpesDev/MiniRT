@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 23:25:30 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/27 22:09:44 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/29 00:58:41 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,15 @@ int	intersect_plane(t_scene *scene, t_ray ray, float *t, int i)
 	return (0);
 }
 
+/**
+ * @param valid: 1 if the normal is pointing towards the camera, -1 otherwise
+ * @returns the normal vector of the plane. It multiplies by the valid param
+ * so that the normal is negative if the camera is in the back of the plane
+*/
 t_vec3	pl_normal(t_shape *pl, t_point3 hit)
 {
 	(void) hit;
-	return (pl->rotation);
+	return (vec3_mult(pl->rotation, pl->pl.valid));
 }
 
 bool	pl_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
@@ -93,6 +98,10 @@ double	ft_abs_double(double n)
 	return (n);
 }
 
+/**
+ * The absolute value of the denom allows to render alse the dark side
+ * of the plane. If the denom is negative we're in the back of the plane
+*/
 bool	pl_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 {
 	const t_vector	p0 = shape->pl.pos;
@@ -103,6 +112,10 @@ bool	pl_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 
 	if (ft_abs_double(denom) > EPSILON)
 	{
+		if (denom > 0)
+			shape->pl.valid = 1;
+		else
+			shape->pl.valid = -1;
 		return (pl_hit_record(((vect_dot(vect_sub(p0, l0), n)) / denom), \
 		shape, rec, r));
 	}

@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/28 23:52:04 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/29 00:17:22 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,8 +188,6 @@ int	per_pixel(t_pxl p, t_scene *scene)
 	t_color	c;
 
 	// Between 0 and 1
-	// m.ndc_x = (width + 0.5f) / img->width * 2.0f - 1.0f;
-	// m.ndc_y = 1.0f - (height + 0.5f) / img->height * 2.0f;
 	// ndc_x = (double)p.x / (WIDTH - 1);
 	// ndc_y = (double)p.y / (HEIGHT - 1);
 	ndc_x = ((double)p.x + 0.5f) / WIDTH * 2.0f - 1.0f;

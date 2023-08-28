@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 14:22:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/27 19:04:27 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/29 00:32:03 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_vec3	sp_normal(t_shape *sp, t_point3 hit)
 	t_point3	center;
 
 	center = sp->sp.pos;
-	normal = vec3_unit(vec3_sub(hit, center));
+	normal = vec3_unit(vec3_sub(center, hit));
 	return (normal);
 }
 
