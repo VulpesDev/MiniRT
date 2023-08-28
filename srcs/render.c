@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/27 21:41:31 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/28 23:52:04 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,12 @@ int	convert_trgb(t_color c)
 
 /**
  * @brief creates a ray from the camera to the canvas
+ * 1. Pixel to world
+ * 2. Transform through matrix
+ * 3. Get ray direction
+ * 4. Normalize ray direction
 */
-t_ray	create_cam_ray(t_camera *c, double u, double v)
+t_ray	create_cam_ray(t_camera *c, double ndc_x, double ndc_y)
 {
 	t_ray	ray;
 	t_vec3	temp;
@@ -109,10 +113,10 @@ t_ray	create_cam_ray(t_camera *c, double u, double v)
 	t_vec3	gradient_ver;
 
 	ray.origin = c->pos;
-	gradient_hor = vec3_mult(c->horizontal, u);
-	gradient_ver = vec3_mult(c->vertical, v);
+	gradient_hor = vec3_mult(c->horizontal, ndc_x);
+	gradient_ver = vec3_mult(c->vertical, ndc_y);
 	temp = vec3_sum(gradient_hor, gradient_ver);
-	ray.direction = vec3_sub(c->lower_left_corner, ray.origin);
+	ray.direction = vec3_sub(c->top_left_corner, ray.origin);
 	ray.direction = vec3_sum(ray.direction, temp);
 	return (ray);
 }
@@ -178,15 +182,19 @@ t_color	ray_color(t_scene *scene, t_ray r)
 */
 int	per_pixel(t_pxl p, t_scene *scene)
 {
-	double	u;
-	double	v;
+	double	ndc_x;
+	double	ndc_y;
 	t_ray	r;
 	t_color	c;
 
 	// Between 0 and 1
-	u = (double)p.x / (WIDTH - 1);
-	v = (double)p.y / (HEIGHT - 1);
-	r = create_cam_ray(&scene->camera, u, v);
+	// m.ndc_x = (width + 0.5f) / img->width * 2.0f - 1.0f;
+	// m.ndc_y = 1.0f - (height + 0.5f) / img->height * 2.0f;
+	// ndc_x = (double)p.x / (WIDTH - 1);
+	// ndc_y = (double)p.y / (HEIGHT - 1);
+	ndc_x = ((double)p.x + 0.5f) / WIDTH * 2.0f - 1.0f;
+	ndc_y = 1.0f - ((double)p.y + 0.5f) / HEIGHT * 2.0f;
+	r = create_cam_ray(&scene->camera, ndc_x, ndc_y);
 	c = ray_color(scene, r);
 	return (convert_trgb(c));
 }
