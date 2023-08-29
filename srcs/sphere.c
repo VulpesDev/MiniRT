@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 14:22:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/29 10:27:53 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/29 11:52:34 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ float	sp_calc_discriminant(t_scene *scene, t_ray ray, \
 		*t = sp_calc_hit_point(discriminant, a, b);
 	return (discriminant);
 }
+
 /**
  * @returns 1 if the ray hits the sphere, 0 otherwise
 */

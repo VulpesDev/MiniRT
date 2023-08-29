@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 17:26:52 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/27 18:40:22 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/29 11:52:56 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ typedef struct s_hit_record
 
 /* SPHERE */
 int		intersect_sphere(t_scene *scene, t_ray ray, float *t, int i);
-float	sp_light_coeff(t_scene *scene, float t, t_ray ray, int i);
 float	sp_calc_discriminant(t_scene *scene, t_ray ray, \
 							float *t, int i);
 float	sp_calc_hit_point(float discriminant, float a, float b);

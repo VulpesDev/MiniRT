@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/28 09:27:16 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/29 10:10:01 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define CAM_PACE 0.1
 # define LIGHT_PACE 0.3
 # define ORIENT_PACE 0.01
-# define RAY_LEN 1000
+# define RAY_LEN 100000
 # define BOUNCES 2
 # define ZNEAR CANV_DIST
 # define ZFAR RAY_LEN

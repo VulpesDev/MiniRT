@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/29 00:17:22 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/29 13:37:20 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,21 @@ int	convert_trgb(t_color c)
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
+// t_ray	create_scratch_cam_ray(t_camera *c, double screen_x, double screen_y)
+// {
+// 	t_ray		ray;
+// 	t_point3	cam_p;
+
+// 	// Camera space
+// 	cam_p.x = screen_x * c->fov;
+// 	cam_p.y = screen_y * c->fov;
+// 	cam_p.z = -1;
+// 	cam_p = mx_mult(c->m, cam_p);
+// 	ray.origin = mx_mult(c->m, vec3(0, 0, 0));
+// 	ray.direction = vec3_unit(vec3_sub(cam_p, ray.origin));
+// 	return (ray);
+// }
+
 /**
  * @brief creates a ray from the camera to the canvas
  * 1. Pixel to world
@@ -105,19 +120,25 @@ int	convert_trgb(t_color c)
  * 3. Get ray direction
  * 4. Normalize ray direction
 */
-t_ray	create_cam_ray(t_camera *c, double ndc_x, double ndc_y)
+t_ray	create_cam_ray(t_camera *c, double screen_x, double screen_y)
 {
+	// return (create_scratch_cam_ray(c, screen_x, screen_y));
 	t_ray	ray;
-	t_vec3	temp;
-	t_vec3	gradient_hor;
-	t_vec3	gradient_ver;
+	// t_vec3	temp;
+	// t_vec3	gradient_hor;
+	// t_vec3	gradient_ver;
 
 	ray.origin = c->pos;
-	gradient_hor = vec3_mult(c->horizontal, ndc_x);
-	gradient_ver = vec3_mult(c->vertical, ndc_y);
-	temp = vec3_sum(gradient_hor, gradient_ver);
-	ray.direction = vec3_sub(c->top_left_corner, ray.origin);
-	ray.direction = vec3_sum(ray.direction, temp);
+	// gradient_hor = vec3_mult(c->horizontal, screen_x);
+	// gradient_ver = vec3_mult(c->vertical, screen_y);
+	// temp = vec3_sum(gradient_hor, gradient_ver);
+	// ray.direction = vec3_sub(c->viewport_top_left, ray.origin);
+	// ray.direction = vec3_sum(ray.direction, temp);
+	t_vec3 pxl_x = vec3_mult(c->pxl_size_hor, screen_x);
+	t_vec3 pxl_y = vec3_mult(c->pxl_size_ver, screen_y);
+	t_vec3 pxl_pos = vec3_sum(c->viewport_top_left, pxl_x);
+	pxl_pos = vec3_sum(pxl_pos, pxl_y);
+	ray.direction = vec3_sub(pxl_pos, ray.origin);
 	return (ray);
 }
 
@@ -179,20 +200,25 @@ t_color	ray_color(t_scene *scene, t_ray r)
  * + (ax^2 +ay^2 + az^2 - r^2) = 0
  * Quadratic formula: (-b +- sqrt(b^2 - 4ac))/2a
  * Discriminant: b^2 - 4ac
+ * https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-generating-camera-rays/generating-camera-rays.html
 */
 int	per_pixel(t_pxl p, t_scene *scene)
 {
-	double	ndc_x;
-	double	ndc_y;
+	// double	ndc_x;
+	// double	ndc_y;
+	double	screen_x;
+	double	screen_y;
 	t_ray	r;
 	t_color	c;
 
-	// Between 0 and 1
+	// Between 0 and 1 (NDC space)
 	// ndc_x = (double)p.x / (WIDTH - 1);
 	// ndc_y = (double)p.y / (HEIGHT - 1);
-	ndc_x = ((double)p.x + 0.5f) / WIDTH * 2.0f - 1.0f;
-	ndc_y = 1.0f - ((double)p.y + 0.5f) / HEIGHT * 2.0f;
-	r = create_cam_ray(&scene->camera, ndc_x, ndc_y);
+
+	// Between -1 and 1 (screen space)
+	screen_x = ((double)p.x + 0.5f) / WIDTH * 2.0f - 1.0f;
+	screen_y = 1.0f - ((double)p.y + 0.5f) / HEIGHT * 2.0f;
+	r = create_cam_ray(&scene->camera, p.x, p.y);
 	c = ray_color(scene, r);
 	return (convert_trgb(c));
 }
