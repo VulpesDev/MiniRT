@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 12:29:38 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/08/27 20:44:48 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/29 11:44:38 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,35 +40,17 @@ int	key_handle(int keycode, t_scene *scene)
 	else if (keycode == RIGHT)
 		scene->camera.pos.x += CAM_PACE;
 	else if (keycode == Q)
-	{
-		if (scene->shape[0].rotation.x < 1)
-		scene->shape[0].rotation.x+= 0.3;
-	}
+		scene->camera.orientation.z -= ORIENT_PACE;
 	else if (keycode == E)
-	{
-		if (scene->shape[0].rotation.x > -1)
-		scene->shape[0].rotation.x -= 0.3;
-	}
+		scene->camera.orientation.z += ORIENT_PACE;
 	else if (keycode == A)
-	{
-		if (scene->shape[0].rotation.y < 1)
-		scene->shape[0].rotation.y += 0.3;
-	}
+		scene->camera.orientation.y -= ORIENT_PACE;
 	else if (keycode == D)
-	{
-		if (scene->shape[0].rotation.y > -1)
-			scene->shape[0].rotation.y -= 0.3;
-	}
+		scene->camera.orientation.y += ORIENT_PACE;
 	else if (keycode == W)
-	{
-		if (scene->shape[0].rotation.z < 1)
-			scene->shape[0].rotation.z += 0.3;
-	}
+		scene->camera.orientation.x += ORIENT_PACE;
 	else if (keycode == S)
-	{
-		if (scene->shape[0].rotation.z > -1)
-			scene->shape[0].rotation.z -= 0.3;
-	}
+		scene->camera.orientation.x -= ORIENT_PACE;
 	else
 		ft_printf("KeyCode: %d\n", keycode);
 	if (keycode != ESC)
