@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:39:08 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/28 23:51:28 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/29 13:38:54 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,12 @@ typedef struct s_camera
 	double			viewport_height;
 	double			viewport_width;
 	double			focal_length;
-	t_point3		top_left_corner;
+	t_point3		viewport_top_left;
 	t_vec3			horizontal;
 	t_vec3			vertical;
-	t_vec3			vup;
+	t_vec3			pxl_size_hor;
+	t_vec3			pxl_size_ver;
+	t_vec3			vert_up;
 	t_vec3			up;
 	t_vec3			right;
 	t_matrix		m;
