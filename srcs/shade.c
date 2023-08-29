@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 15:45:15 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/29 00:31:20 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/29 10:17:10 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ float	diffuse_reflection(t_scene *scene, t_vector n, t_vector p)
 	len_l = vec3_len(l);
 	if (len_l < EPSILON)
 		return (1.0f);
-	light = ft_fmax((scene->light.brightness * n_dot_l / len_l), 0.0f);
+	light = ft_fmax((scene->light.brightness * n_dot_l / len_l) + scene->ambient.lighting_ratio, 0.0f);
 	return (light);
 }
 
