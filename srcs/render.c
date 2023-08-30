@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/29 13:37:20 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/31 00:46:05 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,17 @@ int	convert_trgb(t_color c)
 // 	return (ray);
 // }
 
+t_point_3d	ray_pxl_to_world(t_camera *c, int x, int y)
+{
+	double	screen_x;
+	double	screen_y;
+
+	// Between -1 and 1 (screen space)
+	screen_x = (((double)x + 0.5f) / WIDTH * 2.0f - 1.0f) * c->viewport_width / 2;
+	screen_y = (1.0f - ((double)y + 0.5f) / HEIGHT * 2.0f)  * c->viewport_height / 2;
+	return (vec3(screen_x, screen_y, -1));
+}
+
 /**
  * @brief creates a ray from the camera to the canvas
  * 1. Pixel to world
@@ -120,25 +131,19 @@ int	convert_trgb(t_color c)
  * 3. Get ray direction
  * 4. Normalize ray direction
 */
-t_ray	create_cam_ray(t_camera *c, double screen_x, double screen_y)
+t_ray	create_cam_ray(t_camera *c, int x, int y)
 {
-	// return (create_scratch_cam_ray(c, screen_x, screen_y));
 	t_ray	ray;
-	// t_vec3	temp;
-	// t_vec3	gradient_hor;
-	// t_vec3	gradient_ver;
+	t_vec3	dir;
 
+	dir = ray_pxl_to_world(c, x, y);
+	// dir = mx_mult(c->m, dir);
+	dir = vec3_unit(vec3_sub(dir, c->pos));
 	ray.origin = c->pos;
-	// gradient_hor = vec3_mult(c->horizontal, screen_x);
-	// gradient_ver = vec3_mult(c->vertical, screen_y);
-	// temp = vec3_sum(gradient_hor, gradient_ver);
-	// ray.direction = vec3_sub(c->viewport_top_left, ray.origin);
-	// ray.direction = vec3_sum(ray.direction, temp);
-	t_vec3 pxl_x = vec3_mult(c->pxl_size_hor, screen_x);
-	t_vec3 pxl_y = vec3_mult(c->pxl_size_ver, screen_y);
-	t_vec3 pxl_pos = vec3_sum(c->viewport_top_left, pxl_x);
-	pxl_pos = vec3_sum(pxl_pos, pxl_y);
-	ray.direction = vec3_sub(pxl_pos, ray.origin);
+	ray.direction = dir;
+	static int i = -1;
+	if (++i == 0 || i == WIDTH * HEIGHT - 1)
+		{vec3_print(ray.direction); printf("\n");}
 	return (ray);
 }
 
@@ -206,8 +211,8 @@ int	per_pixel(t_pxl p, t_scene *scene)
 {
 	// double	ndc_x;
 	// double	ndc_y;
-	double	screen_x;
-	double	screen_y;
+	// double	screen_x;
+	// double	screen_y;
 	t_ray	r;
 	t_color	c;
 
@@ -216,8 +221,8 @@ int	per_pixel(t_pxl p, t_scene *scene)
 	// ndc_y = (double)p.y / (HEIGHT - 1);
 
 	// Between -1 and 1 (screen space)
-	screen_x = ((double)p.x + 0.5f) / WIDTH * 2.0f - 1.0f;
-	screen_y = 1.0f - ((double)p.y + 0.5f) / HEIGHT * 2.0f;
+	// screen_x = ((double)p.x + 0.5f) / WIDTH * 2.0f - 1.0f;
+	// screen_y = 1.0f - ((double)p.y + 0.5f) / HEIGHT * 2.0f;
 	r = create_cam_ray(&scene->camera, p.x, p.y);
 	c = ray_color(scene, r);
 	return (convert_trgb(c));
@@ -234,7 +239,7 @@ void	draw(t_scene *scene)
 	int		c;
 
 	data = scene->img;
-	cam_setup(&scene->camera);
+	cam_orientation(&scene->camera);
 	p.y = 0;
 	while (p.y < HEIGHT)
 	{

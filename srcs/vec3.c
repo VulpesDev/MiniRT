@@ -6,12 +6,14 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:42:25 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/29 11:18:36 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/30 21:35:29 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+// #include "minirt.h"
 #include "vec3.h"
+#include <stdio.h>
+#include <math.h>
 
 t_vec3	vec3(double x, double y, double z)
 {

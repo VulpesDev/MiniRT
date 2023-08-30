@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:54:25 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/29 13:39:57 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/31 00:22:28 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ double	radians(double grades)
 {
 	return (grades * M_PI / 180);
 };
+
 
 // void	cam_scratch_orientation(t_camera *c)
 // {
@@ -52,62 +53,37 @@ double	radians(double grades)
 */
 void	cam_orientation(t_camera *c)
 {
-	// cam_scratch_orientation(c);
-	c->right = vec3_unit(vec3_cross(c->orientation, c->vert_up));
-	c->up = vec3_unit(vec3_cross(c->right, c->orientation));
-	c->look_at = vec3_unit(c->orientation);
-	c->m.size = 16;
-	c->m.matrix[0][0] = c->right.x;
-	c->m.matrix[0][1] = c->right.y;
-	c->m.matrix[0][2] = c->right.z;
-	c->m.matrix[0][3] = 0;
-	c->m.matrix[1][0] = c->up.x;
-	c->m.matrix[1][1] = c->up.y;
-	c->m.matrix[1][2] = c->up.z;
-	c->m.matrix[1][3] = 0;
-	c->m.matrix[2][0] = c->vert_up.x;
-	c->m.matrix[2][1] = c->vert_up.y;
-	c->m.matrix[2][2] = c->vert_up.z;
-	c->m.matrix[2][3] = 0;
-	c->m.matrix[3][0] = c->pos.x;
-	c->m.matrix[3][1] = c->pos.y;
-	c->m.matrix[3][2] = c->pos.z;
-	c->m.matrix[3][3] = 1;
+	t_vec3	new;
+
+	printf("viewport_width: %f\tviewport_height: %f\n", c->viewport_width, c->viewport_height);
+	c->look_at = vec3_unit(vec3_sub(vec3_unit(c->orientation), c->pos));
+	c->right = vec3_unit(vec3_cross(c->look_at, c->vert_up));
+	c->up = vec3_unit(vec3_cross(c->right, c->look_at));
+	if (vec3_len(c->up) == 0)
+	{
+		new = vec3(0, 0, 1);
+		c->right = vec3_unit(vec3_cross(c->look_at, new));
+		c->up = vec3_unit(vec3_cross(c->right, c->look_at));
+	}
+	printf("look_at: "); vec3_print(c->look_at);
+	printf("\nright: "); vec3_print(c->right);
+	printf("\nup: "); vec3_print(c->up); printf("\n");
+	c->m = mx_lookat(c->right, c->up, c->look_at, c->pos);
 }
 
+/**
+ * Through testing with pos 0,0,5 and orient 0,0,0 I got that
+ * right = cross(look_at, vert_up) = 1,0,0
+ * up = cross(right, look_at) = 0,1,0
+ * Can change the sign by reversing the factors in cross
+ * x -> y
+ * y -> x
+*/
 void	cam_setup(t_camera *c)
 {
-	t_vec3	half_hor;
-	t_vec3	half_ver;
-	t_vec3	temp;
-
-	c->m = mx_get_identity();
-	cam_orientation(c);
-	c->aspect_ratio = WIDTH / (double)HEIGHT;
-	c->viewport_width = 2.0f * (tan(radians(c->fov) / 2.0f));
+	c->aspect_ratio = (double)WIDTH / (double)HEIGHT;
+	c->viewport_width = tan(radians(c->fov / 2.0f)) * 2.0f;
 	c->viewport_height = c->viewport_width / c->aspect_ratio;
-	c->horizontal = vec3(c->viewport_width, 0, 0);
-	c->vertical = vec3(0, -c->viewport_height, 0);
-	// c->horizontal = vec3_mult(c->right, c->viewport_width);
-	// c->vertical = vec3_mult(c->up, -c->viewport_height);
-	half_hor = vec3_div(c->horizontal, 2);
-	half_ver = vec3_div(c->vertical, 2);
-	temp = vec3_sub(c->pos, vec3(0, 0, c->focal_length));
-	temp = vec3_sub(c->pos, half_hor);
-	temp = vec3_sub(temp, half_ver);
-	c->viewport_top_left = vec3_sub(temp, vec3(0, 0, c->focal_length));
-	c->pxl_size_hor = vec3_div(c->horizontal, WIDTH);
-	c->pxl_size_ver = vec3_div(c->vertical, HEIGHT);
-	printf("Camera: vp_w: %f, vp_h: %f, ratio: %f, top_left: %f %f %f\n", c->viewport_width, c->viewport_height, c->aspect_ratio, c->viewport_top_left.x, c->viewport_top_left.y, c->viewport_top_left.z);
-	printf("Horizontal: ");
-	vec3_print(c->horizontal);
-	printf(" Half_hor: ");
-	vec3_print(half_hor);
-	printf("\nVertical: ");
-	vec3_print(c->vertical);
-	printf(" Half_ver: ");
-	vec3_print(half_ver);
-	printf("\n");
 }
 
 

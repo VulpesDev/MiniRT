@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:30:47 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/29 13:39:09 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/30 12:05:10 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ t_err	validate_camera(t_scene *scene, char **el)
 		return (ft_warning("invalid argument: ", el[3], \
 				INVALID_ELEMENT));
 	scene->camera.focal_length = ZNEAR;
-	scene->camera.look_at = vec3_unit(point(scene->camera.pos.x, scene->camera.pos.y, scene->camera.pos.z - scene->camera.focal_length));
 	scene->camera.vert_up = vec3(0.0f, 1.0f, 0.0f);
 	cam_setup(&scene->camera);
 	return (SUCCESS);

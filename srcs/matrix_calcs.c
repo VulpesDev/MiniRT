@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 18:05:50 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/14 10:45:24 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/31 00:37:28 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,20 @@ t_matrix	create_matrix(const float mx[4][4], size_t size)
 
 	m.size = size;
 	ft_memmove(m.matrix, mx, sizeof(float) * 16);
+	return (m);
+}
+
+t_matrix	mx_lookat(t_vec3 right, t_vec3 up, t_vec3 forward, t_vec3 pos)
+{
+	const float	mx[4][4] = {
+	{right.x, right.y, right.z, 0},
+	{up.x, up.y, up.z, 0},
+	{forward.x, forward.y, forward.z, 0},
+	{pos.x, pos.y, pos.z, 1}
+	};
+	t_matrix	m;
+
+	m = create_matrix(mx, 16);
 	return (m);
 }
 
@@ -186,4 +200,21 @@ t_matrix	mx_combine(t_matrix mx, t_vector orient)
 	comb = mx_rotate_y(comb, orient.y);
 	comb = mx_rotate_z(comb, orient.z);
 	return (comb);
+}
+
+t_matrix	mx_4x4_transpose(t_matrix mx)
+{
+	t_matrix	ret;
+	size_t		row;
+	size_t		col;
+
+	ret = mx;
+	row = -1;
+	while (++row < 4)
+	{
+		col = -1;
+		while (++col < 4)
+			ret.matrix[row][col] = mx.matrix[col][row];
+	}
+	return (ret);
 }

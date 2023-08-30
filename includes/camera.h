@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:39:08 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/29 13:38:54 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/31 00:03:25 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_camera
 }					t_camera;
 
 void		cam_setup(t_camera *c);
+void		cam_orientation(t_camera *c);
 t_point3	cam_look_at(t_vec3 forward, t_vec3 rot);
 
 #endif
