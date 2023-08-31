@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:39:08 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/29 13:38:54 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/31 17:45:18 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ typedef struct s_camera
 	double			aspect_ratio;
 	double			viewport_height;
 	double			viewport_width;
+	double			half_hor;
+	double			half_ver;
 	double			focal_length;
 	t_point3		viewport_top_left;
 	t_vec3			horizontal;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vec3.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:42:25 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/29 11:18:36 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/08/31 17:48:15 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,5 @@ t_vec3	vec3_inv(t_vec3 a)
 
 void	vec3_print(t_vec3 a)
 {
-	printf("x: %f, y: %f, z: %f", a.x, a.y, a.z);
+	printf("x: %f, y: %f, z: %f\n", a.x, a.y, a.z);
 }
