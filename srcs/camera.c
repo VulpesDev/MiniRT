@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:54:25 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/31 17:44:42 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/04 16:17:38 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ double	radians(double grades)
 void	cam_orientation(t_camera *c)
 {
 	// cam_scratch_orientation(c);
-	c->right = vec3_unit(vec3_cross(c->orientation, c->vert_up));
-	c->up = vec3_unit(vec3_cross(c->right, c->orientation));
 	c->look_at = vec3_unit(c->orientation);
+	c->right = vec3_unit(vec3_cross(c->vert_up, c->look_at));
+	c->up = vec3_unit(vec3_cross(c->look_at, c->right));
 	c->m.size = 16;
 	c->m.matrix[0][0] = c->right.x;
 	c->m.matrix[0][1] = c->right.y;
@@ -116,24 +116,35 @@ void	cam_setup(t_camera *c)
 	c->m = mx_get_identity();
 	cam_orientation(c);
 	c->aspect_ratio = WIDTH / (double)HEIGHT;
+	// printf("FOV: %hhu\n", c->fov);
 	c->viewport_width = 2.0f * (tan(radians(c->fov) / 2.0f));
 	c->viewport_height = c->viewport_width / c->aspect_ratio;
 	c->half_hor = c->viewport_width/2;
 	c->half_ver = c->viewport_height/2;
 	c->horizontal = vec3(c->viewport_width, 0, 0);
 	c->vertical = vec3(0, -c->viewport_height, 0);
+	//c->focal_length = vec3_len(vec3_sub(c->pos, c->look_at));
 	// c->horizontal = vec3_mult(c->right, c->viewport_width);
 	// c->vertical = vec3_mult(c->up, -c->viewport_height);
+	//MY IDEA -----
+	c->orientation = vec3_unit(c->orientation);
 	c->viewport_top_left = ray_at(ray(c->pos, c->orientation), c->focal_length);
 	c->viewport_top_left = vec3_sub(c->viewport_top_left, vec3_mult(c->right, c->viewport_width/2));
 	c->viewport_top_left = vec3_sum(c->viewport_top_left, vec3_mult(c->up, c->viewport_height/2));
+	//CHATGPT EDIT ---- 
+	// c->viewport_top_left = vec3_mult(c->right, c->half_hor);
+	// c->viewport_top_left = vec3_sub(c->viewport_top_left, vec3_mult(c->up, c->half_ver));
+	// c->viewport_top_left = vec3_sub(c->pos, c->viewport_top_left);
 	/*1. calculate point at t of direction
 		2. move horizontally and vertiacally to the top left*/
 	c->pxl_size_hor = vec3_div(c->horizontal, WIDTH);
 	c->pxl_size_ver = vec3_div(c->vertical, HEIGHT);
-	printf("Camera: vp_w: %f, vp_h: %f, ratio: %f, top_left: %f %f %f\n", c->viewport_width, c->viewport_height, c->aspect_ratio, c->viewport_top_left.x, c->viewport_top_left.y, c->viewport_top_left.z);
-	printf("Horizontal: ");
-	vec3_print(c->horizontal);
+	printf("Cam_pos: (%f, %f, %f)\n", c->pos.x, c->pos.y, c->pos.z);
+	printf("Cam_orient: (%f, %f, %f)\n", c->orientation.x, c->orientation.y, c->orientation.z);
+	printf("\n\n");
+	// printf("Camera: vp_w: %f, vp_h: %f, ratio: %f, top_left: %f %f %f\n", c->viewport_width, c->viewport_height, c->aspect_ratio, c->viewport_top_left.x, c->viewport_top_left.y, c->viewport_top_left.z);
+	// printf("Horizontal: ");
+	// vec3_print(c->horizontal);
 }
 
 // void	cam_setup(t_camera *c)

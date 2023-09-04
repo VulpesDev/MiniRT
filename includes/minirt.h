@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/31 17:20:45 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/04 15:54:00 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # define CANV_DIST 1.0f
 # define CAM_PACE 0.1
 # define LIGHT_PACE 0.3
-# define ORIENT_PACE 0.4
+# define ORIENT_PACE 0.02
 # define RAY_LEN 100000
 # define BOUNCES 2
 # define ZNEAR CANV_DIST

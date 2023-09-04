@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/31 18:23:23 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/04 15:40:18 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,13 +141,13 @@ t_ray	create_cam_ray(t_camera *c, double int_x, double int_y)
 	t_vec3 pxl_pos = vec3_sum(c->viewport_top_left, vec3_mult(c->right, vec3_len(pxl_x)));
 	pxl_pos = vec3_sum(pxl_pos, vec3_mult(vec3_inv(c->up), vec3_len(pxl_y)));
 	ray.direction = vec3_sub(pxl_pos, ray.origin);
-		static int i = 0;
 	ray.direction = vec3_unit(ray.direction);
-	//?Debug
-	if (i == 0 || i == WIDTH * HEIGHT - 1)
-		printf("direction (%f, %f, %f)\n", ray.direction.x, ray.direction.y, ray.direction.z);
-	i++;
-	//?Debug
+	// //?Debug
+	// static int i = 0;
+	// if (i == 0 || i == WIDTH * HEIGHT - 1)
+	// 	printf("direction (%f, %f, %f)\n", ray.direction.x, ray.direction.y, ray.direction.z);
+	// i++;
+	// //?Debug
 	return (ray);
 }
 

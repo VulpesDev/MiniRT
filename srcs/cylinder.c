@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:18:37 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/08/08 14:01:08 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/02 15:15:48 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	intersect_cylinder(t_scene *scene, t_ray ray, float *t, int i)
 	double discriminant;
 	t_vector	X;
 
-	printf("IN HERE !!!\n");
+	//printf("IN HERE !!!\n");
 	X = vect_sub(ray.origin, scene->shape[i].cy.center);
 	a = vect_dot(ray.direction, ray.direction) - (vect_dot(ray.direction, scene->shape[i].rotation)*vect_dot(ray.direction, scene->shape[i].rotation));
 	b = 2*(vect_dot(ray.direction, X) - (vect_dot(ray.direction, scene->shape[i].rotation))*(vect_dot(X, scene->shape[i].rotation)));
