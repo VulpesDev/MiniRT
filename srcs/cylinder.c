@@ -6,46 +6,12 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:18:37 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/04 18:08:46 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/04 18:18:39 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "vector_math.h"
-
-//! not really needed I think
-//* Edit * needed for the shadow casting
-int	intersect_cylinder(t_scene *scene, t_ray r, float *t, int i)
-{
-	double	a;
-	double	b;
-	double	c;
-	double discriminant;
-	double t1,t2, m1, m2;
-	t_vector	olddir;
-	t_vector	X;
-
-	*t = 0;
-	scene->shape[i].rotation = vect_norm(scene->shape[i].rotation);
-	olddir = r.direction;
-	r.direction = vect_cross(r.direction, scene->shape[i].rotation);
-	X = vect_sub(r.origin, scene->shape[i].cy.center);
-	a = vect_dot(r.direction, r.direction);
-	b = 2 * vect_dot(r.direction, vect_cross(X, scene->shape[i].rotation));
-	c = vect_dot(vect_cross(X, scene->shape[i].rotation), vect_cross(X, scene->shape[i].rotation)) - ((scene->shape[i].cy.diameter / 2) * (scene->shape[i].cy.diameter / 2));
-	//? maybe normalize the r direction first
-	discriminant = b * b - 4 * a * c;
-	t1 = (-b - sqrt(discriminant)) / (2.0 * a);
-	t2 = (-b + sqrt(discriminant)) / (2.0 * a);
-	m1 = vect_dot(olddir, scene->shape[i].rotation) * t1 + vect_dot(X, scene->shape[i].rotation);
-	m2 = vect_dot(olddir, scene->shape[i].rotation) * t2 + vect_dot(X, scene->shape[i].rotation);
-
-	if (t1 > 0 && m1 >= 0 && m1 <= scene->shape[i].cy.height)
-		*t = t1;
-	else if (t2 > 0 && m2 >= 0 && m2 <= scene->shape[i].cy.height)
-		*t = t2;
-	return (discriminant);
-}
 
 bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray, double m)
 {
@@ -118,9 +84,46 @@ bool	hit_plane_bot(t_shape *shape, t_ray r, t_hit_record *rec)
 	return (false);
 }
 
+//! not really needed I think
+//* Edit * needed for the shadow casting
+//! Caps dont cast shadows
+int	intersect_cylinder(t_scene *scene, t_ray r, float *t, int i)
+{
+	double	a;
+	double	b;
+	double	c;
+	double discriminant;
+	double t1,t2, m1, m2;
+	t_hit_record *rec;
+	t_vector	olddir;
+	t_vector	X;
+
+	*t = 0;
+	scene->shape[i].rotation = vect_norm(scene->shape[i].rotation);
+	if (hit_plane_top(scene->shape[i], r, rec) || hit_plane_bot(scene->shape[i], r, rec))
+		return (true);
+	olddir = r.direction;
+	r.direction = vect_cross(r.direction, scene->shape[i].rotation);
+	X = vect_sub(r.origin, scene->shape[i].cy.center);
+	a = vect_dot(r.direction, r.direction);
+	b = 2 * vect_dot(r.direction, vect_cross(X, scene->shape[i].rotation));
+	c = vect_dot(vect_cross(X, scene->shape[i].rotation), vect_cross(X, scene->shape[i].rotation)) - ((scene->shape[i].cy.diameter / 2) * (scene->shape[i].cy.diameter / 2));
+	//? maybe normalize the r direction first
+	discriminant = b * b - 4 * a * c;
+	t1 = (-b - sqrt(discriminant)) / (2.0 * a);
+	t2 = (-b + sqrt(discriminant)) / (2.0 * a);
+	m1 = vect_dot(olddir, scene->shape[i].rotation) * t1 + vect_dot(X, scene->shape[i].rotation);
+	m2 = vect_dot(olddir, scene->shape[i].rotation) * t2 + vect_dot(X, scene->shape[i].rotation);
+
+	if (t1 > 0 && m1 >= 0 && m1 <= scene->shape[i].cy.height)
+		*t = t1;
+	else if (t2 > 0 && m2 >= 0 && m2 <= scene->shape[i].cy.height)
+		*t = t2;
+	return (discriminant);
+}
+
 //first check if it hits a plane
 //limit the plane with the top_cap function
-
 bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 {
 	double	a;
