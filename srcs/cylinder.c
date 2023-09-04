@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:18:37 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/04 18:18:39 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/04 19:48:42 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,55 @@ bool	hit_plane_bot(t_shape *shape, t_ray r, t_hit_record *rec)
 	return (false);
 }
 
+
+
+//make so it only takes the first t
+bool	cap_inter(t_shape *shape, double t, t_ray ray, t_vector Ce, float *tt)
+{
+	t_vector V;
+	t_vector p;
+
+	p = ray_at(ray, t);
+	V = vect_sub(p, Ce);
+	if (vect_mag(V) <= shape->cy.diameter/2)
+	{
+		*tt = t;
+		return (true);
+	}
+	return (false);
+}
+
+bool	hit_plane_top_inter(t_shape *shape, t_ray r, float *t)
+{
+	t_vector p0 = vect_sum(shape->cy.center, vect_mult(shape->rotation, shape->cy.height));
+	t_vector n = vect_inverse(vect_norm(shape->rotation));
+	t_vector l0 = r.origin;
+	t_vector l = vect_norm(r.direction);
+	float denom = vect_dot(n, l);
+	if (denom > 1e-6)
+	{
+		t_vector p0l0 = vect_sub(p0, l0);
+		return (cap_inter(shape, vect_dot(p0l0, n) / denom, r, p0, t));
+	}
+	return (false);
+}
+
+
+bool	hit_plane_bot_inter(t_shape *shape, t_ray r, float *t)
+{
+	t_vector p0 = shape->cy.center;
+	t_vector n = vect_norm(shape->rotation);
+	t_vector l0 = r.origin;
+	t_vector l = vect_norm(r.direction);
+	float denom = vect_dot(n, l);
+	if (denom > 1e-6)
+	{
+		t_vector p0l0 = vect_sub(p0, l0);
+		return (cap_inter(shape, vect_dot(p0l0, n) / denom, r, p0, t));
+	}
+	return (false);
+}
+
 //! not really needed I think
 //* Edit * needed for the shadow casting
 //! Caps dont cast shadows
@@ -94,14 +143,16 @@ int	intersect_cylinder(t_scene *scene, t_ray r, float *t, int i)
 	double	c;
 	double discriminant;
 	double t1,t2, m1, m2;
-	t_hit_record *rec;
+	t_hit_record rec;
 	t_vector	olddir;
 	t_vector	X;
 
 	*t = 0;
+	// rec = NULL;
+	rec.t = RAY_LEN;
 	scene->shape[i].rotation = vect_norm(scene->shape[i].rotation);
-	if (hit_plane_top(scene->shape[i], r, rec) || hit_plane_bot(scene->shape[i], r, rec))
-		return (true);
+	if (hit_plane_top_inter(&(scene->shape[i]), r, t) || hit_plane_bot_inter(&(scene->shape[i]), r, t))
+		return (1);
 	olddir = r.direction;
 	r.direction = vect_cross(r.direction, scene->shape[i].rotation);
 	X = vect_sub(r.origin, scene->shape[i].cy.center);
