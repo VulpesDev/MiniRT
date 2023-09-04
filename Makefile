@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+         #
+#    By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 20:41:46 by tfregni           #+#    #+#              #
-#    Updated: 2023/08/28 09:23:54 by tfregni          ###   ########.fr        #
+#    Updated: 2023/09/04 17:01:17 by tvasilev         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,9 @@ SRCS		= $(addprefix $(SRCS_DIR)/, main.c parse.c populate_element.c populate_sol
 				libx.c render.c sphere.c plane.c vector_calcs.c event_handler.c \
 				matrix_calcs.c camera.c shade.c vec3.c ray.c cylinder.c)
 UNAME_S		:= $(shell uname -s)
-OBJS		= ${SRCS:.c=.o}
+OBJS		= ${patsubst $(SRCS_DIR)/%.c,$(OBJS_DIR)/%.o,${SRCS}}
 SRCS_DIR 	= srcs
-OBJS_DIR 	= objs
+OBJS_DIR 	= obj
 INC_DIR		= includes
 CC			= cc
 CFLAGS		= -O3 -Wall -Wextra -Werror -g
@@ -60,7 +60,8 @@ ${NAME}	: ${OBJS}
 	@${CC} ${CFLAGS} ${OBJS} ${LINKS} -o ${NAME}
 	@echo "done"
 
-%.o:%.c
+$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
+	@mkdir -p $(OBJS_DIR)
 	${CC} ${CFLAGS} ${INC} -c $< -o $@
 
 all		: mlx
@@ -81,9 +82,9 @@ ifneq ("$(wildcard ${NAME} ${MLX_PATH})", "")
 	@${MAKE} clean -C ${MLX_PATH}
 	@echo "done"
 endif
-ifneq ("$(wildcard ${OBJS} $(DSYM))", "")
+ifneq ("$(wildcard ${OBJS_DIR} $(DSYM))", "")
 	@printf "Cleaning up miniRT objects..."
-	@${RM} ${OBJS} $(DSYM)
+	@${RM} ${OBJS_DIR} $(DSYM)
 	@echo "done"
 endif
 
