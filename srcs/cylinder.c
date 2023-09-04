@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:18:37 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/04 18:07:12 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/04 18:08:46 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "vector_math.h"
 
 //! not really needed I think
+//* Edit * needed for the shadow casting
 int	intersect_cylinder(t_scene *scene, t_ray r, float *t, int i)
 {
 	double	a;
@@ -25,7 +26,6 @@ int	intersect_cylinder(t_scene *scene, t_ray r, float *t, int i)
 	t_vector	X;
 
 	*t = 0;
-	//r.direction = vect_norm(r.direction);
 	scene->shape[i].rotation = vect_norm(scene->shape[i].rotation);
 	olddir = r.direction;
 	r.direction = vect_cross(r.direction, scene->shape[i].rotation);
@@ -132,7 +132,6 @@ bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 	t_vector	X;
 
 	t = m = 0;
-	//r.direction = vect_norm(r.direction);
 	shape->rotation = vect_norm(shape->rotation);
 	if (hit_plane_top(shape, r, rec) || hit_plane_bot(shape, r, rec))
 		return (true);
@@ -142,7 +141,6 @@ bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 	a = vect_dot(r.direction, r.direction);
 	b = 2 * vect_dot(r.direction, vect_cross(X, shape->rotation));
 	c = vect_dot(vect_cross(X, shape->rotation), vect_cross(X, shape->rotation)) - ((shape->cy.diameter / 2) * (shape->cy.diameter / 2));
-	//? maybe normalize the r direction first
 	discriminant = b * b - 4 * a * c;
 	if (discriminant < 0)
 		return (false);
