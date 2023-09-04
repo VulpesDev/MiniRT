@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 12:29:38 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/04 16:38:36 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/04 17:58:37 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ int	key_handle(int keycode, t_scene *scene)
 	if (keycode == ESC)
 		free_img(data);
 	else if (keycode == PLUS)
-		scene->ambient.lighting_ratio += 0.1;
+		scene->camera.pos.z += CAM_PACE;
 	else if (keycode == MINUS)
-		scene->ambient.lighting_ratio -= 0.1;
+		scene->camera.pos.z -= CAM_PACE;
 	else if (keycode == UP)
 		scene->camera.pos.y += CAM_PACE;
 	else if (keycode == DOWN)

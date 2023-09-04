@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:18:37 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/02 15:15:48 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/04 18:07:12 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,37 @@
 #include "vector_math.h"
 
 //! not really needed I think
-int	intersect_cylinder(t_scene *scene, t_ray ray, float *t, int i)
+int	intersect_cylinder(t_scene *scene, t_ray r, float *t, int i)
 {
 	double	a;
 	double	b;
 	double	c;
 	double discriminant;
+	double t1,t2, m1, m2;
+	t_vector	olddir;
 	t_vector	X;
 
-	//printf("IN HERE !!!\n");
-	X = vect_sub(ray.origin, scene->shape[i].cy.center);
-	a = vect_dot(ray.direction, ray.direction) - (vect_dot(ray.direction, scene->shape[i].rotation)*vect_dot(ray.direction, scene->shape[i].rotation));
-	b = 2*(vect_dot(ray.direction, X) - (vect_dot(ray.direction, scene->shape[i].rotation))*(vect_dot(X, scene->shape[i].rotation)));
-	c = vect_dot(X, X) - (vect_dot(X, scene->shape[i].rotation)*vect_dot(X, scene->shape[i].rotation)) - scene->shape[i].cy.diameter;
+	*t = 0;
+	//r.direction = vect_norm(r.direction);
+	scene->shape[i].rotation = vect_norm(scene->shape[i].rotation);
+	olddir = r.direction;
+	r.direction = vect_cross(r.direction, scene->shape[i].rotation);
+	X = vect_sub(r.origin, scene->shape[i].cy.center);
+	a = vect_dot(r.direction, r.direction);
+	b = 2 * vect_dot(r.direction, vect_cross(X, scene->shape[i].rotation));
+	c = vect_dot(vect_cross(X, scene->shape[i].rotation), vect_cross(X, scene->shape[i].rotation)) - ((scene->shape[i].cy.diameter / 2) * (scene->shape[i].cy.diameter / 2));
+	//? maybe normalize the r direction first
 	discriminant = b * b - 4 * a * c;
-	if (discriminant < 0)
-		return (0);
-	*t = (-b - sqrt(discriminant)) / (2.0 * a);
-	return (t >= 0);
+	t1 = (-b - sqrt(discriminant)) / (2.0 * a);
+	t2 = (-b + sqrt(discriminant)) / (2.0 * a);
+	m1 = vect_dot(olddir, scene->shape[i].rotation) * t1 + vect_dot(X, scene->shape[i].rotation);
+	m2 = vect_dot(olddir, scene->shape[i].rotation) * t2 + vect_dot(X, scene->shape[i].rotation);
+
+	if (t1 > 0 && m1 >= 0 && m1 <= scene->shape[i].cy.height)
+		*t = t1;
+	else if (t2 > 0 && m2 >= 0 && m2 <= scene->shape[i].cy.height)
+		*t = t2;
+	return (discriminant);
 }
 
 bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray, double m)
