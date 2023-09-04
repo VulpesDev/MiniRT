@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/04 15:40:18 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/04 16:43:38 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,21 +98,6 @@ int	convert_trgb(t_color c)
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
-// t_ray	create_scratch_cam_ray(t_camera *c, double screen_x, double screen_y)
-// {
-// 	t_ray		ray;
-// 	t_point3	cam_p;
-
-// 	// Camera space
-// 	cam_p.x = screen_x * c->fov;
-// 	cam_p.y = screen_y * c->fov;
-// 	cam_p.z = -1;
-// 	cam_p = mx_mult(c->m, cam_p);
-// 	ray.origin = mx_mult(c->m, vec3(0, 0, 0));
-// 	ray.direction = vec3_unit(vec3_sub(cam_p, ray.origin));
-// 	return (ray);
-// }
-
 /**
  * @brief creates a ray from the camera to the canvas
  * 1. Pixel to world
@@ -123,76 +108,17 @@ int	convert_trgb(t_color c)
 
 t_ray	create_cam_ray(t_camera *c, double int_x, double int_y)
 {
-	// return (create_scratch_cam_ray(c, screen_x, screen_y));
 	t_ray	ray;
-	// t_vec3	temp;
-	// t_vec3	gradient_hor;
-	// t_vec3	gradient_ver;
 
 	ray.origin = c->pos;
-	// gradient_hor = vec3_mult(c->horizontal, screen_x);
-	// gradient_ver = vec3_mult(c->vertical, screen_y);
-	// temp = vec3_sum(gradient_hor, gradient_ver);
-	// ray.direction = vec3_sub(c->viewport_top_left, ray.origin);
-	// ray.direction = vec3_sum(ray.direction, temp);
-	///// Vectors
 	t_vec3 pxl_x = vec3_mult(c->pxl_size_hor, int_x);
 	t_vec3 pxl_y = vec3_mult(c->pxl_size_ver, int_y);
 	t_vec3 pxl_pos = vec3_sum(c->viewport_top_left, vec3_mult(c->right, vec3_len(pxl_x)));
 	pxl_pos = vec3_sum(pxl_pos, vec3_mult(vec3_inv(c->up), vec3_len(pxl_y)));
 	ray.direction = vec3_sub(pxl_pos, ray.origin);
 	ray.direction = vec3_unit(ray.direction);
-	// //?Debug
-	// static int i = 0;
-	// if (i == 0 || i == WIDTH * HEIGHT - 1)
-	// 	printf("direction (%f, %f, %f)\n", ray.direction.x, ray.direction.y, ray.direction.z);
-	// i++;
-	// //?Debug
 	return (ray);
 }
-
-// t_ray	create_cam_ray(t_camera *c, double int_x, double int_y)
-// {
-// 	// return (create_scratch_cam_ray(c, screen_x, screen_y));
-// 	t_ray	ray;
-// 	// t_vec3	temp;
-// 	// t_vec3	gradient_hor;
-// 	// t_vec3	gradient_ver;
-// 	double ndc_x = (int_x + 0.5f) / WIDTH * 2.0f - 1.0f;
-// 	double ndc_y = 1.0f - (int_y + 0.5f) / HEIGHT * 2.0f;
-
-// 	ray.origin = c->pos;
-// 	// gradient_hor = vec3_mult(c->horizontal, screen_x);
-// 	// gradient_ver = vec3_mult(c->vertical, screen_y);
-// 	// temp = vec3_sum(gradient_hor, gradient_ver);
-// 	// ray.direction = vec3_sub(c->viewport_top_left, ray.origin);
-// 	// ray.direction = vec3_sum(ray.direction, temp);
-// 	double	screen_x = ndc_x * c->half_hor;
-// 	double	screen_y = ndc_y * c->half_ver;
-// 	static int i = 0;
-// 	// //?Debug
-// 	// if (i == 0 || i == WIDTH * HEIGHT - 1)
-// 	// 	printf("screen_x: %f; screen_y: %f;\n", screen_x, screen_y);
-// 	// i++;
-// 	// //?Debug
-// 	ray.direction.x = screen_x * c->right.x + screen_y * c->up.x - c->focal_length * c->orientation.x;
-// 	ray.direction.y = screen_x * c->right.y + screen_y * c->up.y - c->focal_length * c->orientation.y;
-// 	ray.direction.z = screen_x * c->right.z + screen_y * c->up.z - c->focal_length * c->orientation.z;
-// 	ray.direction = vec3_unit(ray.direction);
-// 	//?Debug
-// 	if (i == 0 || i == WIDTH * HEIGHT - 1)
-// 		printf("direction (%f, %f, %f)\n", ray.direction.x, ray.direction.y, ray.direction.z);
-// 	i++;
-// 	//?Debug
-
-// 	///// Vectors
-// 	// t_vec3 pxl_x = vec3_mult(c->pxl_size_hor, ndc_x);
-// 	// t_vec3 pxl_y = vec3_mult(c->pxl_size_ver, ndc_y);
-// 	// t_vec3 pxl_pos = vec3_sum(c->viewport_top_left, vec3_mult(c->right, vec3_len(pxl_x)));
-// 	// pxl_pos = vec3_sum(pxl_pos, vec3_mult(vec3_inv(c->up), vec3_len(pxl_y)));
-// 	// ray.direction = vec3_sub(pxl_pos, ray.origin);
-// 	return (ray);
-// }
 
 /**
  * Former intersect_element function
