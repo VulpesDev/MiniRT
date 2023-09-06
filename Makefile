@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+         #
+#    By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 20:41:46 by tfregni           #+#    #+#              #
-#    Updated: 2023/09/04 17:01:17 by tvasilev         ###   ########.fr        #
+#    Updated: 2023/09/06 23:05:06 by tfregni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,13 +14,17 @@ SRCS		= $(addprefix $(SRCS_DIR)/, main.c parse.c populate_element.c populate_sol
 				libx.c render.c sphere.c plane.c vector_calcs.c event_handler.c \
 				matrix_calcs.c camera.c shade.c vec3.c ray.c cylinder.c)
 UNAME_S		:= $(shell uname -s)
-OBJS		= ${patsubst $(SRCS_DIR)/%.c,$(OBJS_DIR)/%.o,${SRCS}}
+OBJS		= $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, ${SRCS}) # $(patsubst pattern,replacement,text)
+# $(var:suffix=replacement)
+# is equivalent to
+#$(patsubst %suffix,%replacement,$(var))
+# OBJS		:= $(${SRCS}:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
 SRCS_DIR 	= srcs
-OBJS_DIR 	= obj
+OBJS_DIR 	= objs
 INC_DIR		= includes
 CC			= cc
 CFLAGS		= -O3 -Wall -Wextra -Werror -g
-NAME		= minirt
+NAME		= miniRT
 LINKS		= -lm -Llibft -lft
 INC			= -Ilibft -I$(INC_DIR)
 RE_LIBFT	= "$(wildcard ./libft/libft.a)"
@@ -47,12 +51,15 @@ LINKS 		+= -L./${MLX_PATH} -lmlx
 
 mlx		:
 	@if [ ! -d "./$(MLX_PATH)" ]; then \
-		@echo "Downloading minilibx"; \
-		@$(MAKE) getmlxlib; \
+		echo "Downloading minilibx"; \
+		$(MAKE) getmlxlib; \
 	fi
 	@echo "Building minilibx"
 	@$(MAKE) -C ${MLX_PATH}
 	@$(MAKE) ${NAME}
+
+$(OBJS_DIR):
+	@mkdir -p $(OBJS_DIR)
 
 ${NAME}	: ${OBJS}
 	@$(MAKE) libft
@@ -60,8 +67,7 @@ ${NAME}	: ${OBJS}
 	@${CC} ${CFLAGS} ${OBJS} ${LINKS} -o ${NAME}
 	@echo "done"
 
-$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
-	@mkdir -p $(OBJS_DIR)
+$(OBJS_DIR)/%.o:$(SRCS_DIR)/%.c | $(OBJS_DIR)
 	${CC} ${CFLAGS} ${INC} -c $< -o $@
 
 all		: mlx
@@ -82,9 +88,9 @@ ifneq ("$(wildcard ${NAME} ${MLX_PATH})", "")
 	@${MAKE} clean -C ${MLX_PATH}
 	@echo "done"
 endif
-ifneq ("$(wildcard ${OBJS_DIR} $(DSYM))", "")
+ifneq ("$(wildcard ${OBJS} $(OBJS_DIR) $(DSYM))", "")
 	@printf "Cleaning up miniRT objects..."
-	@${RM} ${OBJS_DIR} $(DSYM)
+	@${RM} ${OBJS} $(OBJS_DIR) $(DSYM)
 	@echo "done"
 endif
 
@@ -92,7 +98,7 @@ getmlxlib:
 ifeq (${UNAME_S}, Linux)
 	@if [ ! -d ${MLX_PATH} ]; then \
 			@echo "Downloading miniLibX for Linux..."; \
-			wget https://cdn.intra.42.fr/document/document/12154/${MLX_TAR}; \
+			wget https://cdn.intra.42.fr/document/document/20192/${MLX_TAR}; \
 			mkdir ${MLX_PATH}; \
 			tar -xzf minilibx-linux.tgz --strip-components=1 -C ${MLX_PATH}; \
 			rm minilibx-linux.tgz; \
@@ -100,7 +106,7 @@ ifeq (${UNAME_S}, Linux)
 else ifeq (${UNAME_S}, Darwin)
 	@if [ ! -d ${MLX_PATH} ]; then \
 			@echo "Downloading miniLibX for Mac..."; \
-			wget https://cdn.intra.42.fr/document/document/12155/${MLX_TAR}; \
+			wget https://cdn.intra.42.fr/document/document/20193/${MLX_TAR}; \
 			mkdir ${MLX_PATH}; \
 			tar -xzf minilibx_opengl.tgz --strip-components=1 -C ${MLX_PATH}; \
 			rm minilibx_opengl.tgz; \
