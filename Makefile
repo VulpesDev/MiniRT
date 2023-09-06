@@ -6,13 +6,13 @@
 #    By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 20:41:46 by tfregni           #+#    #+#              #
-#    Updated: 2023/09/04 17:01:17 by tvasilev         ###   ########.fr        #
+#    Updated: 2023/09/06 12:39:10 by tvasilev         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS		= $(addprefix $(SRCS_DIR)/, main.c parse.c populate_element.c populate_solid.c parse_util.c \
 				libx.c render.c sphere.c plane.c vector_calcs.c event_handler.c \
-				matrix_calcs.c camera.c shade.c vec3.c ray.c cylinder.c)
+				matrix_calcs.c camera.c shade.c vec3.c ray.c cylinder.c cylinder_intersect.c)
 UNAME_S		:= $(shell uname -s)
 OBJS		= ${patsubst $(SRCS_DIR)/%.c,$(OBJS_DIR)/%.o,${SRCS}}
 SRCS_DIR 	= srcs
