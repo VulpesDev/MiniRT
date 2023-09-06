@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:38:19 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/06 13:16:36 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/06 14:53:35 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ bool intersect_cap_top(t_shape *shape, t_ray r, float *tt)
 	{
 		t_vector p0l0 = vect_sub(p0, l0);
 		*tt = vect_dot(p0l0, n) / denom;
+		return true;
 		if (vect_mag(vect_sub(ray_at(r, *tt), p0)) <= shape->cy.diameter/2)
 		{
 			if (*tt > 0.000001f)
@@ -49,7 +50,7 @@ bool intersect_cap_bot(t_shape *shape, t_ray r, float *tt)
 		return true;
 		if (vect_mag(vect_sub(ray_at(r, *tt), p0)) <= shape->cy.diameter/2)
 		{
-			if (*tt > 0.000001f)
+			if (*tt > EPSILON)
 			{
 				return (true);
 			}
