@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:18:37 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/04 19:48:42 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/04 20:07:58 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,8 +151,9 @@ int	intersect_cylinder(t_scene *scene, t_ray r, float *t, int i)
 	// rec = NULL;
 	rec.t = RAY_LEN;
 	scene->shape[i].rotation = vect_norm(scene->shape[i].rotation);
-	if (hit_plane_top_inter(&(scene->shape[i]), r, t) || hit_plane_bot_inter(&(scene->shape[i]), r, t))
-		return (1);
+	// if (hit_plane_top_inter(&(scene->shape[i]), r, t) || hit_plane_bot_inter(&(scene->shape[i]), r, t))
+	// 	 ;
+	// 	//return (1);
 	olddir = r.direction;
 	r.direction = vect_cross(r.direction, scene->shape[i].rotation);
 	X = vect_sub(r.origin, scene->shape[i].cy.center);
