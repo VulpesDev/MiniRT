@@ -6,7 +6,7 @@
 #    By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 20:41:46 by tfregni           #+#    #+#              #
-#    Updated: 2023/09/06 12:39:10 by tvasilev         ###   ########.fr        #
+#    Updated: 2023/09/06 15:27:10 by tvasilev         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,7 @@ ${NAME}	: ${OBJS}
 	@echo "done"
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
-	@mkdir -p $(OBJS_DIR)
+	mkdir -p $(OBJS_DIR)
 	${CC} ${CFLAGS} ${INC} -c $< -o $@
 
 all		: mlx

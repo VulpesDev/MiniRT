@@ -8,7 +8,7 @@ make insides of shapes "solid" #me
 
 caps of the cylinders do not cast Shadows
 	-cylinder normal of hit point (diffuse shading) #me
-	-render caps inside #me
+	/////////////DEPARTED///-render caps inside #me
 	-shadow is only casted on caps and not body #two of us later
 
 in general the shadow cast function #you

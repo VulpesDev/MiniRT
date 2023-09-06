@@ -6,19 +6,40 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:18:37 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/06 13:02:54 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/06 17:34:24 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "vector_math.h"
 
+//already included
+// t_vec3	cy_normal(t_shape *cy, t_point3 hit)
+// {
+// 	t_ray	normal;
+// 	const t_vector N = vec3_unit(cy->rotation);
+// 	const t_vector X = vec3_sub(hit, N);
+// 	const t_vector V = vec3_inv(N);
+// 	double t;
+
+// 	normal = ray(cy->cy.center, vec3_unit(cy->rotation));
+// 	t = vec3_dot(N, V);
+// 	if (t != 0)
+// 	{
+// 		t = vec3_dot(vec3_inv(X), V) / t;
+// 	}
+// 	normal = ray(ray_at(ray(cy->cy.center, N), t), hit);
+// 	return (vec3_unit(normal.direction));
+// }
+
 bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray, double m)
 {
+	//m = 2;
 	if (t > 0.000001f && t < rec->t)
 	{
 		rec->t = t;
 		rec->p = ray_at(ray, t);
+		//rec->normal = cy_normal(shape, rec->p);
 		rec->normal = vect_norm(vect_sub( rec->p, vect_sub(shape->cy.center, vect_mult(shape->rotation, m))));
 		rec->color = shape->color;
 		return (true);
