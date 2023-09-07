@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/07 12:47:22 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/07 14:44:47 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,39 +165,39 @@ t_color	ray_color(t_scene *scene, t_ray r)
 }
 
 
-/**
- * @brief Returns a hit record for a ray that doesn't hit anything
-*/
-t_hit_record	miss(t_ray r)
-{
+// /**
+//  * @brief Returns a hit record for a ray that doesn't hit anything
+// */
+// t_hit_record	miss(t_ray r)
+// {
 
-};
+// };
 
 
-/**
- * @brief Returns the closest hit record
- * @param r: ray
- * @param t: hit distance
- * @param i: index of the shape
-*/
-t_hit_record	closest_hit(t_ray r, double t, uint32_t i)
-{
+// /**
+//  * @brief Returns the closest hit record
+//  * @param r: ray
+//  * @param t: hit distance
+//  * @param i: index of the shape
+// */
+// t_hit_record	closest_hit(t_ray r, double t, uint32_t i)
+// {
 
-};
+// };
 
-/**
- * @brief Returns a hit point payload
- * @param r: ray
-*/
-t_hit_record	trace_ray(t_scene *s, t_ray r)
-{
-	t_hit_record	rec;
+// /**
+//  * @brief Returns a hit point payload
+//  * @param r: ray
+// */
+// t_hit_record	trace_ray(t_scene *s, t_ray r)
+// {
+// 	t_hit_record	rec;
 
-	if (hit_element(s, r, &rec))
-	{
-		
-	}
-};
+// 	if (hit_element(s, r, &rec))
+// 	{
+
+// 	}
+// };
 
 /**
  * @returns a color as int

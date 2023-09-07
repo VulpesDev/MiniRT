@@ -6,13 +6,13 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 15:45:15 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/29 10:30:05 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/07 14:53:46 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int	cast_shadow(t_scene *scene, t_ray ray)
+float	cast_shadow(t_scene *scene, t_ray ray)
 {
 	int		i;
 	float	t;
@@ -22,10 +22,10 @@ int	cast_shadow(t_scene *scene, t_ray ray)
 	{
 		if (scene->shape[i].intersect(scene, ray, &t, i)
 			&& t > EPSILON && t < 1)
-			return (1);
+			return (-0.3f);
 		i--;
 	}
-	return (0);
+	return (1);
 }
 
 /**
@@ -49,14 +49,14 @@ float	diffuse_reflection(t_scene *scene, t_vector n, t_vector p)
 
 	l = vec3_sub(scene->light.pos, p);
 	rebound = (t_ray){p, l};
-	if (cast_shadow(scene, rebound))
-		return (0.1f);
+	// if (cast_shadow(scene, rebound))
+	// 	return (0.1f);
 	n_dot_l = vec3_dot(n, l);
 	len_l = vec3_len(l);
 	if (len_l < EPSILON)
 		return (1.0f);
 	light = ft_fmax((scene->light.brightness * n_dot_l / len_l) \
-		+ scene->ambient.lighting_ratio, 0.0f);
+		* cast_shadow(scene, rebound) + scene->ambient.lighting_ratio, 0.0f);
 	return (light);
 }
 
