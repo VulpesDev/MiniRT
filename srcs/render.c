@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/04 16:43:38 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/07 12:47:22 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,11 +158,46 @@ t_color	ray_color(t_scene *scene, t_ray r)
 	{
 		light = ft_fmin(light_coeff(scene, &rec), 1);
 		if (light < 0 || light > 1)
-			printf("Light out of bound %f\n", light);
+			printf("Light out of bound %f\n", light); // remember to remove
 		return (apply_light_to_color(rec.color, light));
 	}
 	return (convert_color(scene->ambient.trgb));
 }
+
+
+/**
+ * @brief Returns a hit record for a ray that doesn't hit anything
+*/
+t_hit_record	miss(t_ray r)
+{
+
+};
+
+
+/**
+ * @brief Returns the closest hit record
+ * @param r: ray
+ * @param t: hit distance
+ * @param i: index of the shape
+*/
+t_hit_record	closest_hit(t_ray r, double t, uint32_t i)
+{
+
+};
+
+/**
+ * @brief Returns a hit point payload
+ * @param r: ray
+*/
+t_hit_record	trace_ray(t_scene *s, t_ray r)
+{
+	t_hit_record	rec;
+
+	if (hit_element(s, r, &rec))
+	{
+		
+	}
+};
 
 /**
  * @returns a color as int
@@ -182,20 +217,9 @@ t_color	ray_color(t_scene *scene, t_ray r)
 */
 int	per_pixel(t_pxl p, t_scene *scene)
 {
-	// double	ndc_x;
-	// double	ndc_y;
-	double	screen_x;
-	double	screen_y;
 	t_ray	r;
 	t_color	c;
 
-	// Between 0 and 1 (NDC space)
-	// ndc_x = (double)p.x / (WIDTH - 1);
-	// ndc_y = (double)p.y / (HEIGHT - 1);
-
-	// Between -1 and 1 (screen space)
-	screen_x = ((double)p.x + 0.5f) / WIDTH * 2.0f - 1.0f;
-	screen_y = 1.0f - ((double)p.y + 0.5f) / HEIGHT * 2.0f;
 	r = create_cam_ray(&scene->camera, p.x, p.y);
 	c = ray_color(scene, r);
 	return (convert_trgb(c));
@@ -220,7 +244,6 @@ void	draw(t_scene *scene)
 		p.x = 0;
 		while (p.x < WIDTH)
 		{
-			// c = convert_trgb(color(0, (double)p.x / (WIDTH - 1), (double)p.y / (HEIGHT - 1), 0.25));
 			c = per_pixel(p, scene);
 			my_mlx_pixel_put_d(data, p.x, p.y, c);
 			p.x++;

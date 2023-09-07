@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 17:26:52 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/29 11:52:56 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/07 12:54:10 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_hit_record
 	t_point3	p;
 	t_vec3		normal;
 	double		t;
+	t_shape		*shape;
 	int			trgb;
 	t_color		color;
 }				t_hit_record;

@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 14:22:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/29 11:52:34 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/07 12:59:26 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ bool	sp_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 	{
 		rec->t = t;
 		rec->p = ray_at(ray, t);
+		rec->shape = shape;
 		rec->normal = sp_normal(shape, rec->p);
 		rec->color = shape->color;
 		return (true);

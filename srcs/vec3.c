@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vec3.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:42:25 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/31 17:48:15 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/07 11:54:02 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,4 +117,14 @@ t_vec3	vec3_inv(t_vec3 a)
 void	vec3_print(t_vec3 a)
 {
 	printf("x: %f, y: %f, z: %f\n", a.x, a.y, a.z);
+}
+
+/**
+ * @brief Reflects a vector
+ * @param l: light vector to reflect
+ * @param n: normal vector
+*/
+t_vec3	vec3_reflect(t_vec3 l, t_vec3 n)
+{
+	return (vec3_sub(l, vec3_mult(n, 2 * vec3_dot(l, n))));
 }
