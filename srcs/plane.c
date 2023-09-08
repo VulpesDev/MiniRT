@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 23:25:30 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/29 00:58:41 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/08 12:45:00 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	intersect_plane(t_scene *scene, t_ray ray, float *t, int i)
 t_vec3	pl_normal(t_shape *pl, t_point3 hit)
 {
 	(void) hit;
-	return (vec3_mult(pl->rotation, pl->pl.valid));
+	return (vec3_mult(pl->rotation, -pl->pl.valid));
 }
 
 bool	pl_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
