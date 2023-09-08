@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:54:25 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/04 16:42:30 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/08 11:47:32 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ double	radians(double grades)
 void	cam_orientation(t_camera *c)
 {
 	c->look_at = vec3_unit(c->orientation);
-	c->right = vec3_unit(vec3_cross(c->vert_up, c->look_at));
-	c->up = vec3_unit(vec3_cross(c->look_at, c->right));
+	c->right = vec3_unit(vec3_cross(c->look_at, c->vert_up));
+	c->up = vec3_unit(vec3_cross(c->right, c->look_at));
 }
 
 void	cam_setup(t_camera *c)

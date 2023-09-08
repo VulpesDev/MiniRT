@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   event_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 12:29:38 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/04 17:58:37 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/08 11:48:33 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,13 @@ int	key_handle(int keycode, t_scene *scene)
 	else if (keycode == E)
 		scene->camera.orientation.z += ORIENT_PACE;
 	else if (keycode == W)
-		scene->camera.orientation.y -= ORIENT_PACE;
-	else if (keycode == S)
 		scene->camera.orientation.y += ORIENT_PACE;
+	else if (keycode == S)
+		scene->camera.orientation.y -= ORIENT_PACE;
 	else if (keycode == A)
-		scene->camera.orientation.x += ORIENT_PACE;
-	else if (keycode == D)
 		scene->camera.orientation.x -= ORIENT_PACE;
+	else if (keycode == D)
+		scene->camera.orientation.x += ORIENT_PACE;
 	else
 		ft_printf("KeyCode: %d\n", keycode);
 	if (keycode != ESC)
