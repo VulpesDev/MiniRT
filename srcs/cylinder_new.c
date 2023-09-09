@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 23:40:13 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/10 00:51:50 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ bool	cy_hit_cap(t_shape *shape, t_ray ray, t_hit_record *rec)
 
 	to_plane = *rec;
 	cap_top.pl.pos = shape->cy.top;
-	cap_top.pl.rotation = shape->pl.rotation;
+	cap_top.pl.rotation = shape->cy.rotation;
 	cap_bot.pl.pos = shape->cy.bot;
 	cap_bot.pl.rotation = shape->cy.vec;
 	if (!pl_hit(&cap_top, ray, &to_plane) && !pl_hit(&cap_bot, ray, &to_plane))
@@ -79,8 +79,8 @@ bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 		rec->t = t;
 		rec->p = ray_at(ray, t);
 		rec->shape = shape;
-		rec->normal = vec3_unit(vec3_sub(rec->p, vec3_sub(shape->cy.center,
-						vec3_mult(shape->cy.rotation, shape->cy.height / 2))));
+		rec->normal = vec3_unit(vec3_sub(rec->p, shape->cy.center));
+		rec->normal = vec3_cross(rec->normal, shape->cy.rotation);
 		rec->color = shape->color;
 		return (true);
 	}
@@ -119,20 +119,55 @@ void	cylinder_setup(t_shape *cy)
 	t_vec3	vec2;
 
 	cy->cy.rotation = vec3_unit(cy->cy.rotation);
-	vec1 = vec3_mult(cy->cy.rotation, cy->cy.height / 2);
 	cy->cy.vec = vec3_inv(cy->cy.rotation);
+	vec1 = vec3_mult(cy->cy.rotation, cy->cy.height / 2);
 	vec2 = vec3_mult(cy->cy.vec, cy->cy.height);
 
-	cy->cy.top = (t_point_3d){cy->cy.center.x + vec1.x,
-		cy->cy.center.y + vec1.y,
-		cy->cy.center.z + vec1.z};
-	cy->cy.bot = (t_point_3d){cy->cy.top.x + vec2.x,
-		cy->cy.top.y + vec2.y,
-		cy->cy.top.z + vec2.z};
+	cy->cy.top = vec3_sum(cy->cy.center, vec1);
+	cy->cy.bot = vec3_sum(cy->cy.top, vec2);
 	printf("cyl_top: ");
 	vec3_print(cy->cy.top);
 	printf("cyl_bot: ");
 	vec3_print(cy->cy.bot);
+}
+
+int	intersect_cap(t_shape cap, t_ray ray, float *t)
+{
+	const t_vector	p0 = cap.pl.pos;
+	const t_vector	n = cap.pl.rotation;
+	const t_vector	l0 = ray.origin;
+	const t_vector	l = ray.direction;
+	float			denom;
+
+	denom = vec3_dot(n, l);
+	if (ft_abs(denom) > EPSILON)
+	{
+		*t = vec3_dot(vec3_sub(p0, l0), n) / denom;
+		return (*t >= EPSILON);
+	}
+	return (0);
+}
+
+int	intersect_cylinder_cap(t_scene *scene, t_ray ray, float *t, int i)
+{
+	t_shape			cap_top;
+	t_shape			cap_bot;
+	double			radius;
+	float			tt;
+	t_point_3d		hit;
+
+	cap_top.pl.pos = scene->shape[i].cy.top;
+	cap_top.pl.rotation = scene->shape[i].cy.rotation;
+	cap_bot.pl.pos = scene->shape[i].cy.bot;
+	cap_bot.pl.rotation = scene->shape[i].cy.vec;
+	if (!intersect_cap(cap_top, ray, &tt) && !intersect_cap(cap_bot, ray, &tt))
+		return (false);
+	hit = ray_at(ray, tt);
+	radius = vec3_len(vec3_sub(scene->shape[i].cy.top, hit));
+	if (!(radius <= scene->shape[i].cy.diameter / 2))
+		return (false);
+	*t = tt;
+	return (true);
 }
 
 /* Step 1: Transform the ray and cylinder to a local coordinate system
@@ -144,7 +179,8 @@ You can use the simplified cylinder equation (circular cross-section):
 (x^2 + y^2 - r^2) = 0, where r is the radius (diameter / 2). */
 int	intersect_cylinder(t_scene *scene, t_ray ray, float *t, int i)
 {
-	if (cy_calc_discriminant(scene, ray, t, i) < 0)
+	if (cy_calc_discriminant(scene, ray, t, i) < 0
+		&& !intersect_cylinder_cap(scene, ray, t, i))
 		return (0);
 	return (1);
 }
