@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:18:37 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/09 13:13:40 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 15:15:43 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,3 +229,4 @@ bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 		return (false);
 	return (cy_hit_record(t, shape, rec, r, m));
 }
+

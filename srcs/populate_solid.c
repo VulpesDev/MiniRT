@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:31:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 13:47:13 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 14:56:45 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,11 @@
 
 void	init_sphere(t_scene *scene, t_shape *shape)
 {
-	shape->inside = false;
 	shape->intersect = intersect_sphere;
 	shape->hit = sp_hit;
 	shape->normal = sp_normal;
 	shape->color = convert_color(shape->trgb);
-	if (vec3_len(vec3_sub(scene->camera.pos, shape->sp.pos)) \
-		<= shape->sp.diameter / 2)
-		shape->inside = true;
+	shape->is_inside = sp_is_inside;
 	scene->shape[scene->shape_count] = *shape;
 }
 
@@ -70,6 +67,7 @@ int	validate_plane(t_scene *scene, char **el)
 	shape.intersect = intersect_plane;
 	shape.hit = pl_hit;
 	shape.normal = pl_normal;
+	shape.is_inside = pl_is_inside;
 	shape.color = convert_color(shape.trgb);
 	scene->shape[i] = shape;
 	return (SUCCESS);
@@ -77,6 +75,7 @@ int	validate_plane(t_scene *scene, char **el)
 
 void	init_cylinder(t_scene *scene, t_shape *shape)
 {
+	shape->is_inside = cy_is_inside;
 	shape->intersect = intersect_cylinder;
 	shape->hit = cy_hit;
 	shape->color = convert_color(shape->trgb);

@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 12:21:04 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/06 00:59:27 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 10:57:07 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ Keymap
 # define S 1
 # define D 2
 # define R 15
+# define F 3
 # define C 8
 # define PLUS 30
 # define MINUS 44

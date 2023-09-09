@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 23:25:30 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 13:10:25 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 15:15:26 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,3 +91,4 @@ bool	pl_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 	}
 	return (false);
 }
+

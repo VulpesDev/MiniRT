@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/07 14:44:47 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 15:16:01 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,8 @@ int	convert_trgb(t_color c)
 }
 
 /**
- * @brief creates a ray from the camera to the canvas
- * 1. Pixel to world
- * 2. Transform through matrix
- * 3. Get ray direction
- * 4. Normalize ray direction
+ * @brief creates a ray from the camera to the canva
 */
-
 t_ray	create_cam_ray(t_camera *c, double int_x, double int_y)
 {
 	t_ray	ray;
@@ -156,6 +151,8 @@ t_color	ray_color(t_scene *scene, t_ray r)
 
 	if (hit_element(scene, r, &rec))
 	{
+		// if (rec.shape->inside)
+		// 	return ((t_color){0, 0, 0, 0});
 		light = ft_fmin(light_coeff(scene, &rec), 1);
 		if (light < 0 || light > 1)
 			printf("Light out of bound %f\n", light); // remember to remove
@@ -234,9 +231,11 @@ void	draw(t_scene *scene)
 	t_pxl	p;
 	t_img	*data;
 	int		c;
+	t_shape	*shape_ins;
 
 	data = scene->img;
 	cam_setup(&scene->camera);
+	shape_ins = check_inside(scene);
 	p.y = 0;
 	while (p.y < HEIGHT)
 	{
@@ -244,7 +243,10 @@ void	draw(t_scene *scene)
 		p.x = 0;
 		while (p.x < WIDTH)
 		{
-			c = per_pixel(p, scene);
+			if (shape_ins)
+				c = shape_ins->trgb;
+			else
+				c = per_pixel(p, scene);
 			my_mlx_pixel_put_d(data, p.x, p.y, c);
 			p.x++;
 		}
