@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 22:34:33 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 23:24:36 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,43 @@ float	cy_calc_discriminant(t_scene *scene, t_ray ray, float *t, int i)
 	return (discriminant);
 }
 
+bool	cy_hit_cap_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
+{
+	if (t > EPSILON && t < rec->t)
+	{
+		rec->t = t;
+		rec->p = ray_at(ray, t);
+		rec->color = shape->color;
+		rec->shape = shape;
+		rec->normal = shape->rotation;
+		return (true);
+	}
+	return (false);
+}
+
+
+bool	cy_hit_cap(t_shape *shape, t_ray ray, t_hit_record *rec)
+{
+	t_shape			cap_top;
+	t_shape			cap_bot;
+	t_hit_record	to_plane;
+	double			radius;
+	t_point_3d		t;
+
+	to_plane = *rec;
+	cap_top.pl.pos = shape->cy.top;
+	cap_top.rotation = shape->rotation;
+	cap_bot.pl.pos = shape->cy.bot;
+	cap_bot.rotation = shape->cy.vec;
+	if (!pl_hit(&cap_top, ray, &to_plane) && !pl_hit(&cap_bot, ray, &to_plane))
+		return (false);
+	t = ray_at(ray, to_plane.t);
+	radius = vec3_len(vec3_sub(shape->cy.top, t));
+	if (!(radius <= shape->cy.diameter / 2))
+		return (false);
+	return (cy_hit_cap_record(to_plane.t, shape, rec, ray));
+}
+
 bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 {
 	t_vec3	hit_vec;
@@ -51,7 +88,7 @@ bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 	return (false);
 }
 
-bool	cy_hit(t_shape *shape, t_ray ray, t_hit_record *rec)
+bool	cy_hit_body(t_shape *shape, t_ray ray, t_hit_record *rec)
 {
 	const t_vec3	oc = vec3_sub(ray.origin, shape->cy.top);
 	const float		a = vec3_dot(ray.direction, ray.direction)
@@ -68,6 +105,13 @@ bool	cy_hit(t_shape *shape, t_ray ray, t_hit_record *rec)
 		return (false);
 	return (cy_hit_record((-b - sqrt(discriminant)) / (2.0f * a), shape, rec,
 			ray));
+}
+
+bool	cy_hit(t_shape *shape, t_ray ray, t_hit_record *rec)
+{
+	if (cy_hit_body(shape, ray, rec) || cy_hit_cap(shape, ray, rec))
+		return (true);
+	return (false);
 }
 
 void	cylinder_setup(t_shape *cy)
