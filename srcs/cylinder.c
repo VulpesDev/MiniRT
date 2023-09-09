@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:18:37 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/09 15:15:43 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/10 01:35:05 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ bool	cy_hit_cap_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 	{
 		rec->t = t;
 		rec->p = ray_at(ray, t);
-		//rec->normal = vec3_unit();
+		rec->normal = vec3_unit(vec3_sub(rec->p, shape->cy.center));
+		rec->normal = vec3_cross(shape->rotation, rec->normal);
 		rec->color = shape->color;
 		return (true);
 	}
