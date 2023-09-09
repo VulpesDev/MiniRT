@@ -6,11 +6,25 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:31:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 10:16:31 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 13:47:13 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+#include "vec3.h"
+
+void	init_sphere(t_scene *scene, t_shape *shape)
+{
+	shape->inside = false;
+	shape->intersect = intersect_sphere;
+	shape->hit = sp_hit;
+	shape->normal = sp_normal;
+	shape->color = convert_color(shape->trgb);
+	if (vec3_len(vec3_sub(scene->camera.pos, shape->sp.pos)) \
+		<= shape->sp.diameter / 2)
+		shape->inside = true;
+	scene->shape[scene->shape_count] = *shape;
+}
 
 int	validate_sphere(t_scene *scene, char **el)
 {
@@ -29,11 +43,7 @@ int	validate_sphere(t_scene *scene, char **el)
 		&& extract_rgb(el[3], &shape.trgb) == SUCCESS)
 	{
 		shape.sp.diameter = ft_atof(el[2]);
-		shape.intersect = intersect_sphere;
-		shape.hit = sp_hit;
-		shape.normal = sp_normal;
-		shape.color = convert_color(shape.trgb);
-		scene->shape[i] = shape;
+		init_sphere(scene, &shape);
 		return (SUCCESS);
 	}
 	return (ft_warning("sphere", "invalid argument", INVALID_ELEMENT));
