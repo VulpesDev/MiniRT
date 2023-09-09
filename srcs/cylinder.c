@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:18:37 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/09 10:42:25 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 13:13:40 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,24 +41,33 @@ bool	cy_hit_cap_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 //make so it only takes the first t
 bool	cap(t_shape *shape, double t, t_ray ray, t_vector Ce, t_hit_record *rec)
 {
-	t_vector V;
+	t_vector v;
 	t_vector p;
 
 	p = ray_at(ray, t);
-	V = vec3_sub(p, Ce);
-	if (vec3_len(V) <= shape->cy.diameter/2)
+	v = vec3_sub(p, Ce);
+	if (vec3_len(v) <= shape->cy.diameter / 2)
 		return (cy_hit_cap_record(t, shape, rec, ray));
 	return (false);
 }
 
-
+/**
+ * @brief Checks if the ray hits the top cap of the cylinder
+ * @param p0: top cap center
+ * @param n: top cap normal
+ * @param l0: ray origin
+ * @param l: ray direction
+ * @param p0l0: vector from ray origin to top cap center
+*/
 bool	hit_plane_top(t_shape *shape, t_ray r, t_hit_record *rec)
 {
-	t_vector p0 = vec3_sum(shape->cy.center, vec3_mult(shape->rotation, shape->cy.height));
-	t_vector n = vec3_inv(vec3_unit(shape->rotation));
-	t_vector l0 = r.origin;
-	t_vector l = vec3_unit(r.direction);
-	float denom = vec3_dot(n, l);
+	const t_vector	p0 = vec3_sum(shape->cy.center, \
+		vec3_mult(shape->rotation, shape->cy.height));
+	const t_vector	n = vec3_inv(vec3_unit(shape->rotation));
+	const t_vector	l0 = r.origin;
+	const t_vector	l = vec3_unit(r.direction);
+	const float		denom = vec3_dot(n, l);
+
 	if (denom > 1e-6)
 	{
 		t_vector p0l0 = vec3_sub(p0, l0);
@@ -70,11 +79,12 @@ bool	hit_plane_top(t_shape *shape, t_ray r, t_hit_record *rec)
 
 bool	hit_plane_bot(t_shape *shape, t_ray r, t_hit_record *rec)
 {
-	t_vector p0 = shape->cy.center;
-	t_vector n = vec3_unit(shape->rotation);
-	t_vector l0 = r.origin;
-	t_vector l = vec3_unit(r.direction);
-	float denom = vec3_dot(n, l);
+	const t_vector	p0 = shape->cy.center;
+	const t_vector	n = vec3_unit(shape->rotation);
+	const t_vector	l0 = r.origin;
+	const t_vector	l = vec3_unit(r.direction);
+	const float		denom = vec3_dot(n, l);
+
 	if (denom > 1e-6)
 	{
 		t_vector p0l0 = vec3_sub(p0, l0);
@@ -88,12 +98,12 @@ bool	hit_plane_bot(t_shape *shape, t_ray r, t_hit_record *rec)
 //make so it only takes the first t
 bool	cap_inter(t_shape *shape, double t, t_ray ray, t_vector Ce, float *tt)
 {
-	t_vector V;
-	t_vector p;
+	t_vector	v;
+	t_vector	p;
 
 	p = ray_at(ray, t);
-	V = vec3_sub(p, Ce);
-	if (vec3_len(V) <= shape->cy.diameter/2)
+	v = vec3_sub(p, Ce);
+	if (vec3_len(v) <= shape->cy.diameter / 2)
 	{
 		*tt = t;
 		return (true);
@@ -186,6 +196,8 @@ bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 	t_vector	X;
 
 	t = m = 0;
+	if (vec3_len_squared(shape->rotation) == 0)
+		shape->rotation = vec3(0, 1, 0);
 	shape->rotation = vec3_unit(shape->rotation);
 	if (hit_plane_top(shape, r, rec) || hit_plane_bot(shape, r, rec))
 		return (true);
