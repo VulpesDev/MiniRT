@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/10 00:51:50 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/10 01:26:47 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ bool	cy_hit_cap_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 		rec->p = ray_at(ray, t);
 		rec->color = shape->color;
 		rec->shape = shape;
-		rec->normal = shape->cy.rotation;
+		rec->normal = shape->pl.rotation;
 		return (true);
 	}
 	return (false);
@@ -140,7 +140,7 @@ int	intersect_cap(t_shape cap, t_ray ray, float *t)
 	float			denom;
 
 	denom = vec3_dot(n, l);
-	if (ft_abs(denom) > EPSILON)
+	if (ft_dabs(denom) > EPSILON)
 	{
 		*t = vec3_dot(vec3_sub(p0, l0), n) / denom;
 		return (*t >= EPSILON);

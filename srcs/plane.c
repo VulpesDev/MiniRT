@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 23:25:30 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 23:29:36 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/10 01:08:21 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,6 @@ bool	pl_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 	return (false);
 }
 
-double	ft_abs_double(double n)
-{
-	if (n < 0)
-		return (-n);
-	return (n);
-}
 
 /**
  * The absolute value of the denom allows to render alse the dark side
@@ -80,7 +74,7 @@ bool	pl_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 	else
 		n = vec3_unit(shape->pl.rotation);
 	denom = vec3_dot(n, l);
-	if (ft_abs_double(denom) > EPSILON)
+	if (ft_dabs(denom) > EPSILON)
 	{
 		if (denom > 0)
 			shape->pl.valid = 1;
