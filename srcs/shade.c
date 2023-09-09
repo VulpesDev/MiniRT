@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 15:45:15 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 11:09:17 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 16:38:37 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	cast_shadow(t_scene *scene, t_ray ray)
 	while (i >= 0)
 	{
 		if (scene->shape[i].intersect(scene, ray, &t, i)
-			&& t > EPSILON && t < 1)
+			&& t > EPSILON && t < RAY_LEN)
 			return (1);
 		i--;
 	}
@@ -38,26 +38,30 @@ int	cast_shadow(t_scene *scene, t_ray ray)
  * @param n_dot_l: angle between the light ray and the normal
  * @param light: intensity of the light. If it's negative it's
  * set to 0
+ * @explanation: n_dot_l is a value between -1 and 1 if l is normalized
+ * diff_shade is a value between 0 and 1: [-1,1] is a range of 2,
+ * I split it in half and displace it by 0.5 to get a range of 1.
+ * Since brightness is in range [0,1], it would make the product
+ * smaller, so I add 1. At this point the range is [0,2], so I divide
+ * it by 2 to get a range of 1 and I do the same for the light
+ * returned by the shadow to keep the proportion.
 */
-float	diffuse_reflection(t_scene *scene, t_vector n, t_vector p)
+float	diffuse_shade(t_scene *scene, t_vector n, t_vector p)
 {
 	t_vector	l;
 	float		n_dot_l;
 	float		light;
 	float		len_l;
-	t_ray		rebound;
+	double		diff_shade;
 
 	l = vec3_sub(scene->light.pos, p);
 	len_l = vec3_len(l);
-	// l = vec3_unit(l);
-	rebound = (t_ray){p, l};
+	l = vec3_unit(l);
 	n_dot_l = vec3_dot(n, l);
-	if (cast_shadow(scene, rebound) && n_dot_l > 0)
-		return (ft_fmax(n_dot_l / len_l, 0.0f));
-	if (len_l < EPSILON)
-		return (1.0f);
-	light = ft_fmax(((1 + scene->light.brightness) * n_dot_l / len_l) \
-		, 0.0f);
+	diff_shade = n_dot_l / 2 + 0.5f;
+	if (cast_shadow(scene, (t_ray){p, l}))
+		return (diff_shade / 2);
+	light = ((1 + scene->light.brightness) * diff_shade) / 2;
 	return (light);
 }
 
@@ -72,5 +76,5 @@ float	light_coeff(t_scene *scene, t_hit_record *hit)
 
 	hit_pos = hit->p;
 	normal = hit->normal;
-	return (diffuse_reflection(scene, normal, hit_pos));
+	return (diffuse_shade(scene, normal, hit_pos));
 }

@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 15:16:01 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 16:42:42 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,9 @@ t_color	apply_light_to_color(t_color c, double light)
 	t_color	ret;
 
 	ret = color(0.0, c.r * light, c.g * light, c.b * light);
+	ret.r = ft_fmin(ret.r, 1.0f);
+	ret.g = ft_fmin(ret.g, 1.0f);
+	ret.b = ft_fmin(ret.b, 1.0f);
 	return (ret);
 }
 
@@ -151,9 +154,7 @@ t_color	ray_color(t_scene *scene, t_ray r)
 
 	if (hit_element(scene, r, &rec))
 	{
-		// if (rec.shape->inside)
-		// 	return ((t_color){0, 0, 0, 0});
-		light = ft_fmin(light_coeff(scene, &rec), 1);
+		light = light_coeff(scene, &rec);
 		if (light < 0 || light > 1)
 			printf("Light out of bound %f\n", light); // remember to remove
 		return (apply_light_to_color(rec.color, light));
@@ -219,6 +220,7 @@ int	per_pixel(t_pxl p, t_scene *scene)
 
 	r = create_cam_ray(&scene->camera, p.x, p.y);
 	c = ray_color(scene, r);
+	c = apply_light_to_color(c, 1 + scene->ambient.lighting_ratio);
 	return (convert_trgb(c));
 }
 
