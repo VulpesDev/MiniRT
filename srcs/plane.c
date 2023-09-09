@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 23:25:30 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 10:42:15 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 13:10:25 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,8 @@ int	intersect_plane(t_scene *scene, t_ray ray, float *t, int i)
 	denom = vec3_dot(n, l);
 	if (denom > EPSILON)
 	{
-		// t_vector p0l0 = vec3_sub(p0, l0);
 		*t = vec3_dot(vec3_sub(p0, l0), n) / denom;
-		return (*t >= 0);
+		return (*t >= EPSILON);
 	}
 	return (0);
 }
@@ -70,12 +69,17 @@ double	ft_abs_double(double n)
 */
 bool	pl_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 {
+	t_vector		n;
+	float			denom;
 	const t_vector	p0 = shape->pl.pos;
-	const t_vector	n = vec3_unit(shape->rotation);
 	const t_vector	l0 = r.origin;
 	const t_vector	l = vec3_unit(r.direction);
-	const float		denom = vec3_dot(n, l);
 
+	if (vec3_len_squared(shape->rotation) == 0)
+		n = vec3(0, 0, -1);
+	else
+		n = vec3_unit(shape->rotation);
+	denom = vec3_dot(n, l);
 	if (ft_abs_double(denom) > EPSILON)
 	{
 		if (denom > 0)
