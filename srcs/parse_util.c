@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 12:46:52 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/05 00:48:07 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 09:53:21 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	create_trgb(int t, int r, int g, int b)
 }
 
 /**
- * Given a string, it splits by the ',' and extracts 3 int that
+ * @brief Given a string, it splits by the ',' and extracts 3 int that
  * assigns bitwise to an int to return (setting transparency to 0)
  * @param	string in format "int,int,int"
  *			pointer to the int where to write the rgb
@@ -69,8 +69,8 @@ t_err	extract_xyz(char *xyz, t_point_3d *point)
 	split_arg = ft_split(xyz, ',');
 	if (ft_arrlen(split_arg) == 3)
 	{
-		i = 0;
-		while (i < 3)
+		i = -1;
+		while (++i < 3)
 		{
 			if (!ft_isfloat(split_arg[i]))
 			{
@@ -78,11 +78,9 @@ t_err	extract_xyz(char *xyz, t_point_3d *point)
 				return (ft_warning("expected floating point value", \
 							NULL, INVALID_ELEMENT));
 			}
-			i++;
 		}
-		point->x = ft_atof(split_arg[0]);
-		point->y = ft_atof(split_arg[1]);
-		point->z = ft_atof(split_arg[2]);
+		*point = (t_point_3d){ft_atof(split_arg[0]), ft_atof(split_arg[1]), \
+			ft_atof(split_arg[2])};
 		ft_free_str_arr(split_arg);
 		return (SUCCESS);
 	}

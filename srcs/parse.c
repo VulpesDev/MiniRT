@@ -6,34 +6,20 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 09:24:43 by tfregni           #+#    #+#             */
-/*   Updated: 2023/06/12 19:05:48 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 09:57:04 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
 /**
- * Prints the current status of the unique elements flag
-*/
-// static void	print_flag(int *flag)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (i < 3)
-// 		ft_printf("%d\t", flag[i++]);
-// 	ft_printf("\n");
-// }
-
-/**
- * I pass it a triple flag as int array to check that the unique
+ * I pass a triple flag as int array to check that the unique
  * elements are not set multiple times.
 */
 t_err	handle_unique(t_scene *scene, char **el, uint8_t *flag)
 {
 	if (!ft_strcmp(el[0], "A"))
 	{
-		ft_printf("Ambient\n");
 		if (flag[AMBIENT])
 			return (ft_warning("Ambient already set", NULL, INVALID_DUP));
 		if (validate_ambient(scene, el) == SUCCESS)
@@ -41,7 +27,6 @@ t_err	handle_unique(t_scene *scene, char **el, uint8_t *flag)
 	}
 	else if (!ft_strcmp(el[0], "C"))
 	{
-		ft_printf("Camera\n");
 		if (flag[CAMERA])
 			return (ft_warning("Camera already set", NULL, INVALID_DUP));
 		if (validate_camera(scene, el) == SUCCESS)
@@ -49,7 +34,6 @@ t_err	handle_unique(t_scene *scene, char **el, uint8_t *flag)
 	}
 	else if (!ft_strcmp(el[0], "L"))
 	{
-		ft_printf("Light\n");
 		if (flag[LIGHT])
 			return (ft_warning("Light already set", NULL, INVALID_DUP));
 		if (validate_light(scene, el) == SUCCESS)
@@ -70,7 +54,6 @@ void	handle_solid(t_scene *scene, char **el)
 	{
 		if (!validate_sphere(scene, el))
 		{
-			printf("Sphere\n");
 			scene->shape_count++;
 		}
 	}
@@ -79,7 +62,6 @@ void	handle_solid(t_scene *scene, char **el)
 		if (!validate_plane(scene, el))
 		{
 			scene->shape_count++;
-			ft_printf("Plane\n");
 		}
 	}
 	else if (!ft_strcmp(el[0], "cy"))
@@ -87,7 +69,6 @@ void	handle_solid(t_scene *scene, char **el)
 		if (!validate_cylinder(scene, el))
 		{
 			scene->shape_count++;
-			ft_printf("Cylinder\n");
 		}
 	}
 	else
@@ -146,8 +127,6 @@ int	parse_args(t_scene *scene, char *filename)
 	}
 	close(fd);
 	if (flag[0] && flag[1] && flag[2])
-	{
 		return (render_scene(scene));
-	}
 	return (ft_warning("cannot render", "missing element", MISS_UNIQUE));
 }

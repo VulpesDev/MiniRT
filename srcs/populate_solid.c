@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:31:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/27 18:39:49 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 10:16:31 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	validate_sphere(t_scene *scene, char **el)
 		&& extract_rgb(el[3], &shape.trgb) == SUCCESS)
 	{
 		shape.sp.diameter = ft_atof(el[2]);
-		shape.type = ft_strdup("sphere");
 		shape.intersect = intersect_sphere;
 		shape.hit = sp_hit;
 		shape.normal = sp_normal;
@@ -58,8 +57,6 @@ int	validate_plane(t_scene *scene, char **el)
 		|| extract_rgb(el[3], &shape.trgb))
 		return (ft_warning("invalid argument: ", el[2], \
 					INVALID_ELEMENT));
-	printf("SHAPE ROTATION: (%f, %f, %f)\n\n", shape.rotation.x, shape.rotation.y, shape.rotation.z);
-	shape.type = ft_strdup("plane");
 	shape.intersect = intersect_plane;
 	shape.hit = pl_hit;
 	shape.normal = pl_normal;
@@ -68,13 +65,19 @@ int	validate_plane(t_scene *scene, char **el)
 	return (SUCCESS);
 }
 
+void	init_cylinder(t_scene *scene, t_shape *shape)
+{
+	shape->intersect = intersect_cylinder;
+	shape->hit = cy_hit;
+	shape->color = convert_color(shape->trgb);
+	scene->shape[scene->shape_count] = *shape;
+}
+
 int	validate_cylinder(t_scene *scene, char **el)
 {
 	t_shape		shape;
-	int			i;
 
-	i = scene->shape_count;
-	if (i >= MAX_SOLID)
+	if (scene->shape_count >= MAX_SOLID)
 		return (ft_warning("not handling these many solids", \
 				NULL, INVALID_FILE));
 	if (ft_arrlen(el) != 6)
@@ -94,10 +97,6 @@ int	validate_cylinder(t_scene *scene, char **el)
 			return (ft_warning("invalid argument", \
 					NULL, INVALID_ELEMENT));
 	}
-	shape.type = ft_strdup("cylinder");
-	shape.intersect = intersect_cylinder;
-	shape.hit = cy_hit;
-	shape.color = convert_color(shape.trgb);
-	scene->shape[i] = shape;
+	init_cylinder(scene, &shape);
 	return (SUCCESS);
 }

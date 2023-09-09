@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 18:06:27 by tfregni           #+#    #+#             */
-/*   Updated: 2023/08/27 14:10:10 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 09:40:53 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef struct s_matrix
 }	t_matrix;
 
 t_matrix	mx_get_identity(void);
+t_matrix	create_matrix(const float mx[4][4], size_t size);
 /* TRANSFORMATIONS */
 t_matrix	mx_rotate_x(t_matrix mx, float x);
 t_matrix	mx_rotate_y(t_matrix mx, float y);

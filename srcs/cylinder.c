@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cylinder.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:18:37 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/04 20:07:58 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/09 10:42:25 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-#include "vector_math.h"
 
 bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray, double m)
 {
@@ -19,7 +18,7 @@ bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray, doubl
 	{
 		rec->t = t;
 		rec->p = ray_at(ray, t);
-		rec->normal = vect_norm(vect_sub( rec->p, vect_sub(shape->cy.center, vect_mult(shape->rotation, m))));
+		rec->normal = vec3_unit(vec3_sub(rec->p, vec3_sub(shape->cy.center, vec3_mult(shape->rotation, m))));
 		rec->color = shape->color;
 		return (true);
 	}
@@ -32,7 +31,7 @@ bool	cy_hit_cap_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 	{
 		rec->t = t;
 		rec->p = ray_at(ray, t);
-		//rec->normal = vect_norm();
+		//rec->normal = vec3_unit();
 		rec->color = shape->color;
 		return (true);
 	}
@@ -46,8 +45,8 @@ bool	cap(t_shape *shape, double t, t_ray ray, t_vector Ce, t_hit_record *rec)
 	t_vector p;
 
 	p = ray_at(ray, t);
-	V = vect_sub(p, Ce);
-	if (vect_mag(V) <= shape->cy.diameter/2)
+	V = vec3_sub(p, Ce);
+	if (vec3_len(V) <= shape->cy.diameter/2)
 		return (cy_hit_cap_record(t, shape, rec, ray));
 	return (false);
 }
@@ -55,15 +54,15 @@ bool	cap(t_shape *shape, double t, t_ray ray, t_vector Ce, t_hit_record *rec)
 
 bool	hit_plane_top(t_shape *shape, t_ray r, t_hit_record *rec)
 {
-	t_vector p0 = vect_sum(shape->cy.center, vect_mult(shape->rotation, shape->cy.height));
-	t_vector n = vect_inverse(vect_norm(shape->rotation));
+	t_vector p0 = vec3_sum(shape->cy.center, vec3_mult(shape->rotation, shape->cy.height));
+	t_vector n = vec3_inv(vec3_unit(shape->rotation));
 	t_vector l0 = r.origin;
-	t_vector l = vect_norm(r.direction);
-	float denom = vect_dot(n, l);
+	t_vector l = vec3_unit(r.direction);
+	float denom = vec3_dot(n, l);
 	if (denom > 1e-6)
 	{
-		t_vector p0l0 = vect_sub(p0, l0);
-		return (cap(shape, vect_dot(p0l0, n) / denom, r, p0, rec));
+		t_vector p0l0 = vec3_sub(p0, l0);
+		return (cap(shape, vec3_dot(p0l0, n) / denom, r, p0, rec));
 	}
 	return (false);
 }
@@ -72,14 +71,14 @@ bool	hit_plane_top(t_shape *shape, t_ray r, t_hit_record *rec)
 bool	hit_plane_bot(t_shape *shape, t_ray r, t_hit_record *rec)
 {
 	t_vector p0 = shape->cy.center;
-	t_vector n = vect_norm(shape->rotation);
+	t_vector n = vec3_unit(shape->rotation);
 	t_vector l0 = r.origin;
-	t_vector l = vect_norm(r.direction);
-	float denom = vect_dot(n, l);
+	t_vector l = vec3_unit(r.direction);
+	float denom = vec3_dot(n, l);
 	if (denom > 1e-6)
 	{
-		t_vector p0l0 = vect_sub(p0, l0);
-		return (cap(shape, vect_dot(p0l0, n) / denom, r, p0, rec));
+		t_vector p0l0 = vec3_sub(p0, l0);
+		return (cap(shape, vec3_dot(p0l0, n) / denom, r, p0, rec));
 	}
 	return (false);
 }
@@ -93,8 +92,8 @@ bool	cap_inter(t_shape *shape, double t, t_ray ray, t_vector Ce, float *tt)
 	t_vector p;
 
 	p = ray_at(ray, t);
-	V = vect_sub(p, Ce);
-	if (vect_mag(V) <= shape->cy.diameter/2)
+	V = vec3_sub(p, Ce);
+	if (vec3_len(V) <= shape->cy.diameter/2)
 	{
 		*tt = t;
 		return (true);
@@ -104,15 +103,15 @@ bool	cap_inter(t_shape *shape, double t, t_ray ray, t_vector Ce, float *tt)
 
 bool	hit_plane_top_inter(t_shape *shape, t_ray r, float *t)
 {
-	t_vector p0 = vect_sum(shape->cy.center, vect_mult(shape->rotation, shape->cy.height));
-	t_vector n = vect_inverse(vect_norm(shape->rotation));
+	t_vector p0 = vec3_sum(shape->cy.center, vec3_mult(shape->rotation, shape->cy.height));
+	t_vector n = vec3_inv(vec3_unit(shape->rotation));
 	t_vector l0 = r.origin;
-	t_vector l = vect_norm(r.direction);
-	float denom = vect_dot(n, l);
+	t_vector l = vec3_unit(r.direction);
+	float denom = vec3_dot(n, l);
 	if (denom > 1e-6)
 	{
-		t_vector p0l0 = vect_sub(p0, l0);
-		return (cap_inter(shape, vect_dot(p0l0, n) / denom, r, p0, t));
+		t_vector p0l0 = vec3_sub(p0, l0);
+		return (cap_inter(shape, vec3_dot(p0l0, n) / denom, r, p0, t));
 	}
 	return (false);
 }
@@ -121,14 +120,14 @@ bool	hit_plane_top_inter(t_shape *shape, t_ray r, float *t)
 bool	hit_plane_bot_inter(t_shape *shape, t_ray r, float *t)
 {
 	t_vector p0 = shape->cy.center;
-	t_vector n = vect_norm(shape->rotation);
+	t_vector n = vec3_unit(shape->rotation);
 	t_vector l0 = r.origin;
-	t_vector l = vect_norm(r.direction);
-	float denom = vect_dot(n, l);
+	t_vector l = vec3_unit(r.direction);
+	float denom = vec3_dot(n, l);
 	if (denom > 1e-6)
 	{
-		t_vector p0l0 = vect_sub(p0, l0);
-		return (cap_inter(shape, vect_dot(p0l0, n) / denom, r, p0, t));
+		t_vector p0l0 = vec3_sub(p0, l0);
+		return (cap_inter(shape, vec3_dot(p0l0, n) / denom, r, p0, t));
 	}
 	return (false);
 }
@@ -150,22 +149,22 @@ int	intersect_cylinder(t_scene *scene, t_ray r, float *t, int i)
 	*t = 0;
 	// rec = NULL;
 	rec.t = RAY_LEN;
-	scene->shape[i].rotation = vect_norm(scene->shape[i].rotation);
+	scene->shape[i].rotation = vec3_unit(scene->shape[i].rotation);
 	// if (hit_plane_top_inter(&(scene->shape[i]), r, t) || hit_plane_bot_inter(&(scene->shape[i]), r, t))
 	// 	 ;
 	// 	//return (1);
 	olddir = r.direction;
-	r.direction = vect_cross(r.direction, scene->shape[i].rotation);
-	X = vect_sub(r.origin, scene->shape[i].cy.center);
-	a = vect_dot(r.direction, r.direction);
-	b = 2 * vect_dot(r.direction, vect_cross(X, scene->shape[i].rotation));
-	c = vect_dot(vect_cross(X, scene->shape[i].rotation), vect_cross(X, scene->shape[i].rotation)) - ((scene->shape[i].cy.diameter / 2) * (scene->shape[i].cy.diameter / 2));
+	r.direction = vec3_cross(r.direction, scene->shape[i].rotation);
+	X = vec3_sub(r.origin, scene->shape[i].cy.center);
+	a = vec3_dot(r.direction, r.direction);
+	b = 2 * vec3_dot(r.direction, vec3_cross(X, scene->shape[i].rotation));
+	c = vec3_dot(vec3_cross(X, scene->shape[i].rotation), vec3_cross(X, scene->shape[i].rotation)) - ((scene->shape[i].cy.diameter / 2) * (scene->shape[i].cy.diameter / 2));
 	//? maybe normalize the r direction first
 	discriminant = b * b - 4 * a * c;
 	t1 = (-b - sqrt(discriminant)) / (2.0 * a);
 	t2 = (-b + sqrt(discriminant)) / (2.0 * a);
-	m1 = vect_dot(olddir, scene->shape[i].rotation) * t1 + vect_dot(X, scene->shape[i].rotation);
-	m2 = vect_dot(olddir, scene->shape[i].rotation) * t2 + vect_dot(X, scene->shape[i].rotation);
+	m1 = vec3_dot(olddir, scene->shape[i].rotation) * t1 + vec3_dot(X, scene->shape[i].rotation);
+	m2 = vec3_dot(olddir, scene->shape[i].rotation) * t2 + vec3_dot(X, scene->shape[i].rotation);
 
 	if (t1 > 0 && m1 >= 0 && m1 <= scene->shape[i].cy.height)
 		*t = t1;
@@ -187,22 +186,22 @@ bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 	t_vector	X;
 
 	t = m = 0;
-	shape->rotation = vect_norm(shape->rotation);
+	shape->rotation = vec3_unit(shape->rotation);
 	if (hit_plane_top(shape, r, rec) || hit_plane_bot(shape, r, rec))
 		return (true);
 	olddir = r.direction;
-	r.direction = vect_cross(r.direction, shape->rotation);
-	X = vect_sub(r.origin, shape->cy.center);
-	a = vect_dot(r.direction, r.direction);
-	b = 2 * vect_dot(r.direction, vect_cross(X, shape->rotation));
-	c = vect_dot(vect_cross(X, shape->rotation), vect_cross(X, shape->rotation)) - ((shape->cy.diameter / 2) * (shape->cy.diameter / 2));
+	r.direction = vec3_cross(r.direction, shape->rotation);
+	X = vec3_sub(r.origin, shape->cy.center);
+	a = vec3_dot(r.direction, r.direction);
+	b = 2 * vec3_dot(r.direction, vec3_cross(X, shape->rotation));
+	c = vec3_dot(vec3_cross(X, shape->rotation), vec3_cross(X, shape->rotation)) - ((shape->cy.diameter / 2) * (shape->cy.diameter / 2));
 	discriminant = b * b - 4 * a * c;
 	if (discriminant < 0)
 		return (false);
 	t1 = (-b - sqrt(discriminant)) / (2.0 * a);
 	t2 = (-b + sqrt(discriminant)) / (2.0 * a);
-	m1 = vect_dot(olddir, shape->rotation) * t1 + vect_dot(X, shape->rotation);
-	m2 = vect_dot(olddir, shape->rotation) * t2 + vect_dot(X, shape->rotation);
+	m1 = vec3_dot(olddir, shape->rotation) * t1 + vec3_dot(X, shape->rotation);
+	m2 = vec3_dot(olddir, shape->rotation) * t2 + vec3_dot(X, shape->rotation);
 
 	if (t1 > 0 && m1 >= 0 && m1 <= shape->cy.height)
 	{

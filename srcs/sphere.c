@@ -6,17 +6,12 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 14:22:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/07 12:59:26 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 10:36:20 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-#include "vector_math.h"
-
-float	sp_calc_hit_point(float discriminant, float a, float b)
-{
-	return ((-b - sqrt(discriminant)) / (2.0f * a));
-}
+#include "vec3.h"
 
 /**
  * It returns the discriminant. If it's >=0 it assigns to t the value of
@@ -31,13 +26,13 @@ float	sp_calc_discriminant(t_scene *scene, t_ray ray, \
 	t_point_3d		transl;
 	float			discriminant;
 
-	a = vect_dot(ray.direction, ray.direction);
-	transl = vect_sub(ray.origin, scene->shape[i].sp.pos);
-	b = 2.0f * vect_dot(transl, ray.direction);
-	c = vect_dot(transl, transl) - pow((scene->shape[i].sp.diameter / 2), 2);
+	a = vec3_dot(ray.direction, ray.direction);
+	transl = vec3_sub(ray.origin, scene->shape[i].sp.pos);
+	b = 2.0f * vec3_dot(transl, ray.direction);
+	c = vec3_dot(transl, transl) - pow((scene->shape[i].sp.diameter / 2), 2);
 	discriminant = b * b - (4.0f * a * c);
 	if (discriminant >= 0)
-		*t = sp_calc_hit_point(discriminant, a, b);
+		*t = (-b - sqrt(discriminant)) / (2.0f * a);
 	return (discriminant);
 }
 
@@ -52,11 +47,12 @@ int	intersect_sphere(t_scene *scene, t_ray ray, float *t, int i)
 }
 
 /**
- * @todo	- could be calculated with (hit_point - center) / radius
- * avoiding the sqrt
  * @param hit: hit point
  * @param center: center of the sphere
  * @returns a normalized vector perpendicular to the surface of the sphere
+ * Since the direction is hit - center which is always radius long,
+ * we can get the normalized by dividing by radius. This saves an expensive
+ * sqrt.
  * t_vec3			(*t_normal)(t_shape *shape, t_point3 hit);
 */
 t_vec3	sp_normal(t_shape *sp, t_point3 hit)
@@ -65,7 +61,7 @@ t_vec3	sp_normal(t_shape *sp, t_point3 hit)
 	t_point3	center;
 
 	center = sp->sp.pos;
-	normal = vec3_unit(vec3_sub(hit, center));
+	normal = vec3_div(vec3_sub(hit, center), sp->sp.diameter / 2);
 	return (normal);
 }
 
@@ -106,6 +102,6 @@ bool	sp_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 	discriminant = b * b - 4 * a * c;
 	if (discriminant < 0)
 		return (false);
-	return (sp_hit_record((-b - sqrt(discriminant)) / (2.0 * a), shape, rec, r));
+	return (sp_hit_record((-b - \
+		sqrt(discriminant)) / (2.0 * a), shape, rec, r));
 }
-
