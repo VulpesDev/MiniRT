@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 17:26:52 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/07 12:54:10 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 13:35:04 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,15 @@
 # include "vec3.h"
 # include "ray.h"
 
-typedef struct s_scene	t_scene;
-typedef struct s_shape	t_shape;
+typedef struct s_scene		t_scene;
+typedef struct s_shape		t_shape;
+typedef struct s_hit_record	t_hit_record;
+typedef int					(*t_hit_func)(t_scene *scene, t_ray ray, \
+								float *t, int i);
+typedef bool				(*t_hit)(t_shape *shape, t_ray ray, \
+								t_hit_record *rec);
+typedef t_vec3				(*t_normal)(t_shape *shape, t_point3 hit);
+
 typedef struct s_sphere
 {
 	t_point_3d		pos;
@@ -40,6 +47,22 @@ typedef struct s_cylinder
 	float			height;
 	int				trgb;
 }					t_cylinder;
+
+typedef struct s_shape
+{
+	union {
+		t_sphere	sp;
+		t_plane		pl;
+		t_cylinder	cy;
+	};
+	t_vector		rotation;
+	t_hit_func		intersect;
+	t_hit			hit;
+	t_normal		normal;
+	t_matrix_trans	transform;
+	int				trgb;
+	t_color			color;
+}			t_shape;
 
 typedef struct s_hit_record
 {

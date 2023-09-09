@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 10:06:56 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 13:33:37 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,6 @@
 # define EPSILON 1e-6
 
 typedef struct s_ray	t_ray;
-typedef int				(*t_hit_func)(t_scene *scene, t_ray ray, \
-							float *t, int i);
-typedef bool			(*t_hit)(t_shape *shape, t_ray ray, t_hit_record *rec);
-typedef t_vec3			(*t_normal)(t_shape *shape, t_point3 hit);
 
 typedef enum e_err
 {
@@ -104,22 +100,6 @@ typedef struct s_light
 	float			brightness;
 	int				trgb;
 }					t_light;
-
-typedef struct s_shape
-{
-	union {
-		t_sphere	sp;
-		t_plane		pl;
-		t_cylinder	cy;
-	};
-	t_vector		rotation;
-	t_hit_func		intersect;
-	t_hit			hit;
-	t_normal		normal;
-	t_matrix_trans	transform;
-	int				trgb;
-	t_color			color;
-}			t_shape;
 
 typedef struct s_scene
 {
