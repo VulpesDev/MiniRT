@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:54:25 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 09:33:19 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 12:13:56 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ double	radians(double grades)
 
 void	cam_orientation(t_camera *c)
 {
+	if (vec3_len_squared(c->orientation) == 0)
+		c->orientation = vec3(0, 0, -1);
 	c->look_at = vec3_unit(c->orientation);
 	c->right = vec3_unit(vec3_cross(c->look_at, c->vert_up));
 	c->up = vec3_unit(vec3_cross(c->right, c->look_at));
@@ -36,8 +38,7 @@ void	cam_setup(t_camera *c)
 	c->half_ver = c->viewport_height / 2;
 	c->horizontal = vec3(c->viewport_width, 0, 0);
 	c->vertical = vec3(0, -c->viewport_height, 0);
-	c->orientation = vec3_unit(c->orientation);
-	c->viewport_top_left = ray_at(ray(c->pos, c->orientation), c->focal_length);
+	c->viewport_top_left = ray_at(ray(c->pos, c->look_at), c->focal_length);
 	c->viewport_top_left = vec3_sub(c->viewport_top_left, \
 		vec3_mult(c->right, c->viewport_width / 2));
 	c->viewport_top_left = vec3_sum(c->viewport_top_left, \
