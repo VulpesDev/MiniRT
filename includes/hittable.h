@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 17:26:52 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 20:30:58 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 21:27:38 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_cylinder
 	t_point_3d		top;
 	t_point_3d		bot;
 	t_vector		rotation;
+	t_vector		vec;
 	float			diameter;
 	float			height;
 	int				trgb;

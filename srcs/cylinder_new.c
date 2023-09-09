@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 20:34:18 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 22:30:33 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,13 @@
 float	cy_calc_discriminant(t_scene *scene, t_ray ray, float *t, int i)
 {
 	const t_vec3	oc = vec3_sub(ray.origin, scene->shape[i].cy.top);
-	const float		a = vec3_dot(ray.direction, ray.direction);
+	const float		a = vec3_dot(ray.direction, ray.direction)
+		- pow(vec3_dot(ray.direction, scene->shape[i].cy.vec), 2);
 	const float		b = 2 * (vec3_dot(ray.direction, oc)
-			- vec3_dot(ray.direction, scene->shape[i].rotation)
-			* vec3_dot(oc, scene->shape[i].rotation));
+			- vec3_dot(ray.direction, scene->shape[i].cy.vec)
+			* vec3_dot(oc, scene->shape[i].cy.rotation));
 	const float		c = vec3_dot(oc, oc) - pow(vec3_dot(oc,
-				scene->shape[i].rotation), 2)
+				scene->shape[i].cy.vec), 2)
 		- pow(scene->shape[i].cy.height / 2, 2);
 	const float		discriminant = b * b - (4.0f * a * c);
 
@@ -33,7 +34,11 @@ float	cy_calc_discriminant(t_scene *scene, t_ray ray, float *t, int i)
 
 bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 {
-	if (t > EPSILON && t < rec->t)
+	t_vec3	hit_vec;
+
+	hit_vec = vec3_sub(ray_at(ray, t), shape->cy.top);
+	if (t > EPSILON && t < rec->t && vec3_dot(hit_vec, shape->cy.vec) >= 0
+		&& (vec3_dot(hit_vec, shape->cy.vec) <= shape->cy.height))
 	{
 		rec->t = t;
 		rec->p = ray_at(ray, t);
@@ -46,29 +51,17 @@ bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 	return (false);
 }
 
+bool	cy_hit(t_shape *shape, t_ray ray, t_hit_record *rec)
 {
-	if (t > EPSILON && t < rec->t)
-	{
-		rec->t = t;
-		rec->p = ray_at(ray, t);
-		rec->shape = shape;
-		rec->normal = sp_normal(shape, rec->p);
-		rec->color = shape->color;
-		return (true);
-	}
-	return (false);
-}
-
-bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec)
-{
-	const t_vec3	oc = vec3_sub(ray.origin, scene->shape[i].cy.top);
-	const float		a = vec3_dot(ray.direction, ray.direction);
+	const t_vec3	oc = vec3_sub(ray.origin, shape->cy.top);
+	const float		a = vec3_dot(ray.direction, ray.direction)
+		- pow(vec3_dot(ray.direction, shape->cy.vec), 2);
 	const float		b = 2 * (vec3_dot(ray.direction, oc)
-			- vec3_dot(ray.direction, scene->shape[i].rotation)
-			* vec3_dot(oc, scene->shape[i].rotation));
+			- vec3_dot(ray.direction, shape->cy.vec)
+			* vec3_dot(oc, shape->cy.vec));
 	const float		c = vec3_dot(oc, oc) - pow(vec3_dot(oc,
-				scene->shape[i].rotation), 2)
-		- pow(scene->shape[i].cy.height / 2, 2);
+				shape->cy.vec), 2)
+		- pow(shape->cy.height / 2, 2);
 	const float		discriminant = b * b - (4.0f * a * c);
 
 	if (discriminant < 0)
@@ -79,17 +72,20 @@ bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 
 void	cylinder_setup(t_shape *cy)
 {
-	t_vec3	up_vec;
-	t_vec3	down_vec;
+	t_vec3	vec1;
+	t_vec3	vec2;
 
-	up_vec = vec3_div(vec3_mult(cy->cy.rotation, cy->cy.height), 2);
-	down_vec = vec3_inv(up_vec);
-	cy->cy.top = (t_point_3d){cy->cy.center.x + up_vec.x,
-		cy->cy.center.y + up_vec.y,
-		cy->cy.center.z + up_vec.z};
-	cy->cy.top = (t_point_3d){cy->cy.center.x + down_vec.x,
-		cy->cy.center.y + down_vec.y,
-		cy->cy.center.z + down_vec.z};
+	cy->cy.rotation = vec3_unit(cy->rotation);
+	vec1 = vec3_mult(cy->rotation, cy->cy.height / 2);
+	cy->cy.vec = vec3_inv(cy->rotation);
+	vec2 = vec3_mult(cy->cy.vec, cy->cy.height);
+
+	cy->cy.top = (t_point_3d){cy->cy.center.x + vec1.x,
+		cy->cy.center.y + vec1.y,
+		cy->cy.center.z + vec1.z};
+	cy->cy.bot = (t_point_3d){cy->cy.top.x + vec2.x,
+		cy->cy.top.y + vec2.y,
+		cy->cy.top.z + vec2.z};
 	printf("cyl_top: ");
 	vec3_print(cy->cy.top);
 	printf("cyl_bot: ");
