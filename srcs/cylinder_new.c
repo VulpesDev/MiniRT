@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 22:30:33 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 22:34:33 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ float	cy_calc_discriminant(t_scene *scene, t_ray ray, float *t, int i)
 		- pow(vec3_dot(ray.direction, scene->shape[i].cy.vec), 2);
 	const float		b = 2 * (vec3_dot(ray.direction, oc)
 			- vec3_dot(ray.direction, scene->shape[i].cy.vec)
-			* vec3_dot(oc, scene->shape[i].cy.rotation));
+			* vec3_dot(oc, scene->shape[i].cy.vec));
 	const float		c = vec3_dot(oc, oc) - pow(vec3_dot(oc,
 				scene->shape[i].cy.vec), 2)
 		- pow(scene->shape[i].cy.height / 2, 2);
@@ -75,7 +75,7 @@ void	cylinder_setup(t_shape *cy)
 	t_vec3	vec1;
 	t_vec3	vec2;
 
-	cy->cy.rotation = vec3_unit(cy->rotation);
+	cy->rotation = vec3_unit(cy->rotation);
 	vec1 = vec3_mult(cy->rotation, cy->cy.height / 2);
 	cy->cy.vec = vec3_inv(cy->rotation);
 	vec2 = vec3_mult(cy->cy.vec, cy->cy.height);
