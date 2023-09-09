@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 23:25:30 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 15:15:26 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 23:29:36 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	intersect_plane(t_scene *scene, t_ray ray, float *t, int i)
 t_vec3	pl_normal(t_shape *pl, t_point3 hit)
 {
 	(void) hit;
-	return (vec3_mult(pl->rotation, -pl->pl.valid));
+	return (vec3_mult(pl->pl.rotation, -pl->pl.valid));
 }
 
 bool	pl_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
@@ -75,10 +75,10 @@ bool	pl_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 	const t_vector	l0 = r.origin;
 	const t_vector	l = vec3_unit(r.direction);
 
-	if (vec3_len_squared(shape->rotation) == 0)
+	if (vec3_len_squared(shape->pl.rotation) == 0)
 		n = vec3(0, 0, -1);
 	else
-		n = vec3_unit(shape->rotation);
+		n = vec3_unit(shape->pl.rotation);
 	denom = vec3_dot(n, l);
 	if (ft_abs_double(denom) > EPSILON)
 	{

@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 23:24:36 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/09 23:40:13 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,11 @@ bool	cy_hit_cap_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 		rec->p = ray_at(ray, t);
 		rec->color = shape->color;
 		rec->shape = shape;
-		rec->normal = shape->rotation;
+		rec->normal = shape->cy.rotation;
 		return (true);
 	}
 	return (false);
 }
-
 
 bool	cy_hit_cap(t_shape *shape, t_ray ray, t_hit_record *rec)
 {
@@ -57,9 +56,9 @@ bool	cy_hit_cap(t_shape *shape, t_ray ray, t_hit_record *rec)
 
 	to_plane = *rec;
 	cap_top.pl.pos = shape->cy.top;
-	cap_top.rotation = shape->rotation;
+	cap_top.pl.rotation = shape->pl.rotation;
 	cap_bot.pl.pos = shape->cy.bot;
-	cap_bot.rotation = shape->cy.vec;
+	cap_bot.pl.rotation = shape->cy.vec;
 	if (!pl_hit(&cap_top, ray, &to_plane) && !pl_hit(&cap_bot, ray, &to_plane))
 		return (false);
 	t = ray_at(ray, to_plane.t);
@@ -81,7 +80,7 @@ bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 		rec->p = ray_at(ray, t);
 		rec->shape = shape;
 		rec->normal = vec3_unit(vec3_sub(rec->p, vec3_sub(shape->cy.center,
-						vec3_mult(shape->rotation, shape->cy.height / 2))));
+						vec3_mult(shape->cy.rotation, shape->cy.height / 2))));
 		rec->color = shape->color;
 		return (true);
 	}
@@ -119,9 +118,9 @@ void	cylinder_setup(t_shape *cy)
 	t_vec3	vec1;
 	t_vec3	vec2;
 
-	cy->rotation = vec3_unit(cy->rotation);
-	vec1 = vec3_mult(cy->rotation, cy->cy.height / 2);
-	cy->cy.vec = vec3_inv(cy->rotation);
+	cy->cy.rotation = vec3_unit(cy->cy.rotation);
+	vec1 = vec3_mult(cy->cy.rotation, cy->cy.height / 2);
+	cy->cy.vec = vec3_inv(cy->cy.rotation);
 	vec2 = vec3_mult(cy->cy.vec, cy->cy.height);
 
 	cy->cy.top = (t_point_3d){cy->cy.center.x + vec1.x,
