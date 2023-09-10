@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/10 12:46:29 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/10 13:37:39 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,20 +35,6 @@ float	cy_calc_discriminant(t_scene *scene, t_ray ray, float *t, int i)
 		*t = (-b - sqrt(discriminant)) / (2.0f * a);
 	return (discriminant);
 }
-
-// bool	cy_hit_cap_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
-// {
-// 	if (t > EPSILON && t < rec->t)
-// 	{
-// 		rec->t = t;
-// 		rec->p = ray_at(ray, t);
-// 		rec->color = shape->color;
-// 		rec->shape = shape;
-// 		rec->normal = shape->rotation;
-// 		return (true);
-// 	}
-// 	return (false);
-// }
 
 bool	cy_hit_disk_record(double t, t_shape *shape,
 		t_hit_record *rec, t_ray ray)
@@ -94,28 +80,6 @@ bool	cy_hit_disk(t_shape *shape, t_ray ray, t_hit_record *rec)
 	return (hit_disk);
 }
 
-// bool	cy_hit_cap(t_shape *shape, t_ray ray, t_hit_record *rec)
-// {
-// 	t_shape			cap_top;
-// 	t_shape			cap_bot;
-// 	t_hit_record	to_plane;
-// 	double			radius;
-// 	t_point_3d		t;
-
-// 	to_plane = *rec;
-// 	cap_top.pl.pos = shape->cy.top;
-// 	cap_top.rotation = shape->rotation;
-// 	cap_bot.pl.pos = shape->cy.bot;
-// 	cap_bot.rotation = shape->cy.vec;
-// 	if (!pl_hit(&cap_top, ray, &to_plane) && !pl_hit(&cap_bot, ray, &to_plane))
-// 		return (false);
-// 	t = ray_at(ray, to_plane.t);
-// 	radius = vec3_len(vec3_sub(to_plane.shape->pl.pos, t));
-// 	if (!(radius <= shape->cy.diameter / 2))
-// 		return (false);
-// 	return (cy_hit_cap_record(to_plane.t, to_plane.shape, rec, ray));
-// }
-
 bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 {
 	t_vec3	hit_vec;
@@ -156,7 +120,8 @@ bool	cy_hit_body(t_shape *shape, t_ray ray, t_hit_record *rec)
 
 bool	cy_hit(t_shape *shape, t_ray ray, t_hit_record *rec)
 {
-	if (cy_hit_body(shape, ray, rec) || cy_hit_disk(shape, ray, rec))
+	if (cy_hit_body(shape, ray, rec)
+		|| cy_hit_disk(shape, ray, rec))
 		return (true);
 	return (false);
 }
@@ -181,60 +146,28 @@ void	cylinder_setup(t_shape *cy)
 	vec3_print(cy->cy.bot);
 }
 
-int	intersect_cap(t_shape cap, t_ray ray, float *t)
-{
-	const t_vector	p0 = cap.pl.pos;
-	const t_vector	n = cap.rotation;
-	const t_vector	l0 = ray.origin;
-	const t_vector	l = ray.direction;
-	float			denom;
-
-	denom = vec3_dot(n, l);
-	if (ft_dabs(denom) > EPSILON)
-	{
-		*t = vec3_dot(vec3_sub(p0, l0), n) / denom;
-		return (*t >= EPSILON);
-	}
-	return (0);
-}
-
 int	intersect_cylinder_cap(t_scene *scene, t_ray ray, float *t, int i)
 {
-	t_shape			cap_top;
-	t_shape			cap_bot;
-	double			radius;
-	float			tt;
-	bool			hit_any;
+	const double	t3 = vec3_dot(vec3_sub(scene->shape[i].cy.top, ray.origin),
+			scene->shape[i].cy.vec) / vec3_dot(ray.direction, \
+				scene->shape[i].cy.vec);
+	const double	t4 = vec3_dot(vec3_sub(scene->shape[i].cy.bot, ray.origin),
+			scene->shape[i].cy.vec) / vec3_dot(ray.direction, \
+				scene->shape[i].cy.vec);
+	const t_vec3	v3 = vec3_sub(ray_at(ray, t3), scene->shape[i].cy.top);
+	const t_vec3	v4 = vec3_sub(ray_at(ray, t4), scene->shape[i].cy.bot);
+	double			old_t;
 
-	hit_any = false;
-	cap_top.pl.pos = scene->shape[i].cy.top;
-	cap_top.rotation = scene->shape[i].rotation;
-	cap_bot.pl.pos = scene->shape[i].cy.bot;
-	cap_bot.rotation = scene->shape[i].cy.vec;
-	if (intersect_cap(cap_top, ray, &tt))
-	{
-		radius = vec3_len(vec3_sub(scene->shape[i].cy.top, ray_at(ray, tt)));
-		if (radius <= scene->shape[i].cy.diameter / 2)
-			hit_any = true;
-	}
-	if (intersect_cap(cap_bot, ray, &tt))
-	{
-		radius = vec3_len(vec3_sub(scene->shape[i].cy.bot, ray_at(ray, tt)));
-		if (!(radius <= scene->shape[i].cy.diameter / 2))
-			hit_any = true;
-	}
-	if (hit_any)
-		*t = tt;
-	return (hit_any);
+	old_t = *t;
+	if (vec3_dot(v3, v3) <= pow(scene->shape[i].cy.diameter / 2, 2)
+		&& t3 >= EPSILON && t3 < *t)
+		*t = t3;
+	if (vec3_dot(v4, v4) <= pow(scene->shape[i].cy.diameter / 2, 2)
+		&& t4 >= EPSILON && t4 < *t)
+		*t = t4;
+	return (*t != old_t);
 }
 
-/* Step 1: Transform the ray and cylinder to a local coordinate system
-You will need to apply a transformation matrix based on the cylinder's
-center and rotation. This transforms the ray and cylinder into a local
-space where the cylinder's axis aligns with the z-axis.
-Step 2: Solve for ray-cylinder intersection in local coordinates
-You can use the simplified cylinder equation (circular cross-section):
-(x^2 + y^2 - r^2) = 0, where r is the radius (diameter / 2). */
 int	intersect_cylinder(t_scene *scene, t_ray ray, float *t, int i)
 {
 	if (cy_calc_discriminant(scene, ray, t, i) < 0
