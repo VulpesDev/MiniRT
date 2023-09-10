@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:31:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 14:56:45 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/10 10:31:38 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	init_cylinder(t_scene *scene, t_shape *shape)
 	shape->intersect = intersect_cylinder;
 	shape->hit = cy_hit;
 	shape->color = convert_color(shape->trgb);
+	cylinder_setup(shape);
 	scene->shape[scene->shape_count] = *shape;
 }
 
