@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   populate_solid.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:31:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/10 15:40:17 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/10 16:02:36 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ void	init_cylinder(t_scene *scene, t_shape *shape)
 {
 	if (vec3_len_squared(shape->rotation) == 0)
 		shape->rotation = vec3(0, 1, 0);
+	shape->rotation = vec3_unit(shape->rotation);
 	shape->is_inside = cy_is_inside;
 	shape->intersect = intersect_cylinder;
 	shape->hit = cy_hit;
