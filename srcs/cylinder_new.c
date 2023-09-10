@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/10 01:26:47 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/10 12:48:14 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ void	cylinder_setup(t_shape *cy)
 	t_vec3	vec1;
 	t_vec3	vec2;
 
+	if (vec3_len_squared(cy->cy.rotation) == 0)
+		cy->cy.rotation = vec3(0, 1, 0);
 	cy->cy.rotation = vec3_unit(cy->cy.rotation);
 	cy->cy.vec = vec3_inv(cy->cy.rotation);
 	vec1 = vec3_mult(cy->cy.rotation, cy->cy.height / 2);
