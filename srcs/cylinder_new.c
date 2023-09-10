@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/10 10:33:02 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/10 11:59:09 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,41 +32,82 @@ float	cy_calc_discriminant(t_scene *scene, t_ray ray, float *t, int i)
 	return (discriminant);
 }
 
-bool	cy_hit_cap_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
+// bool	cy_hit_cap_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
+// {
+// 	if (t > EPSILON && t < rec->t)
+// 	{
+// 		rec->t = t;
+// 		rec->p = ray_at(ray, t);
+// 		rec->color = shape->color;
+// 		rec->shape = shape;
+// 		rec->normal = shape->rotation;
+// 		return (true);
+// 	}
+// 	return (false);
+// }
+
+bool	cy_hit_disk_record(double t, t_shape *shape,
+		t_hit_record *rec, t_ray ray)
 {
-	if (t > EPSILON && t < rec->t)
+	if (t >= EPSILON && t < rec->t)
 	{
 		rec->t = t;
+		rec->shape = shape;
 		rec->p = ray_at(ray, t);
 		rec->color = shape->color;
-		rec->shape = shape;
-		rec->normal = shape->rotation;
+		rec->trgb = shape->trgb;
 		return (true);
 	}
 	return (false);
 }
 
-bool	cy_hit_cap(t_shape *shape, t_ray ray, t_hit_record *rec)
+bool	cy_hit_disk(t_shape *shape, t_ray ray, t_hit_record *rec)
 {
-	t_shape			cap_top;
-	t_shape			cap_bot;
-	t_hit_record	to_plane;
-	double			radius;
-	t_point_3d		t;
+	const double	t3 = vec3_dot(vec3_sub(shape->cy.top, ray.origin),
+			shape->cy.vec) / vec3_dot(ray.direction, shape->cy.vec);
+	const double	t4 = vec3_dot(vec3_sub(shape->cy.bot, ray.origin),
+			shape->cy.vec) / vec3_dot(ray.direction, shape->cy.vec);
+	const t_vec3	v3 = vec3_sub(ray_at(ray, t3), shape->cy.top);
+	const t_vec3	v4 = vec3_sub(ray_at(ray, t4), shape->cy.bot);
+	bool			hit_disk;
 
-	to_plane = *rec;
-	cap_top.pl.pos = shape->cy.top;
-	cap_top.rotation = shape->rotation;
-	cap_bot.pl.pos = shape->cy.bot;
-	cap_bot.rotation = shape->cy.vec;
-	if (!pl_hit(&cap_top, ray, &to_plane) && !pl_hit(&cap_bot, ray, &to_plane))
-		return (false);
-	t = ray_at(ray, to_plane.t);
-	radius = vec3_len(vec3_sub(shape->cy.top, t));
-	if (!(radius <= shape->cy.diameter / 2))
-		return (false);
-	return (cy_hit_cap_record(to_plane.t, shape, rec, ray));
+	hit_disk = false;
+	if (vec3_dot(v3, v3) <= pow(shape->cy.diameter / 2, 2)
+		&& cy_hit_disk_record(t3, shape, rec, ray))
+	{
+		rec->normal = shape->rotation;
+		hit_disk = true;
+	}
+	if (vec3_dot(v4, v4) <= pow(shape->cy.diameter / 2, 2)
+		&& cy_hit_disk_record(t4, shape, rec, ray))
+	{
+		rec->normal = shape->cy.vec;
+		hit_disk = true;
+	}
+	return (hit_disk);
 }
+
+// bool	cy_hit_cap(t_shape *shape, t_ray ray, t_hit_record *rec)
+// {
+// 	t_shape			cap_top;
+// 	t_shape			cap_bot;
+// 	t_hit_record	to_plane;
+// 	double			radius;
+// 	t_point_3d		t;
+
+// 	to_plane = *rec;
+// 	cap_top.pl.pos = shape->cy.top;
+// 	cap_top.rotation = shape->rotation;
+// 	cap_bot.pl.pos = shape->cy.bot;
+// 	cap_bot.rotation = shape->cy.vec;
+// 	if (!pl_hit(&cap_top, ray, &to_plane) && !pl_hit(&cap_bot, ray, &to_plane))
+// 		return (false);
+// 	t = ray_at(ray, to_plane.t);
+// 	radius = vec3_len(vec3_sub(to_plane.shape->pl.pos, t));
+// 	if (!(radius <= shape->cy.diameter / 2))
+// 		return (false);
+// 	return (cy_hit_cap_record(to_plane.t, to_plane.shape, rec, ray));
+// }
 
 bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 {
@@ -79,7 +120,7 @@ bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 		rec->t = t;
 		rec->p = ray_at(ray, t);
 		rec->shape = shape;
-		rec->normal = vec3_unit(vec3_sub(rec->p, shape->cy.center));
+		rec->normal = vec3_unit(vec3_sub(shape->cy.center, rec->p));
 		rec->normal = vec3_cross(rec->normal, shape->rotation);
 		rec->color = shape->color;
 		return (true);
@@ -108,7 +149,7 @@ bool	cy_hit_body(t_shape *shape, t_ray ray, t_hit_record *rec)
 
 bool	cy_hit(t_shape *shape, t_ray ray, t_hit_record *rec)
 {
-	if (cy_hit_body(shape, ray, rec) || cy_hit_cap(shape, ray, rec))
+	if (cy_hit_body(shape, ray, rec) || cy_hit_disk(shape, ray, rec))
 		return (true);
 	return (false);
 }
@@ -154,20 +195,28 @@ int	intersect_cylinder_cap(t_scene *scene, t_ray ray, float *t, int i)
 	t_shape			cap_bot;
 	double			radius;
 	float			tt;
-	t_point_3d		hit;
+	bool			hit_any;
 
+	hit_any = false;
 	cap_top.pl.pos = scene->shape[i].cy.top;
 	cap_top.rotation = scene->shape[i].rotation;
 	cap_bot.pl.pos = scene->shape[i].cy.bot;
 	cap_bot.rotation = scene->shape[i].cy.vec;
-	if (!intersect_cap(cap_top, ray, &tt) && !intersect_cap(cap_bot, ray, &tt))
-		return (false);
-	hit = ray_at(ray, tt);
-	radius = vec3_len(vec3_sub(scene->shape[i].cy.top, hit));
-	if (!(radius <= scene->shape[i].cy.diameter / 2))
-		return (false);
-	*t = tt;
-	return (true);
+	if (intersect_cap(cap_top, ray, &tt))
+	{
+		radius = vec3_len(vec3_sub(scene->shape[i].cy.top, ray_at(ray, tt)));
+		if (radius <= scene->shape[i].cy.diameter / 2)
+			hit_any = true;
+	}
+	if (intersect_cap(cap_bot, ray, &tt))
+	{
+		radius = vec3_len(vec3_sub(scene->shape[i].cy.bot, ray_at(ray, tt)));
+		if (!(radius <= scene->shape[i].cy.diameter / 2))
+			hit_any = true;
+	}
+	if (hit_any)
+		*t = tt;
+	return (hit_any);
 }
 
 /* Step 1: Transform the ray and cylinder to a local coordinate system
