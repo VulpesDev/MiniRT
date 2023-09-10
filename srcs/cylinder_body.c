@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 14:32:49 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/10 14:55:11 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/10 16:34:32 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ bool	cy_hit_body(t_shape *shape, t_ray r, t_hit_record *rec)
 	if (discriminant < 0)
 		return (false);
 	calculate_t(tm[0], a, b, discriminant);
-	calculate_m(tm[1], tm[0], r.direction, shape->rotation,
+	calculate_m(tm, r.direction, shape->rotation,
 		vec3_sub(r.origin, shape->cy.center));
 	determine_t_m(tm[0], tm[1], shape->cy.height);
 	if (!tm[0] && !tm[1])
@@ -71,7 +71,7 @@ int	intersect_body(t_scene *scene, t_ray r, float *t, int i)
 	if (discriminant < 0)
 		return (false);
 	calculate_t(tm[0], a, b, discriminant);
-	calculate_m(tm[1], tm[0], r.direction, scene->shape[i].rotation,
+	calculate_m(tm, r.direction, scene->shape[i].rotation,
 		vec3_sub(r.origin, scene->shape[i].cy.center));
 	determine_t_m(tm[0], tm[1], scene->shape[i].cy.height);
 	if (!tm[0] && !tm[1])

@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 14:33:39 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/10 15:22:29 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/10 16:33:36 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 void	calculate_t(double t[], double a, double b, double discriminant);
 
-void	calculate_m(double m[], double t[], t_vec3 dir, t_vec3 rot, t_vec3 X);
+void	calculate_m(double tm[][3], t_vec3 dir, t_vec3 rot, t_vec3 X);
 
 void	determine_t_m(double t[], double m[], double height);
 
