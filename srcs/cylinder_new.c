@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/10 11:59:09 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/10 12:20:18 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 #include "vec3.h"
 #include "minirt.h"
 
+/**
+ * @brief Calculates the discriminant of the quadratic equation
+ * @param oc: vector from the center of the top cap to the ray origin
+*/
 float	cy_calc_discriminant(t_scene *scene, t_ray ray, float *t, int i)
 {
 	const t_vec3	oc = vec3_sub(ray.origin, scene->shape[i].cy.top);
@@ -61,6 +65,9 @@ bool	cy_hit_disk_record(double t, t_shape *shape,
 	return (false);
 }
 
+/**
+ * @brief Checks if the ray hits the top or bottom disk of the cylinder
+*/
 bool	cy_hit_disk(t_shape *shape, t_ray ray, t_hit_record *rec)
 {
 	const double	t3 = vec3_dot(vec3_sub(shape->cy.top, ray.origin),
