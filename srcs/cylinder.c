@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:18:37 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/10 15:23:49 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/10 15:39:52 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ void	determine_t_m(double t[], double m[], double height)
 
 int	intersect_cylinder(t_scene *scene, t_ray r, float *t, int i)
 {
-	if (vec3_len_squared(scene->shape[i].rotation) == 0)
-		scene->shape[i].rotation = vec3(0, 1, 0);
 	scene->shape[i].rotation = vec3_unit(scene->shape[i].rotation);
 	if (intersect_plane_cap(&scene->shape[i], r, t, true)
 		|| intersect_plane_cap(&scene->shape[i], r, t, false))
@@ -56,8 +54,6 @@ int	intersect_cylinder(t_scene *scene, t_ray r, float *t, int i)
 //limit the plane with the top_cap function
 bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 {
-	if (vec3_len_squared(shape->rotation) == 0)
-		shape->rotation = vec3(0, 1, 0);
 	shape->rotation = vec3_unit(shape->rotation);
 	if (hit_plane_cap(shape, r, rec, true)
 		|| hit_plane_cap(shape, r, rec, false))
