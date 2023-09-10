@@ -6,16 +6,36 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 14:56:18 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/10 14:57:46 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/10 15:25:00 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cylinder.h"
 
-bool	cy_hit_cap_record(double t, t_shape *shape,
-	t_hit_record *rec, t_ray ray)
+bool	intersect_cap(t_shape *shape, double t, t_ray ray, float *tt)
 {
-	if (t > 0.000001f && t < rec->t)
+	const t_vector	p0 = vec3_sum(shape->cy.center, \
+		vec3_mult(shape->rotation, shape->cy.height));
+	const t_vector	p = ray_at(ray, t);
+	const t_vector	v = vec3_sub(p, p0);
+
+	if (vec3_len(v) <= shape->cy.diameter / 2 && t > 0.000001f)
+	{
+		*tt = t;
+		return (true);
+	}
+	return (false);
+}
+
+bool	hit_cap(t_shape *shape, double t, t_ray ray, t_hit_record *rec)
+{
+	const t_vector	p0 = vec3_sum(shape->cy.center, \
+		vec3_mult(shape->rotation, shape->cy.height));
+	const t_vector	p = ray_at(ray, t);
+	const t_vector	v = vec3_sub(p, p0);
+
+	if (vec3_len(v) <= shape->cy.diameter / 2 &&
+		t > 0.000001f && t < rec->t)
 	{
 		rec->t = t;
 		rec->p = ray_at(ray, t);
@@ -27,18 +47,6 @@ bool	cy_hit_cap_record(double t, t_shape *shape,
 	return (false);
 }
 
-bool	cap(t_shape *shape, double t, t_ray ray, t_vector Ce, t_hit_record *rec)
-{
-	t_vector	v;
-	t_vector	p;
-
-	p = ray_at(ray, t);
-	v = vec3_sub(p, Ce);
-	if (vec3_len(v) <= shape->cy.diameter / 2)
-		return (cy_hit_cap_record(t, shape, rec, ray));
-	return (false);
-}
-
 /**
  * @brief Checks if the ray hits the top cap of the cylinder
  * @param p0: top cap center
@@ -47,29 +55,40 @@ bool	cap(t_shape *shape, double t, t_ray ray, t_vector Ce, t_hit_record *rec)
  * @param l: ray direction
  * @param p0l0: vector from ray origin to top cap center
 */
-bool	hit_plane_top(t_shape *shape, t_ray r, t_hit_record *rec)
+bool	hit_plane_cap(t_shape *shape, t_ray r, t_hit_record *rec, bool top)
 {
-	const t_vector	p0 = vec3_sum(shape->cy.center, \
-		vec3_mult(shape->rotation, shape->cy.height));
+	t_vector		p0;
 	const t_vector	n = vec3_inv(vec3_unit(shape->rotation));
 	const t_vector	l0 = r.origin;
 	const t_vector	l = vec3_unit(r.direction);
 	const float		denom = vec3_dot(n, l);
 
+	if (top)
+		p0 = vec3_sum(shape->cy.center, \
+			vec3_mult(shape->rotation, shape->cy.height));
+	else
+		p0 = shape->cy.center;
 	if (denom > 1e-6)
-		return (cap(shape, vec3_dot(vec3_sub(p0, l0), n) / denom, r, p0, rec));
+		return (hit_cap(shape, vec3_dot(vec3_sub(p0, l0), n) / denom,
+				r, rec));
 	return (false);
 }
 
-bool	hit_plane_bot(t_shape *shape, t_ray r, t_hit_record *rec)
+bool	intersect_plane_cap(t_shape *shape, t_ray r, float *t, bool top)
 {
-	const t_vector	p0 = shape->cy.center;
-	const t_vector	n = vec3_unit(shape->rotation);
+	t_vector		p0;
+	const t_vector	n = vec3_inv(vec3_unit(shape->rotation));
 	const t_vector	l0 = r.origin;
 	const t_vector	l = vec3_unit(r.direction);
 	const float		denom = vec3_dot(n, l);
 
+	if (top)
+		p0 = vec3_sum(shape->cy.center, \
+			vec3_mult(shape->rotation, shape->cy.height));
+	else
+		p0 = shape->cy.center;
 	if (denom > 1e-6)
-		return (cap(shape, vec3_dot(vec3_sub(p0, l0), n) / denom, r, p0, rec));
+		return (intersect_cap(shape,
+				vec3_dot(vec3_sub(p0, l0), n) / denom, r, t));
 	return (false);
 }

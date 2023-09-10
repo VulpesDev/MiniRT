@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:18:37 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/10 15:03:17 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/10 15:23:49 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,11 @@ int	intersect_cylinder(t_scene *scene, t_ray r, float *t, int i)
 	if (vec3_len_squared(scene->shape[i].rotation) == 0)
 		scene->shape[i].rotation = vec3(0, 1, 0);
 	scene->shape[i].rotation = vec3_unit(scene->shape[i].rotation);
-	//? For later add intersection functions for caps
-	// if (hit_plane_top(shape, r, rec) || hit_plane_bot(shape, r, rec))
-	// 	return (true);
-	// else
-	return (intersect_body(scene, r, t, i));
+	if (intersect_plane_cap(&scene->shape[i], r, t, true)
+		|| intersect_plane_cap(&scene->shape[i], r, t, false))
+		return (true);
+	else
+		return (intersect_body(scene, r, t, i));
 }
 
 //first check if it hits a plane
@@ -59,7 +59,8 @@ bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 	if (vec3_len_squared(shape->rotation) == 0)
 		shape->rotation = vec3(0, 1, 0);
 	shape->rotation = vec3_unit(shape->rotation);
-	if (hit_plane_top(shape, r, rec) || hit_plane_bot(shape, r, rec))
+	if (hit_plane_cap(shape, r, rec, true)
+		|| hit_plane_cap(shape, r, rec, false))
 		return (true);
 	else
 		return (cy_hit_body(shape, r, rec));
