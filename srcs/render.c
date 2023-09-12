@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 16:42:42 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/10 16:01:07 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ t_color	ray_color(t_scene *scene, t_ray r)
 	if (hit_element(scene, r, &rec))
 	{
 		light = light_coeff(scene, &rec);
-		if (light < 0 || light > 1)
+		if (light <= 0 || light >= 1)
 			printf("Light out of bound %f\n", light); // remember to remove
 		return (apply_light_to_color(rec.color, light));
 	}
