@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 15:45:15 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/12 16:13:28 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/12 16:15:24 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	cast_shadow(t_scene *scene, t_ray ray, t_hit_record *rec)
  * it by 2 to get a range of 1 and I do the same for the light
  * returned by the shadow to keep the proportion.
 */
-double	diffuse_shade(t_scene *scene, t_vector n, t_vector p)
+double	diffuse_shade(t_scene *scene, t_vector n, t_vector p, t_hit_record *rec)
 {
 	t_vector	l;
 	double		n_dot_l;
