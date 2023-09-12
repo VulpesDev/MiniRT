@@ -1,233 +1,103 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cylinder.c                                         :+:      :+:    :+:   */
+/*   cylinder_new.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/01 16:18:37 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/10 01:35:05 by tfregni          ###   ########.fr       */
+/*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
+/*   Updated: 2023/09/12 18:51:07 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "hittable.h"
+#include "vec3.h"
 #include "minirt.h"
 
-bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray, double m)
-{
-	if (t > 0.000001f && t < rec->t)
-	{
-		rec->t = t;
-		rec->p = ray_at(ray, t);
-		rec->normal = vec3_unit(vec3_sub(rec->p, vec3_sub(shape->cy.center, vec3_mult(shape->rotation, m))));
-		rec->color = shape->color;
-		return (true);
-	}
-	return (false);
-}
-
-bool	cy_hit_cap_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
-{
-	if (t > 0.000001f && t < rec->t)
-	{
-		rec->t = t;
-		rec->p = ray_at(ray, t);
-		rec->normal = vec3_unit(vec3_sub(rec->p, shape->cy.center));
-		rec->normal = vec3_cross(shape->rotation, rec->normal);
-		rec->color = shape->color;
-		return (true);
-	}
-	return (false);
-}
-
-//make so it only takes the first t
-bool	cap(t_shape *shape, double t, t_ray ray, t_vector Ce, t_hit_record *rec)
-{
-	t_vector v;
-	t_vector p;
-
-	p = ray_at(ray, t);
-	v = vec3_sub(p, Ce);
-	if (vec3_len(v) <= shape->cy.diameter / 2)
-		return (cy_hit_cap_record(t, shape, rec, ray));
-	return (false);
-}
-
 /**
- * @brief Checks if the ray hits the top cap of the cylinder
- * @param p0: top cap center
- * @param n: top cap normal
- * @param l0: ray origin
- * @param l: ray direction
- * @param p0l0: vector from ray origin to top cap center
+ * @brief Calculates the discriminant of the quadratic equation
+ * @param oc: vector from the center of the top cap to the ray origin
 */
-bool	hit_plane_top(t_shape *shape, t_ray r, t_hit_record *rec)
+double	cy_calc_discriminant(t_scene *scene, t_ray ray, double *t, int i)
 {
-	const t_vector	p0 = vec3_sum(shape->cy.center, \
-		vec3_mult(shape->rotation, shape->cy.height));
-	const t_vector	n = vec3_inv(vec3_unit(shape->rotation));
-	const t_vector	l0 = r.origin;
-	const t_vector	l = vec3_unit(r.direction);
-	const float		denom = vec3_dot(n, l);
+	const t_vec3	oc = vec3_sub(ray.origin, scene->shape[i].cy.top);
+	const double	a = vec3_dot(ray.direction, ray.direction)
+		- pow(vec3_dot(ray.direction, scene->shape[i].cy.vec), 2);
+	const double	b = 2 * (vec3_dot(ray.direction, oc)
+			- vec3_dot(ray.direction, scene->shape[i].cy.vec)
+			* vec3_dot(oc, scene->shape[i].cy.vec));
+	const double	c = vec3_dot(oc, oc) - pow(vec3_dot(oc,
+				scene->shape[i].cy.vec), 2)
+		- pow(scene->shape[i].cy.diameter / 2, 2);
+	const double	discriminant = b * b - (4.0f * a * c);
 
-	if (denom > 1e-6)
-	{
-		t_vector p0l0 = vec3_sub(p0, l0);
-		return (cap(shape, vec3_dot(p0l0, n) / denom, r, p0, rec));
-	}
-	return (false);
-}
-
-
-bool	hit_plane_bot(t_shape *shape, t_ray r, t_hit_record *rec)
-{
-	const t_vector	p0 = shape->cy.center;
-	const t_vector	n = vec3_unit(shape->rotation);
-	const t_vector	l0 = r.origin;
-	const t_vector	l = vec3_unit(r.direction);
-	const float		denom = vec3_dot(n, l);
-
-	if (denom > 1e-6)
-	{
-		t_vector p0l0 = vec3_sub(p0, l0);
-		return (cap(shape, vec3_dot(p0l0, n) / denom, r, p0, rec));
-	}
-	return (false);
-}
-
-
-
-//make so it only takes the first t
-bool	cap_inter(t_shape *shape, double t, t_ray ray, t_vector Ce, float *tt)
-{
-	t_vector	v;
-	t_vector	p;
-
-	p = ray_at(ray, t);
-	v = vec3_sub(p, Ce);
-	if (vec3_len(v) <= shape->cy.diameter / 2)
-	{
-		*tt = t;
-		return (true);
-	}
-	return (false);
-}
-
-bool	hit_plane_top_inter(t_shape *shape, t_ray r, float *t)
-{
-	t_vector p0 = vec3_sum(shape->cy.center, vec3_mult(shape->rotation, shape->cy.height));
-	t_vector n = vec3_inv(vec3_unit(shape->rotation));
-	t_vector l0 = r.origin;
-	t_vector l = vec3_unit(r.direction);
-	float denom = vec3_dot(n, l);
-	if (denom > 1e-6)
-	{
-		t_vector p0l0 = vec3_sub(p0, l0);
-		return (cap_inter(shape, vec3_dot(p0l0, n) / denom, r, p0, t));
-	}
-	return (false);
-}
-
-
-bool	hit_plane_bot_inter(t_shape *shape, t_ray r, float *t)
-{
-	t_vector p0 = shape->cy.center;
-	t_vector n = vec3_unit(shape->rotation);
-	t_vector l0 = r.origin;
-	t_vector l = vec3_unit(r.direction);
-	float denom = vec3_dot(n, l);
-	if (denom > 1e-6)
-	{
-		t_vector p0l0 = vec3_sub(p0, l0);
-		return (cap_inter(shape, vec3_dot(p0l0, n) / denom, r, p0, t));
-	}
-	return (false);
-}
-
-//! not really needed I think
-//* Edit * needed for the shadow casting
-//! Caps dont cast shadows
-int	intersect_cylinder(t_scene *scene, t_ray r, float *t, int i)
-{
-	double	a;
-	double	b;
-	double	c;
-	double discriminant;
-	double t1,t2, m1, m2;
-	t_hit_record rec;
-	t_vector	olddir;
-	t_vector	X;
-
-	*t = 0;
-	// rec = NULL;
-	rec.t = RAY_LEN;
-	scene->shape[i].rotation = vec3_unit(scene->shape[i].rotation);
-	// if (hit_plane_top_inter(&(scene->shape[i]), r, t) || hit_plane_bot_inter(&(scene->shape[i]), r, t))
-	// 	 ;
-	// 	//return (1);
-	olddir = r.direction;
-	r.direction = vec3_cross(r.direction, scene->shape[i].rotation);
-	X = vec3_sub(r.origin, scene->shape[i].cy.center);
-	a = vec3_dot(r.direction, r.direction);
-	b = 2 * vec3_dot(r.direction, vec3_cross(X, scene->shape[i].rotation));
-	c = vec3_dot(vec3_cross(X, scene->shape[i].rotation), vec3_cross(X, scene->shape[i].rotation)) - ((scene->shape[i].cy.diameter / 2) * (scene->shape[i].cy.diameter / 2));
-	//? maybe normalize the r direction first
-	discriminant = b * b - 4 * a * c;
-	t1 = (-b - sqrt(discriminant)) / (2.0 * a);
-	t2 = (-b + sqrt(discriminant)) / (2.0 * a);
-	m1 = vec3_dot(olddir, scene->shape[i].rotation) * t1 + vec3_dot(X, scene->shape[i].rotation);
-	m2 = vec3_dot(olddir, scene->shape[i].rotation) * t2 + vec3_dot(X, scene->shape[i].rotation);
-
-	if (t1 > 0 && m1 >= 0 && m1 <= scene->shape[i].cy.height)
-		*t = t1;
-	else if (t2 > 0 && m2 >= 0 && m2 <= scene->shape[i].cy.height)
-		*t = t2;
+	if (discriminant >= 0)
+		*t = (-b - sqrt(discriminant)) / (2.0f * a);
 	return (discriminant);
 }
 
-//first check if it hits a plane
-//limit the plane with the top_cap function
-bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec)
+bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 {
-	double	a;
-	double	b;
-	double	c;
-	double t1,t2,t, m1, m2, m;
-	double discriminant;
-	t_vector	olddir;
-	t_vector	X;
+	t_vec3	hit_vec;
 
-	t = m = 0;
-	if (vec3_len_squared(shape->rotation) == 0)
-		shape->rotation = vec3(0, 1, 0);
-	shape->rotation = vec3_unit(shape->rotation);
-	if (hit_plane_top(shape, r, rec) || hit_plane_bot(shape, r, rec))
+	hit_vec = vec3_sub(ray_at(ray, t), shape->cy.top);
+	if (t > EPSILON && t < rec->t && vec3_dot(hit_vec, shape->cy.vec) >= 0
+		&& (vec3_dot(hit_vec, shape->cy.vec) <= shape->cy.height))
+	{
+		rec->t = t;
+		rec->p = ray_at(ray, t);
+		rec->shape = shape;
+		rec->normal = vec3_unit(vec3_sub(shape->cy.center, rec->p));
+		rec->normal = vec3_cross(rec->normal, shape->cy.rotation);
+		rec->color = shape->color;
 		return (true);
-	olddir = r.direction;
-	r.direction = vec3_cross(r.direction, shape->rotation);
-	X = vec3_sub(r.origin, shape->cy.center);
-	a = vec3_dot(r.direction, r.direction);
-	b = 2 * vec3_dot(r.direction, vec3_cross(X, shape->rotation));
-	c = vec3_dot(vec3_cross(X, shape->rotation), vec3_cross(X, shape->rotation)) - ((shape->cy.diameter / 2) * (shape->cy.diameter / 2));
-	discriminant = b * b - 4 * a * c;
-	if (discriminant < 0)
-		return (false);
-	t1 = (-b - sqrt(discriminant)) / (2.0 * a);
-	t2 = (-b + sqrt(discriminant)) / (2.0 * a);
-	m1 = vec3_dot(olddir, shape->rotation) * t1 + vec3_dot(X, shape->rotation);
-	m2 = vec3_dot(olddir, shape->rotation) * t2 + vec3_dot(X, shape->rotation);
-
-	if (t1 > 0 && m1 >= 0 && m1 <= shape->cy.height)
-	{
-		t = t1;
-		m = m1;
 	}
-	else if (t2 > 0 && m2 >= 0 && m2 <= shape->cy.height)
-	{
-		t = t2;
-		m = m2;
-	}
-	else
-		return (false);
-	return (cy_hit_record(t, shape, rec, r, m));
+	return (false);
 }
 
+bool	cy_hit_body(t_shape *shape, t_ray ray, t_hit_record *rec)
+{
+	const t_vec3	oc = vec3_sub(ray.origin, shape->cy.top);
+	const double	a = vec3_dot(ray.direction, ray.direction)
+		- pow(vec3_dot(ray.direction, shape->cy.vec), 2);
+	const double	b = 2 * (vec3_dot(ray.direction, oc)
+			- vec3_dot(ray.direction, shape->cy.vec)
+			* vec3_dot(oc, shape->cy.vec));
+	const double	c = vec3_dot(oc, oc) - pow(vec3_dot(oc,
+				shape->cy.vec), 2)
+		- pow(shape->cy.diameter / 2, 2);
+	const double	discriminant = b * b - (4.0f * a * c);
+
+	if (discriminant < 0)
+		return (false);
+	return (cy_hit_record((-b - sqrt(discriminant)) / (2.0f * a), shape, rec,
+			ray));
+}
+
+bool	cy_hit(t_shape *shape, t_ray ray, t_hit_record *rec)
+{
+	if (cy_hit_body(shape, ray, rec)
+		|| cy_hit_disk(shape, ray, rec))
+		return (true);
+	return (false);
+}
+
+void	cylinder_setup(t_shape *cy)
+{
+	t_vec3	vec1;
+	t_vec3	vec2;
+
+	if (vec3_len_squared(cy->cy.rotation) == 0)
+		cy->cy.rotation = vec3(0, 1, 0);
+	cy->cy.rotation = vec3_unit(cy->cy.rotation);
+	cy->cy.vec = vec3_inv(cy->cy.rotation);
+	vec1 = vec3_mult(cy->cy.rotation, cy->cy.height / 2);
+	vec2 = vec3_mult(cy->cy.vec, cy->cy.height);
+
+	cy->cy.top = vec3_sum(cy->cy.center, vec1);
+	cy->cy.bot = vec3_sum(cy->cy.top, vec2);
+	printf("cyl_top: ");
+	vec3_print(cy->cy.top);
+	printf("cyl_bot: ");
+	vec3_print(cy->cy.bot);
+}

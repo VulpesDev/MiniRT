@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 17:26:52 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/12 16:27:27 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/12 18:52:46 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,10 @@ bool	pl_is_inside(t_shape *s, t_point_3d cam);
 /* CYLINDER */
 void	cylinder_setup(t_shape *cy);
 bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec);
+bool	cy_hit_disk(t_shape *shape, t_ray ray, t_hit_record *rec);
 bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray);
+bool	cy_hit_disk_record(double t, t_shape *shape,
+			t_hit_record *rec, t_ray ray);
 bool	cy_is_inside(t_shape *s, t_point_3d cam);
 
 #endif
