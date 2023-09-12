@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 15:45:15 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/12 16:15:24 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/12 18:48:22 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	cast_shadow(t_scene *scene, t_ray ray, t_hit_record *rec)
 {
 	int		i;
-	// float	t;
 	t_color	color;
 
 	i = scene->shape_count - 1;
@@ -24,10 +23,10 @@ int	cast_shadow(t_scene *scene, t_ray ray, t_hit_record *rec)
 		color = rec->color;
 		if (scene->shape[i].hit(&scene->shape[i], ray, rec)
 			&& rec->t > EPSILON && rec->t < RAY_LEN)
-			{
-				rec->color = color;
-				return (1);
-			}
+		{
+			rec->color = color;
+			return (1);
+		}
 		i--;
 	}
 	return (0);
@@ -64,7 +63,7 @@ double	diffuse_shade(t_scene *scene, t_vector n, t_vector p, t_hit_record *rec)
 	l = vec3_unit(l);
 	n_dot_l = vec3_dot(n, l);
 	diff_shade = n_dot_l / 2 + 0.5f;
-	if (cast_shadow(scene, (t_ray){p, l}, rec))
+	if (cast_shadow(scene, (t_ray){p, l}, rec) && len_l > rec->t)
 		return (diff_shade / 2);
 	light = ((1 + scene->light.brightness) * diff_shade) / 2;
 	return (light);
