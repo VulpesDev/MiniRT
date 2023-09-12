@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:31:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/12 14:17:54 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/12 16:24:23 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 void	init_sphere(t_scene *scene, t_shape *shape)
 {
-	// shape->intersect = intersect_sphere;
 	shape->hit = sp_hit;
 	shape->normal = sp_normal;
 	shape->color = convert_color(shape->trgb);
@@ -59,12 +58,11 @@ int	validate_plane(t_scene *scene, char **el)
 		return (ft_warning("Plane expects 3 parameters", \
 				NULL, INVALID_ELEMENT));
 	if (extract_xyz(el[1], &shape.pl.pos)
-		|| extract_xyz(el[2], &shape.rotation)
-		|| !validate_3d_range((t_point_3d)shape.rotation, -1.0, 1.0)
+		|| extract_xyz(el[2], &shape.pl.rotation)
+		|| !validate_3d_range((t_point_3d)shape.pl.rotation, -1.0, 1.0)
 		|| extract_rgb(el[3], &shape.trgb))
 		return (ft_warning("invalid argument: ", el[2], \
 					INVALID_ELEMENT));
-	// shape.intersect = intersect_plane;
 	shape.hit = pl_hit;
 	shape.normal = pl_normal;
 	shape.is_inside = pl_is_inside;
@@ -76,7 +74,6 @@ int	validate_plane(t_scene *scene, char **el)
 void	init_cylinder(t_scene *scene, t_shape *shape)
 {
 	shape->is_inside = cy_is_inside;
-	// shape->intersect = intersect_cylinder;
 	shape->hit = cy_hit;
 	shape->color = convert_color(shape->trgb);
 	cylinder_setup(shape);
@@ -94,8 +91,8 @@ int	validate_cylinder(t_scene *scene, char **el)
 		return (ft_warning("Cylinder expects 5 parameters", \
 				NULL, INVALID_ELEMENT));
 	if (extract_xyz(el[1], &shape.cy.center)
-		|| extract_xyz(el[2], &shape.rotation)
-		|| !validate_3d_range(shape.rotation, -1.0, 1.0)
+		|| extract_xyz(el[2], &shape.cy.rotation)
+		|| !validate_3d_range(shape.cy.rotation, -1.0, 1.0)
 		|| extract_rgb(el[5], &shape.trgb))
 		return (ft_warning("invalid argument", el[2], \
 					INVALID_ELEMENT));

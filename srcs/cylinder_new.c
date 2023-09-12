@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/12 16:20:50 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/12 16:25:45 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ bool	cy_hit_disk(t_shape *shape, t_ray ray, t_hit_record *rec)
 	if (vec3_dot(v3, v3) <= pow(shape->cy.diameter / 2, 2)
 		&& cy_hit_disk_record(t3, shape, rec, ray))
 	{
-		rec->normal = shape->rotation;
+		rec->normal = shape->cy.rotation;
 		hit_disk = true;
 	}
 	if (vec3_dot(v4, v4) <= pow(shape->cy.diameter / 2, 2)
@@ -92,7 +92,7 @@ bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 		rec->p = ray_at(ray, t);
 		rec->shape = shape;
 		rec->normal = vec3_unit(vec3_sub(shape->cy.center, rec->p));
-		rec->normal = vec3_cross(rec->normal, shape->rotation);
+		rec->normal = vec3_cross(rec->normal, shape->cy.rotation);
 		rec->color = shape->color;
 		return (true);
 	}
@@ -131,11 +131,11 @@ void	cylinder_setup(t_shape *cy)
 	t_vec3	vec1;
 	t_vec3	vec2;
 
-	if (vec3_len_squared(cy->rotation) == 0)
-		cy->rotation = vec3(0, 1, 0);
-	cy->rotation = vec3_unit(cy->rotation);
-	cy->cy.vec = vec3_inv(cy->rotation);
-	vec1 = vec3_mult(cy->rotation, cy->cy.height / 2);
+	if (vec3_len_squared(cy->cy.rotation) == 0)
+		cy->cy.rotation = vec3(0, 1, 0);
+	cy->cy.rotation = vec3_unit(cy->cy.rotation);
+	cy->cy.vec = vec3_inv(cy->cy.rotation);
+	vec1 = vec3_mult(cy->cy.rotation, cy->cy.height / 2);
 	vec2 = vec3_mult(cy->cy.vec, cy->cy.height);
 
 	cy->cy.top = vec3_sum(cy->cy.center, vec1);

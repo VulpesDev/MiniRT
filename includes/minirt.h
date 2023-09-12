@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/12 16:14:50 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/12 16:27:09 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,8 @@ int		intersect_element(t_scene *scene, t_ray ray, int *color, float *min_t);
 
 /* SHADE */
 double	light_coeff(t_scene *scene, t_hit_record *hit);
-double	diffuse_shade(t_scene *scene, t_vector n, t_vector p, t_hit_record *rec);
+double	diffuse_shade(t_scene *scene, t_vector n, t_vector p, \
+	t_hit_record *rec);
 int		cast_shadow(t_scene *scene, t_ray ray, t_hit_record *rec);
 
 /* ERROR HANDLING*/

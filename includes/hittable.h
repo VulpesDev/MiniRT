@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 17:26:52 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/12 16:22:01 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/12 16:27:27 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ typedef struct s_shape
 		t_plane		pl;
 		t_cylinder	cy;
 	};
-	t_vector		rotation;
 	t_hit			hit;
 	t_normal		normal;
 	t_inside		is_inside;
