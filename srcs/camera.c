@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:54:25 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 12:13:56 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/12 12:08:27 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,21 @@ double	radians(double grades)
 	return (grades * M_PI / 180);
 }
 
+/**
+ * @explanation:
+ * - making sure that the orientation vector is not 0
+ * - normalize orientation
+ * - translate the orientation to the position of the camera
+ * - the look_at vector is from the position to the translated orientation
+ * - calculate right and up vectors
+*/
 void	cam_orientation(t_camera *c)
 {
 	if (vec3_len_squared(c->orientation) == 0)
 		c->orientation = vec3(0, 0, -1);
-	c->look_at = vec3_unit(c->orientation);
+	c->orientation = vec3_unit(c->orientation);
+	c->look_at = vec3_sum(c->pos, c->orientation);
+	c->look_at = vec3_sub(c->look_at, c->pos);
 	c->right = vec3_unit(vec3_cross(c->look_at, c->vert_up));
 	c->up = vec3_unit(vec3_cross(c->right, c->look_at));
 }
