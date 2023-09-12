@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 14:22:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/12 16:04:14 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/12 16:21:33 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,6 @@ double	sp_calc_discriminant(t_scene *scene, t_ray ray, \
 	if (discriminant >= 0)
 		*t = (-b - sqrt(discriminant)) / (2.0f * a);
 	return (discriminant);
-}
-
-/**
- * @returns 1 if the ray hits the sphere, 0 otherwise
-*/
-int	intersect_sphere(t_scene *scene, t_ray ray, double *t, int i)
-{
-	if (sp_calc_discriminant(scene, ray, t, i) < 0)
-		return (0);
-	return (1);
 }
 
 /**

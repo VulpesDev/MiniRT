@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 17:26:52 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/12 16:12:51 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/12 16:22:01 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ typedef struct s_shape
 		t_cylinder	cy;
 	};
 	t_vector		rotation;
-	// t_hit_func		intersect;
 	t_hit			hit;
 	t_normal		normal;
 	t_inside		is_inside;
@@ -81,23 +80,19 @@ typedef struct s_hit_record
 t_shape	*check_inside(t_scene *s);
 
 /* SPHERE */
-int		intersect_sphere(t_scene *scene, t_ray ray, double *t, int i);
 double	sp_calc_discriminant(t_scene *scene, t_ray ray, \
 							double *t, int i);
-// float	sp_calc_hit_point(float discriminant, float a, float b);
 bool	sp_hit(t_shape *shape, t_ray r, t_hit_record *rec);
 t_vec3	sp_normal(t_shape *sp, t_point3 hit);
 bool	sp_is_inside(t_shape *s, t_point_3d cam);
 
 /* PLANE */
-int		intersect_plane(t_scene *scene, t_ray ray, double *t, int i);
 bool	pl_hit(t_shape *shape, t_ray r, t_hit_record *rec);
 t_vec3	pl_normal(t_shape *pl, t_point3 hit);
 bool	pl_is_inside(t_shape *s, t_point_3d cam);
 
 /* CYLINDER */
 void	cylinder_setup(t_shape *cy);
-int		intersect_cylinder(t_scene *scene, t_ray ray, double *t, int i);
 bool	cy_hit(t_shape *shape, t_ray r, t_hit_record *rec);
 bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray);
 bool	cy_is_inside(t_shape *s, t_point_3d cam);

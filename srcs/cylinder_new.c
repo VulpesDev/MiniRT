@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/12 16:01:37 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/12 16:20:50 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,15 +102,15 @@ bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 bool	cy_hit_body(t_shape *shape, t_ray ray, t_hit_record *rec)
 {
 	const t_vec3	oc = vec3_sub(ray.origin, shape->cy.top);
-	const double		a = vec3_dot(ray.direction, ray.direction)
+	const double	a = vec3_dot(ray.direction, ray.direction)
 		- pow(vec3_dot(ray.direction, shape->cy.vec), 2);
-	const double		b = 2 * (vec3_dot(ray.direction, oc)
+	const double	b = 2 * (vec3_dot(ray.direction, oc)
 			- vec3_dot(ray.direction, shape->cy.vec)
 			* vec3_dot(oc, shape->cy.vec));
-	const double		c = vec3_dot(oc, oc) - pow(vec3_dot(oc,
+	const double	c = vec3_dot(oc, oc) - pow(vec3_dot(oc,
 				shape->cy.vec), 2)
 		- pow(shape->cy.diameter / 2, 2);
-	const double		discriminant = b * b - (4.0f * a * c);
+	const double	discriminant = b * b - (4.0f * a * c);
 
 	if (discriminant < 0)
 		return (false);
@@ -144,45 +144,4 @@ void	cylinder_setup(t_shape *cy)
 	vec3_print(cy->cy.top);
 	printf("cyl_bot: ");
 	vec3_print(cy->cy.bot);
-}
-
-int	intersect_cylinder_cap(t_scene *scene, t_ray ray, double *t, int i)
-{
-	const double	t3 = vec3_dot(vec3_sub(scene->shape[i].cy.top, ray.origin),
-			scene->shape[i].cy.vec) / vec3_dot(ray.direction, \
-				scene->shape[i].cy.vec);
-	const double	t4 = vec3_dot(vec3_sub(scene->shape[i].cy.bot, ray.origin),
-			scene->shape[i].cy.vec) / vec3_dot(ray.direction, \
-				scene->shape[i].cy.vec);
-	const t_vec3	v3 = vec3_sub(ray_at(ray, t3), scene->shape[i].cy.top);
-	const t_vec3	v4 = vec3_sub(ray_at(ray, t4), scene->shape[i].cy.bot);
-	double			old_t;
-
-	old_t = *t;
-	if (vec3_dot(v3, v3) <= pow(scene->shape[i].cy.diameter / 2, 2)
-		&& t3 >= EPSILON && t3 < *t)
-		*t = t3;
-	if (vec3_dot(v4, v4) <= pow(scene->shape[i].cy.diameter / 2, 2)
-		&& t4 >= EPSILON && t4 < *t)
-		*t = t4;
-	return (*t != old_t);
-}
-
-int	intersect_cylinder(t_scene *scene, t_ray ray, double *t, int i)
-{
-	int		hit;
-	t_vec3	hit_vec;
-
-	hit = 0;
-	hit_vec = vec3_sub(ray_at(ray, *t), scene->shape[i].cy.top);
-	if (cy_calc_discriminant(scene, ray, t, i) >= EPSILON)
-	{
-		if (vec3_dot(hit_vec, scene->shape[i].cy.vec) >= 0
-			&& (vec3_dot(hit_vec, scene->shape[i].cy.vec)
-				<= scene->shape[i].cy.height))
-			hit = 1;
-	}
-	if (intersect_cylinder_cap(scene, ray, t, i))
-		hit = 1;
-	return (hit);
 }
