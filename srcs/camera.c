@@ -6,12 +6,13 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:54:25 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/12 19:54:02 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/12 20:23:18 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "camera.h"
 #include "ray.h"
+#include "minirt.h"
 #include <stdio.h>
 
 double	radians(double grades)
@@ -35,8 +36,14 @@ void	cam_orientation(t_camera *c)
 	// c->look_at = vec3_sum(c->pos, c->orientation);
 	// c->look_at = vec3_sub(c->look_at, c->pos);
 	c->look_at = vec3_unit(vec3_sub(c->orientation, c->pos));
-	c->right = vec3_unit(vec3_cross(c->look_at, c->vert_up));
+	c->right = vec3_cross(c->look_at, c->vert_up);
+	if (vec3_len_squared(c->right) < EPSILON)
+		c->right = vec3_cross(c->look_at, vec3(1, 0, 0));
+	c->right = vec3_unit(c->right);
 	c->up = vec3_unit(vec3_cross(c->right, c->look_at));
+	vec3_print(c->look_at);
+	vec3_print(c->right);
+	vec3_print(c->up);
 }
 
 void	cam_setup(t_camera *c)
