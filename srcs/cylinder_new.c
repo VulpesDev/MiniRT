@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/12 13:22:16 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/12 14:14:18 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,17 @@
 float	cy_calc_discriminant(t_scene *scene, t_ray ray, float *t, int i)
 {
 	const t_vec3	oc = vec3_sub(ray.origin, scene->shape[i].cy.top);
-	const float		a = vec3_dot(ray.direction, ray.direction)
+	const double	a = vec3_dot(ray.direction, ray.direction)
 		- pow(vec3_dot(ray.direction, scene->shape[i].cy.vec), 2);
-	const float		b = 2 * (vec3_dot(ray.direction, oc)
+	const double	b = 2 * (vec3_dot(ray.direction, oc)
 			- vec3_dot(ray.direction, scene->shape[i].cy.vec)
 			* vec3_dot(oc, scene->shape[i].cy.vec));
-	const float		c = vec3_dot(oc, oc) - pow(vec3_dot(oc,
+	const double	c = vec3_dot(oc, oc) - pow(vec3_dot(oc,
 				scene->shape[i].cy.vec), 2)
 		- pow(scene->shape[i].cy.diameter / 2, 2);
-	const float		discriminant = b * b - (4.0f * a * c);
+	const double	discriminant = b * b - (4.0f * a * c);
 
-	if (discriminant >= 0)
+	if (discriminant >= EPSILON)
 		*t = (-b - sqrt(discriminant)) / (2.0f * a);
 	return (discriminant);
 }
@@ -170,8 +170,19 @@ int	intersect_cylinder_cap(t_scene *scene, t_ray ray, float *t, int i)
 
 int	intersect_cylinder(t_scene *scene, t_ray ray, float *t, int i)
 {
-	if (cy_calc_discriminant(scene, ray, t, i) < 0
-		&& !intersect_cylinder_cap(scene, ray, t, i))
-		return (0);
-	return (1);
+	int		hit;
+	t_vec3	hit_vec;
+
+	hit = 0;
+	hit_vec = vec3_sub(ray_at(ray, *t), scene->shape[i].cy.top);
+	if (cy_calc_discriminant(scene, ray, t, i) >= EPSILON)
+	{
+		if (vec3_dot(hit_vec, scene->shape[i].cy.vec) >= 0
+			&& (vec3_dot(hit_vec, scene->shape[i].cy.vec)
+				<= scene->shape[i].cy.height))
+			hit = 1;
+	}
+	if (intersect_cylinder_cap(scene, ray, t, i))
+		hit = 1;
+	return (hit);
 }
