@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/12 14:14:18 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/12 16:01:37 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
  * @brief Calculates the discriminant of the quadratic equation
  * @param oc: vector from the center of the top cap to the ray origin
 */
-float	cy_calc_discriminant(t_scene *scene, t_ray ray, float *t, int i)
+double	cy_calc_discriminant(t_scene *scene, t_ray ray, double *t, int i)
 {
 	const t_vec3	oc = vec3_sub(ray.origin, scene->shape[i].cy.top);
 	const double	a = vec3_dot(ray.direction, ray.direction)
@@ -102,15 +102,15 @@ bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 bool	cy_hit_body(t_shape *shape, t_ray ray, t_hit_record *rec)
 {
 	const t_vec3	oc = vec3_sub(ray.origin, shape->cy.top);
-	const float		a = vec3_dot(ray.direction, ray.direction)
+	const double		a = vec3_dot(ray.direction, ray.direction)
 		- pow(vec3_dot(ray.direction, shape->cy.vec), 2);
-	const float		b = 2 * (vec3_dot(ray.direction, oc)
+	const double		b = 2 * (vec3_dot(ray.direction, oc)
 			- vec3_dot(ray.direction, shape->cy.vec)
 			* vec3_dot(oc, shape->cy.vec));
-	const float		c = vec3_dot(oc, oc) - pow(vec3_dot(oc,
+	const double		c = vec3_dot(oc, oc) - pow(vec3_dot(oc,
 				shape->cy.vec), 2)
 		- pow(shape->cy.diameter / 2, 2);
-	const float		discriminant = b * b - (4.0f * a * c);
+	const double		discriminant = b * b - (4.0f * a * c);
 
 	if (discriminant < 0)
 		return (false);
@@ -146,7 +146,7 @@ void	cylinder_setup(t_shape *cy)
 	vec3_print(cy->cy.bot);
 }
 
-int	intersect_cylinder_cap(t_scene *scene, t_ray ray, float *t, int i)
+int	intersect_cylinder_cap(t_scene *scene, t_ray ray, double *t, int i)
 {
 	const double	t3 = vec3_dot(vec3_sub(scene->shape[i].cy.top, ray.origin),
 			scene->shape[i].cy.vec) / vec3_dot(ray.direction, \
@@ -168,7 +168,7 @@ int	intersect_cylinder_cap(t_scene *scene, t_ray ray, float *t, int i)
 	return (*t != old_t);
 }
 
-int	intersect_cylinder(t_scene *scene, t_ray ray, float *t, int i)
+int	intersect_cylinder(t_scene *scene, t_ray ray, double *t, int i)
 {
 	int		hit;
 	t_vec3	hit_vec;

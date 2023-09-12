@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 23:25:30 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/10 10:43:16 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/12 15:59:37 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 
 /*returns 0 or not depending if the ray hits the plane
 !!! important !!! pass in normalized vectors*/
-int	intersect_plane(t_scene *scene, t_ray ray, float *t, int i)
+int	intersect_plane(t_scene *scene, t_ray ray, double *t, int i)
 {
 	const t_vector	p0 = scene->shape[i].pl.pos;
-	const t_vector	n = scene->shape[i].pl.rotation;
+	const t_vector	n = scene->shape[i].rotation;
 	const t_vector	l0 = ray.origin;
 	const t_vector	l = ray.direction;
-	float			denom;
+	double			denom;
 
 	denom = vec3_dot(n, l);
 	if (denom > EPSILON)
@@ -71,13 +71,13 @@ double	ft_abs_double(double n)
 bool	pl_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 {
 	t_vector		n;
-	float			denom;
+	double			denom;
 	const t_vector	p0 = shape->pl.pos;
 	const t_vector	l0 = r.origin;
 	const t_vector	l = vec3_unit(r.direction);
 
 	if (vec3_len_squared(shape->rotation) == 0)
-		n = vec3(0, 0, -1);
+		n = vec3(0, 1, 0);
 	else
 		n = vec3_unit(shape->rotation);
 	denom = vec3_dot(n, l);
