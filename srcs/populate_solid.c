@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:31:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/10 13:18:46 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/12 14:17:54 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 void	init_sphere(t_scene *scene, t_shape *shape)
 {
-	shape->intersect = intersect_sphere;
+	// shape->intersect = intersect_sphere;
 	shape->hit = sp_hit;
 	shape->normal = sp_normal;
 	shape->color = convert_color(shape->trgb);
@@ -64,7 +64,7 @@ int	validate_plane(t_scene *scene, char **el)
 		|| extract_rgb(el[3], &shape.trgb))
 		return (ft_warning("invalid argument: ", el[2], \
 					INVALID_ELEMENT));
-	shape.intersect = intersect_plane;
+	// shape.intersect = intersect_plane;
 	shape.hit = pl_hit;
 	shape.normal = pl_normal;
 	shape.is_inside = pl_is_inside;
@@ -76,7 +76,7 @@ int	validate_plane(t_scene *scene, char **el)
 void	init_cylinder(t_scene *scene, t_shape *shape)
 {
 	shape->is_inside = cy_is_inside;
-	shape->intersect = intersect_cylinder;
+	// shape->intersect = intersect_cylinder;
 	shape->hit = cy_hit;
 	shape->color = convert_color(shape->trgb);
 	cylinder_setup(shape);

@@ -6,23 +6,28 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 15:45:15 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 16:38:37 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/12 14:25:28 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int	cast_shadow(t_scene *scene, t_ray ray)
+int	cast_shadow(t_scene *scene, t_ray ray, t_hit_record *rec)
 {
 	int		i;
-	float	t;
+	// float	t;
+	t_color	color;
 
 	i = scene->shape_count - 1;
 	while (i >= 0)
 	{
-		if (scene->shape[i].intersect(scene, ray, &t, i)
-			&& t > EPSILON && t < RAY_LEN)
-			return (1);
+		color = rec->color;
+		if (scene->shape[i].hit(&scene->shape[i], ray, rec)
+			&& rec->t > EPSILON && rec->t < RAY_LEN)
+			{
+				rec->color = color;
+				return (1);
+			}
 		i--;
 	}
 	return (0);
@@ -46,7 +51,7 @@ int	cast_shadow(t_scene *scene, t_ray ray)
  * it by 2 to get a range of 1 and I do the same for the light
  * returned by the shadow to keep the proportion.
 */
-float	diffuse_shade(t_scene *scene, t_vector n, t_vector p)
+float	diffuse_shade(t_scene *scene, t_vector n, t_vector p, t_hit_record *rec)
 {
 	t_vector	l;
 	float		n_dot_l;
@@ -59,7 +64,7 @@ float	diffuse_shade(t_scene *scene, t_vector n, t_vector p)
 	l = vec3_unit(l);
 	n_dot_l = vec3_dot(n, l);
 	diff_shade = n_dot_l / 2 + 0.5f;
-	if (cast_shadow(scene, (t_ray){p, l}))
+	if (cast_shadow(scene, (t_ray){p, l}, rec))
 		return (diff_shade / 2);
 	light = ((1 + scene->light.brightness) * diff_shade) / 2;
 	return (light);
@@ -76,5 +81,5 @@ float	light_coeff(t_scene *scene, t_hit_record *hit)
 
 	hit_pos = hit->p;
 	normal = hit->normal;
-	return (diffuse_shade(scene, normal, hit_pos));
+	return (diffuse_shade(scene, normal, hit_pos, hit));
 }
