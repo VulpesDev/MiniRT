@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 14:22:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 15:14:30 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/12 16:04:14 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@
  * It returns the discriminant. If it's >=0 it assigns to t the value of
  * the closest hit point
 */
-float	sp_calc_discriminant(t_scene *scene, t_ray ray, \
-							float *t, int i)
+double	sp_calc_discriminant(t_scene *scene, t_ray ray, \
+							double *t, int i)
 {
-	float			a;
-	float			b;
-	float			c;
+	double			a;
+	double			b;
+	double			c;
 	t_point_3d		transl;
-	float			discriminant;
+	double			discriminant;
 
 	a = vec3_dot(ray.direction, ray.direction);
 	transl = vec3_sub(ray.origin, scene->shape[i].sp.pos);
@@ -39,7 +39,7 @@ float	sp_calc_discriminant(t_scene *scene, t_ray ray, \
 /**
  * @returns 1 if the ray hits the sphere, 0 otherwise
 */
-int	intersect_sphere(t_scene *scene, t_ray ray, float *t, int i)
+int	intersect_sphere(t_scene *scene, t_ray ray, double *t, int i)
 {
 	if (sp_calc_discriminant(scene, ray, t, i) < 0)
 		return (0);
