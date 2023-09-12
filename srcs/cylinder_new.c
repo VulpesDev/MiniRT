@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/10 13:37:39 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/12 13:22:16 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ float	cy_calc_discriminant(t_scene *scene, t_ray ray, float *t, int i)
 			* vec3_dot(oc, scene->shape[i].cy.vec));
 	const float		c = vec3_dot(oc, oc) - pow(vec3_dot(oc,
 				scene->shape[i].cy.vec), 2)
-		- pow(scene->shape[i].cy.height / 2, 2);
+		- pow(scene->shape[i].cy.diameter / 2, 2);
 	const float		discriminant = b * b - (4.0f * a * c);
 
 	if (discriminant >= 0)
@@ -109,7 +109,7 @@ bool	cy_hit_body(t_shape *shape, t_ray ray, t_hit_record *rec)
 			* vec3_dot(oc, shape->cy.vec));
 	const float		c = vec3_dot(oc, oc) - pow(vec3_dot(oc,
 				shape->cy.vec), 2)
-		- pow(shape->cy.height / 2, 2);
+		- pow(shape->cy.diameter / 2, 2);
 	const float		discriminant = b * b - (4.0f * a * c);
 
 	if (discriminant < 0)
