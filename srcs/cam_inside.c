@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cam_inside.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 15:14:07 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/10 15:35:38 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/12 18:58:20 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,17 @@ bool	pl_is_inside(t_shape *s, t_point_3d cam)
 
 bool	cy_is_inside(t_shape *s, t_point_3d cam)
 {
-	const t_vec3 perpen_vec = vec3_cross(s->rotation, vec3_sub(s->cy.center, cam));
-	const float perpen_len = vec3_len(perpen_vec);
-	const float denom = vec3_dot(s->rotation, s->rotation);
-	float height = 0.0;
+	const t_vec3		perpen_vec = vec3_cross(s->rotation, \
+		vec3_sub(s->cy.center, cam));
+	const double		perpen_len = vec3_len(perpen_vec);
+	const double		denom = vec3_dot(s->rotation, s->rotation);
+	double				height;
 
+	height = 0.0;
 	if (denom > EPSILON)
-		height = vec3_dot(vec3_sub(cam, s->cy.center), s->rotation) / denom;	
-	
-	//?Debug
-	// printf("rotation: (%f, %f, %f)\n", s->rotation.x, s->rotation.y, s->rotation.z);
-	// printf("sub: (%f, %f, %f)\n", vec3_sub(s->cy.center, cam).x, vec3_sub(s->cy.center, cam).y, vec3_sub(s->cy.center, cam).z);
-	// printf("height: %f\n", height);
-	// printf("perpen_len: %f\n", perpen_len);
-	//?Debug
-
-	if (perpen_len <= s->cy.diameter * 0.5f && height >= 0 && height <= s->cy.height)
+		height = vec3_dot(vec3_sub(cam, s->cy.center), s->rotation) / denom;
+	if (perpen_len <= s->cy.diameter * 0.5f && height >= 0
+		&& height <= s->cy.height)
 		return (true);
 	return (false);
 }
