@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 15:45:15 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/12 18:48:22 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/13 11:44:03 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,10 @@ int	cast_shadow(t_scene *scene, t_ray ray, t_hit_record *rec)
  * smaller, so I add 1. At this point the range is [0,2], so I divide
  * it by 2 to get a range of 1 and I do the same for the light
  * returned by the shadow to keep the proportion.
+ * The conditions to cast the shadow are:
+ * - cast_shadow function: hit an object with a ray with positive length
+ * - len_l > rec->t: the light is farther than the object
+ * - vec3_dot(rec->normal, l) < 0: the normal is facing the light
 */
 double	diffuse_shade(t_scene *scene, t_vector n, t_vector p, t_hit_record *rec)
 {
@@ -63,7 +67,9 @@ double	diffuse_shade(t_scene *scene, t_vector n, t_vector p, t_hit_record *rec)
 	l = vec3_unit(l);
 	n_dot_l = vec3_dot(n, l);
 	diff_shade = n_dot_l / 2 + 0.5f;
-	if (cast_shadow(scene, (t_ray){p, l}, rec) && len_l > rec->t)
+	if (cast_shadow(scene, (t_ray){p, l}, rec)
+		&& len_l > rec->t
+		&& vec3_dot(rec->normal, l) < 0)
 		return (diff_shade / 2);
 	light = ((1 + scene->light.brightness) * diff_shade) / 2;
 	return (light);
