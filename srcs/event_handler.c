@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 12:29:38 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/09 11:00:01 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/13 22:09:21 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,33 +70,30 @@ int	key_handle(int keycode, t_scene *scene)
 	return (0);
 }
 
-int	track_delta(int button, int x, int y, t_scene *scene)
-{
-	t_camera	*c;
+// int	track_delta(int button, int x, int y, t_scene *scene)
+// {
+// 	t_camera	*c;
 
-	(void) x;
-	(void) y;
-	(void) button;
-	c = &scene->camera;
-	// if (button == LEFT_BUTTON)
-	// {
-	// 	// H : 1 = d : x
-	// 	// printf("Dist: %f %f\n", (x - c->delta.x) / HEIGHT, (c->delta.y - y) / HEIGHT);
-	// 	c->orientation.x += (x - c->delta.x) / HEIGHT;
-	// 	c->orientation.y += (c->delta.y - y) / HEIGHT;
-	// 	c->delta = (t_point_2d){0, 0};
-	// 	draw(scene);
-	// }
-	return (0);
-}
+// 	(void) x;
+// 	(void) y;
+// 	(void) button;
+// 	c = &scene->camera;
+// 	// if (button == LEFT_BUTTON)
+// 	// {
+// 	// 	// H : 1 = d : x
+// 	// 	// printf("Dist: %f %f\n", (x - c->delta.x) / HEIGHT, (c->delta.y - y) / HEIGHT);
+// 	// 	c->orientation.x += (x - c->delta.x) / HEIGHT;
+// 	// 	c->orientation.y += (c->delta.y - y) / HEIGHT;
+// 	// 	c->delta = (t_point_2d){0, 0};
+// 	// 	draw(scene);
+// 	// }
+// 	return (0);
+// }
 
 int	mouse_handle(int button, int x, int y, t_scene *scene)
 {
-	t_img	*data;
-
 	(void) x;
 	(void) y;
-	data = scene->img;
 	if (button == WHEEL_UP)
 		scene->camera.fov -= 1;
 	if (button == WHEEL_DOWN)
