@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shade.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 15:45:15 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/14 16:16:40 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/14 17:12:07 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ int	cast_shadow(t_scene *scene, t_ray ray, t_hit_record *rec)
 	{
 		if (rec->shape != &scene->shape[i])
 		{
-		color = rec->color;
-		if (scene->shape[i].hit(&scene->shape[i], ray, rec)
-			&& rec->t > EPSILON && rec->t < RAY_LEN)
-		{
-			rec->color = color;
-			return (1);
-		}
+			color = rec->color;
+			if (scene->shape[i].hit(&scene->shape[i], ray, rec)
+				&& rec->t > EPSILON && rec->t < RAY_LEN)
+			{
+				rec->color = color;
+				return (1);
+			}
 		}
 		i--;
 	}

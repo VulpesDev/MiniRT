@@ -6,14 +6,14 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:40:31 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 10:33:44 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/14 17:10:29 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VEC3_H
 # define VEC3_H
 
-#include <math.h>
+# include <math.h>
 
 typedef struct s_vec3
 {

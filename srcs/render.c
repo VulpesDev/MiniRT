@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 16:42:42 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/14 17:15:06 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,6 @@ void	print_4x4(t_matrix_trans m)
 	printf("\n");
 }
 #endif
-
-/**
- * As in openGL, we state that the projection plane coinincides
- * with the near clipping plane.
- * https://www.scratchapixel.com/lessons/3d-basic-rendering
- * /perspective-and-orthographic-projection-matrix
- * /opengl-perspective-projection-matrix.html
-*/
-t_point_3d	world_to_cam(t_point_3d p, t_matrix_trans proj)
-{
-	return (transform(p, proj));
-}
-
-t_point_3d	world_to_cam_new(t_point_3d p, t_matrix transform)
-{
-	return (mx_mult(transform, p));
-}
 
 int	apply_lighting_ratio(int trgb, float lighting_ratio)
 {
@@ -241,7 +224,7 @@ void	draw(t_scene *scene)
 	p.y = 0;
 	while (p.y < HEIGHT)
 	{
-		// printf("Scanlines remaining: %d\n", HEIGHT - 1 - p.y);
+		// ft_printf("Scanlines remaining: %d\n", HEIGHT - 1 - p.y);
 		p.x = 0;
 		while (p.x < WIDTH)
 		{
