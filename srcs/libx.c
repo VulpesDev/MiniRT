@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libx.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 08:25:02 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/13 22:10:03 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/16 14:29:27 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ int	free_img(t_img *data)
 {
 	mlx_destroy_image(data->mlx_ptr, data->img);
 	mlx_destroy_window(data->mlx_ptr, data->win_ptr);
-	// mlx_destroy_display(data->mlx_ptr);
+	mlx_destroy_display(data->mlx_ptr);
 	free(data->mlx_ptr);
 	data = NULL;
-	exit(0);
+	// exit(0);
 	return (0);
 }
 
@@ -35,6 +35,7 @@ int	mlx_manage(t_scene *scene)
 	mlx_hook(data->win_ptr, ON_DESTROY, 0, &free_img, data);
 	mlx_loop(data->mlx_ptr);
 	free_img(data);
+	free(data);
 	return (1);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   event_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 12:29:38 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/13 22:09:21 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/16 14:26:56 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	key_handle(int keycode, t_scene *scene)
 
 	data = scene->img;
 	if (keycode == ESC)
-		free_img(data);
+		//free_img(data);
+		mlx_loop_end(scene->img->mlx_ptr);
 	else if (keycode == PLUS)
 		scene->camera.pos.z += CAM_PACE;
 	else if (keycode == MINUS)
