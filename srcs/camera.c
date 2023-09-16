@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:54:25 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/12 20:23:18 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/16 14:45:04 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ void	cam_orientation(t_camera *c)
 		c->right = vec3_cross(c->look_at, vec3(1, 0, 0));
 	c->right = vec3_unit(c->right);
 	c->up = vec3_unit(vec3_cross(c->right, c->look_at));
-	vec3_print(c->look_at);
-	vec3_print(c->right);
-	vec3_print(c->up);
+	// vec3_print(c->look_at);
+	// vec3_print(c->right);
+	// vec3_print(c->up);
 }
 
 void	cam_setup(t_camera *c)
@@ -63,7 +63,7 @@ void	cam_setup(t_camera *c)
 		vec3_mult(c->up, c->viewport_height / 2));
 	c->pxl_size_hor = vec3_div(c->horizontal, WIDTH);
 	c->pxl_size_ver = vec3_div(c->vertical, HEIGHT);
-	printf("Cam_pos: (%f, %f, %f)\n", c->pos.x, c->pos.y, c->pos.z);
-	printf("Cam_orient: (%f, %f, %f)\n", c->orientation.x, c->orientation.y, c->orientation.z);
-	printf("\n\n");
+	// printf("Cam_pos: (%f, %f, %f)\n", c->pos.x, c->pos.y, c->pos.z);
+	// printf("Cam_orient: (%f, %f, %f)\n", c->orientation.x, c->orientation.y, c->orientation.z);
+	// printf("\n\n");
 }

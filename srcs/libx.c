@@ -6,7 +6,7 @@
 /*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 08:25:02 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/16 14:29:27 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/16 14:50:03 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	mlx_manage(t_scene *scene)
 	mlx_key_hook(data->win_ptr, &key_handle, scene);
 	mlx_mouse_hook(data->win_ptr, &mouse_handle, scene);
 	// mlx_hook(data->win_ptr, ON_MOUSEUP, (1L << 3), &track_delta, scene);
-	mlx_hook(data->win_ptr, ON_DESTROY, 0, &free_img, data);
+	mlx_hook(data->win_ptr, ON_DESTROY, 0, &mlx_loop_end, scene->img->mlx_ptr);
 	mlx_loop(data->mlx_ptr);
 	free_img(data);
 	free(data);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cylinder.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/13 11:45:11 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/16 14:33:45 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,8 @@ void	cylinder_setup(t_shape *cy)
 	vec2 = vec3_mult(cy->cy.vec, cy->cy.height);
 	cy->cy.top = vec3_sum(cy->cy.center, vec1);
 	cy->cy.bot = vec3_sum(cy->cy.top, vec2);
-	printf("cyl_top: ");
-	vec3_print(cy->cy.top);
-	printf("cyl_bot: ");
-	vec3_print(cy->cy.bot);
+	// printf("cyl_top: ");
+	// vec3_print(cy->cy.top);
+	// printf("cyl_bot: ");
+	// vec3_print(cy->cy.bot);
 }
