@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cylinder.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/16 14:33:45 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/17 13:52:18 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,18 @@ double	cy_calc_discriminant(t_scene *scene, t_ray ray, double *t, int i)
 	return (discriminant);
 }
 
+/**
+ * @explanation: to find the normal I find the distance along the center vector at the
+ * level of the hit point: double center_t = vec3_dot(hit_vec, shape->cy.vec);
+ * Then the coordinate of the point on the center vector is:
+ * rec->normal = vec3_sum(shape->cy.top, vec3_mult(shape->cy.vec, center_t));
+ * Finally, the normal is the normalized vector from the hit point to the point I found
+ * along the center vector.
+*/
 bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 {
 	t_vec3	hit_vec;
+	double	center_t;
 
 	hit_vec = vec3_sub(ray_at(ray, t), shape->cy.top);
 	if (t > EPSILON && t < rec->t && vec3_dot(hit_vec, shape->cy.vec) >= 0
@@ -47,8 +56,12 @@ bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 		rec->t = t;
 		rec->p = ray_at(ray, t);
 		rec->shape = shape;
-		rec->normal = vec3_sub(shape->cy.center, rec->p);
-		rec->normal = vec3_unit(vec3_cross(rec->normal, shape->cy.rotation));
+		center_t = vec3_dot(hit_vec, shape->cy.vec);
+		rec->normal = vec3_sum(shape->cy.top, \
+			vec3_mult(shape->cy.vec, center_t));
+		rec->normal = vec3_unit(vec3_sub(rec->p, rec->normal));
+		// rec->normal = vec3_sub(shape->cy.center, rec->p);
+		// rec->normal = vec3_unit(vec3_cross(rec->normal, shape->cy.rotation));
 		rec->color = shape->color;
 		return (true);
 	}
