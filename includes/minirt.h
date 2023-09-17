@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/16 14:36:59 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/16 23:20:48 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,8 @@ t_err	extract_rgb(char *rgb, int *ret);
 /* GRAPHIC */
 int		create_trgb(int t, int r, int g, int b);
 t_color	convert_color(int trgb);
+int		convert_trgb(t_color c);
+t_color	apply_light_to_color(t_color c, double light);
 int		mlx_manage(t_scene *scene);
 void	my_mlx_pixel_put_d(t_img *data, int x, int y, int color);
 t_err	init_img(t_scene *scene);
@@ -155,6 +157,6 @@ void	free_scene(t_scene **scene);
 
 /* DEBUG */
 void	print_4x4(t_matrix_trans m);
-void	printProgress(double percentage);
+void	print_progress(double percentage);
 
 #endif

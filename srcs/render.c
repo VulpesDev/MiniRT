@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/16 14:44:00 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/16 23:18:51 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,73 +28,21 @@ void	print_4x4(t_matrix_trans m)
 }
 #endif
 
-int	apply_lighting_ratio(int trgb, float lighting_ratio)
-{
-	return (create_trgb(0, \
-			lighting_ratio * ((trgb >> 16) & 0xFF),
-			lighting_ratio * ((trgb >> 8) & 0xFF),
-			lighting_ratio * (trgb & 0xFF)));
-}
-
-t_color	apply_light_to_color(t_color c, double light)
-{
-	t_color	ret;
-
-	ret = color(0.0, c.r * light, c.g * light, c.b * light);
-	ret.r = ft_fmin(ret.r, 1.0f);
-	ret.g = ft_fmin(ret.g, 1.0f);
-	ret.b = ft_fmin(ret.b, 1.0f);
-	return (ret);
-}
-
-/**
- * @brief converts an int in trgb format to a color struct with double values
- * in range [0, 1]
- * @param trgb int in trgb format
- * @return color struct
-*/
-t_color	convert_color(int trgb)
-{
-	t_color	c;
-
-	c.t = ((trgb >> 24) & 0xFF) / 255.999;
-	c.r = ((trgb >> 16) & 0xFF) / 255.999;
-	c.g = ((trgb >> 8) & 0xFF) / 255.999;
-	c.b = (trgb & 0xFF) / 255.999;
-	return (c);
-}
-
-/**
- * @brief converts a color struct with double values in range [0, 1]
- * to an int in trgb format
- * @param c color struct
- * @return int in trgb format
-*/
-int	convert_trgb(t_color c)
-{
-	int		t;
-	int		r;
-	int		g;
-	int		b;
-
-	t = (int)(c.t * 255.999);
-	r = (int)(c.r * 255.999);
-	g = (int)(c.g * 255.999);
-	b = (int)(c.b * 255.999);
-	return (t << 24 | r << 16 | g << 8 | b);
-}
-
 /**
  * @brief creates a ray from the camera to the canva
 */
 t_ray	create_cam_ray(t_camera *c, double int_x, double int_y)
 {
 	t_ray	ray;
+	t_vec3	pxl_x;
+	t_vec3	pxl_y;
+	t_vec3	pxl_pos;
 
 	ray.origin = c->pos;
-	t_vec3 pxl_x = vec3_mult(c->pxl_size_hor, int_x);
-	t_vec3 pxl_y = vec3_mult(c->pxl_size_ver, int_y);
-	t_vec3 pxl_pos = vec3_sum(c->viewport_top_left, vec3_mult(c->right, vec3_len(pxl_x)));
+	pxl_x = vec3_mult(c->pxl_size_hor, int_x);
+	pxl_y = vec3_mult(c->pxl_size_ver, int_y);
+	pxl_pos = vec3_sum(c->viewport_top_left, \
+		vec3_mult(c->right, vec3_len(pxl_x)));
 	pxl_pos = vec3_sum(pxl_pos, vec3_mult(vec3_inv(c->up), vec3_len(pxl_y)));
 	ray.direction = vec3_sub(pxl_pos, ray.origin);
 	ray.direction = vec3_unit(ray.direction);
@@ -138,8 +86,8 @@ t_color	ray_color(t_scene *scene, t_ray r)
 	if (hit_element(scene, r, &rec))
 	{
 		light = light_coeff(scene, &rec);
-		if (light < 0 || light > 1)
-			printf("Light out of bound %f\n", light); // remember to remove
+		// if (light < 0 || light > 1)
+		// 	printf("Light out of bound %f\n", light); // remember to remove
 		return (apply_light_to_color(rec.color, light));
 	}
 	return (convert_color(scene->ambient.trgb));
@@ -224,7 +172,6 @@ void	draw(t_scene *scene)
 	p.y = 0;
 	while (p.y < HEIGHT)
 	{
-		// ft_printf("Scanlines remaining: %d\n", HEIGHT - 1 - p.y);
 		p.x = 0;
 		while (p.x < WIDTH)
 		{
@@ -236,9 +183,8 @@ void	draw(t_scene *scene)
 			p.x++;
 		}
 		p.y++;
-		printProgress((double)p.y/HEIGHT);
+		print_progress((double)p.y / HEIGHT);
 	}
-	printf("\n");
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img, 0, 0);
 }
 
@@ -247,6 +193,7 @@ t_err	render_scene(t_scene *scene)
 	if (!init_img(scene))
 	{
 		draw(scene);
+		printf("\n");
 		mlx_manage(scene);
 		return (SUCCESS);
 	}
