@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/16 23:20:48 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/20 18:49:03 by tvasilev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ int		intersect_element(t_scene *scene, t_ray ray, int *color, float *min_t);
 double	light_coeff(t_scene *scene, t_hit_record *hit);
 double	diffuse_shade(t_scene *scene, t_vector n, t_vector p, \
 	t_hit_record *rec);
-int		cast_shadow(t_scene *scene, t_ray ray, t_hit_record *rec);
+int	cast_shadow(t_scene *scene, t_ray ray, t_hit_record *rec);
 
 /* ERROR HANDLING*/
 t_err	ft_error(char *msg, char *arg, int err_code, t_scene *scene);
