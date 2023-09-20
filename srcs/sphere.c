@@ -3,38 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   sphere.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 14:22:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/14 15:32:55 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/20 22:34:06 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "vec3.h"
-
-/**
- * It returns the discriminant. If it's >=0 it assigns to t the value of
- * the closest hit point
-*/
-double	sp_calc_discriminant(t_scene *scene, t_ray ray, \
-							double *t, int i)
-{
-	double			a;
-	double			b;
-	double			c;
-	t_point_3d		transl;
-	double			discriminant;
-
-	a = vec3_dot(ray.direction, ray.direction);
-	transl = vec3_sub(ray.origin, scene->shape[i].sp.pos);
-	b = 2.0f * vec3_dot(transl, ray.direction);
-	c = vec3_dot(transl, transl) - pow((scene->shape[i].sp.diameter / 2), 2);
-	discriminant = b * b - (4.0f * a * c);
-	if (discriminant >= 0)
-		*t = (-b - sqrt(discriminant)) / (2.0f * a);
-	return (discriminant);
-}
 
 /**
  * @param hit: hit point

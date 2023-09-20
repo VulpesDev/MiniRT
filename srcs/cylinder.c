@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/17 13:52:18 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/20 22:36:18 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,34 +15,13 @@
 #include "minirt.h"
 
 /**
- * @brief Calculates the discriminant of the quadratic equation
- * @param oc: vector from the center of the top cap to the ray origin
-*/
-double	cy_calc_discriminant(t_scene *scene, t_ray ray, double *t, int i)
-{
-	const t_vec3	oc = vec3_sub(ray.origin, scene->shape[i].cy.top);
-	const double	a = vec3_dot(ray.direction, ray.direction)
-		- pow(vec3_dot(ray.direction, scene->shape[i].cy.vec), 2);
-	const double	b = 2 * (vec3_dot(ray.direction, oc)
-			- vec3_dot(ray.direction, scene->shape[i].cy.vec)
-			* vec3_dot(oc, scene->shape[i].cy.vec));
-	const double	c = vec3_dot(oc, oc) - pow(vec3_dot(oc,
-				scene->shape[i].cy.vec), 2)
-		- pow(scene->shape[i].cy.diameter / 2, 2);
-	const double	discriminant = b * b - (4.0f * a * c);
-
-	if (discriminant >= 0)
-		*t = (-b - sqrt(discriminant)) / (2.0f * a);
-	return (discriminant);
-}
-
-/**
- * @explanation: to find the normal I find the distance along the center vector at the
- * level of the hit point: double center_t = vec3_dot(hit_vec, shape->cy.vec);
+ * @explanation: to find the normal I find the distance along
+ * the center vector at the level of the hit point:
+ * double center_t = vec3_dot(hit_vec, shape->cy.vec);
  * Then the coordinate of the point on the center vector is:
  * rec->normal = vec3_sum(shape->cy.top, vec3_mult(shape->cy.vec, center_t));
- * Finally, the normal is the normalized vector from the hit point to the point I found
- * along the center vector.
+ * Finally, the normal is the normalized vector from the hit point to
+ * the point I found along the center vector.
 */
 bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 {
@@ -60,14 +39,15 @@ bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 		rec->normal = vec3_sum(shape->cy.top, \
 			vec3_mult(shape->cy.vec, center_t));
 		rec->normal = vec3_unit(vec3_sub(rec->p, rec->normal));
-		// rec->normal = vec3_sub(shape->cy.center, rec->p);
-		// rec->normal = vec3_unit(vec3_cross(rec->normal, shape->cy.rotation));
 		rec->color = shape->color;
 		return (true);
 	}
 	return (false);
 }
 
+/**
+ * @param oc: vector from the center of the top cap to the ray origin
+*/
 bool	cy_hit_body(t_shape *shape, t_ray ray, t_hit_record *rec)
 {
 	const t_vec3	oc = vec3_sub(ray.origin, shape->cy.top);
@@ -108,8 +88,4 @@ void	cylinder_setup(t_shape *cy)
 	vec2 = vec3_mult(cy->cy.vec, cy->cy.height);
 	cy->cy.top = vec3_sum(cy->cy.center, vec1);
 	cy->cy.bot = vec3_sum(cy->cy.top, vec2);
-	// printf("cyl_top: ");
-	// vec3_print(cy->cy.top);
-	// printf("cyl_bot: ");
-	// vec3_print(cy->cy.bot);
 }
