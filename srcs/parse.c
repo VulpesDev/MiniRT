@@ -6,14 +6,14 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 09:24:43 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 09:57:04 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/21 10:01:46 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
 /**
- * I pass a triple flag as int array to check that the unique
+ * @brief: I pass a triple flag as int array to check that the unique
  * elements are not set multiple times.
 */
 t_err	handle_unique(t_scene *scene, char **el, uint8_t *flag)
@@ -45,7 +45,7 @@ t_err	handle_unique(t_scene *scene, char **el, uint8_t *flag)
 }
 
 /**
- * In case of invalid solid we throw a warning
+ * @brief: In case of invalid solid we throw a warning
  * and move on to the next line
 */
 void	handle_solid(t_scene *scene, char **el)
@@ -53,30 +53,24 @@ void	handle_solid(t_scene *scene, char **el)
 	if (!ft_strcmp(el[0], "sp"))
 	{
 		if (!validate_sphere(scene, el))
-		{
 			scene->shape_count++;
-		}
 	}
 	else if (!ft_strcmp(el[0], "pl"))
 	{
 		if (!validate_plane(scene, el))
-		{
 			scene->shape_count++;
-		}
 	}
 	else if (!ft_strcmp(el[0], "cy"))
 	{
 		if (!validate_cylinder(scene, el))
-		{
 			scene->shape_count++;
-		}
 	}
 	else
 		ft_printf("Solid not recognized\n");
 }
 
 /**
- * Added support to comment # to make testing scenes easier
+ * @brief: Added support to comment # to make testing scenes easier
  * @returns 0 for success, > 0 for err_code
 */
 int	parse_element(t_scene *scene, char *line, uint8_t *flag)
