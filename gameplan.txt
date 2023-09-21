@@ -1,3 +1,0 @@
-///////////////// DOONE /////////////// Why camera rotation and distortion?
-Shadows and shading on cylinders
-Look at the parsing
