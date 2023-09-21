@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/20 22:36:18 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/21 09:52:45 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,10 @@ bool	cy_hit(t_shape *shape, t_ray ray, t_hit_record *rec)
 	return (false);
 }
 
+/**
+ * @brief: it calculates the top and bottom points of the cylinder
+ * and everything neede for later calculations
+*/
 void	cylinder_setup(t_shape *cy)
 {
 	t_vec3	vec1;

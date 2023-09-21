@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 18:50:00 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/12 20:58:59 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/21 09:53:41 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ bool	cy_hit_disk(t_shape *shape, t_ray ray, t_hit_record *rec)
 	return (hit_disk);
 }
 
-
 bool	cy_hit_disk_record(double t, t_shape *shape,
 		t_hit_record *rec, t_ray ray)
 {
@@ -58,4 +57,3 @@ bool	cy_hit_disk_record(double t, t_shape *shape,
 	}
 	return (false);
 }
-
