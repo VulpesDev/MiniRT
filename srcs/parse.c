@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 09:24:43 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/21 10:01:46 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/21 10:12:57 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,12 @@ t_err	handle_unique(t_scene *scene, char **el, uint8_t *flag)
 */
 void	handle_solid(t_scene *scene, char **el)
 {
+	if (scene->shape_count >= MAX_SOLID)
+	{
+		ft_warning("not handling these many solids", \
+				NULL, INVALID_FILE);
+		return ;
+	}
 	if (!ft_strcmp(el[0], "sp"))
 	{
 		if (!validate_sphere(scene, el))

@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:31:05 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/12 16:24:23 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/21 10:29:23 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,7 @@ void	init_sphere(t_scene *scene, t_shape *shape)
 int	validate_sphere(t_scene *scene, char **el)
 {
 	t_shape		shape;
-	int			i;
 
-	i = scene->shape_count;
-	if (i >= MAX_SOLID)
-		return (ft_warning("not handling these many solids", \
-				NULL, INVALID_FILE));
 	if (ft_arrlen(el) != 4)
 		return (ft_warning("Sphere expects 3 parameters", \
 				NULL, INVALID_ELEMENT));
@@ -51,9 +46,6 @@ int	validate_plane(t_scene *scene, char **el)
 	int			i;
 
 	i = scene->shape_count;
-	if (i >= MAX_SOLID)
-		return (ft_warning("not handling these many solids", \
-				NULL, INVALID_FILE));
 	if (ft_arrlen(el) != 4)
 		return (ft_warning("Plane expects 3 parameters", \
 				NULL, INVALID_ELEMENT));
@@ -84,9 +76,6 @@ int	validate_cylinder(t_scene *scene, char **el)
 {
 	t_shape		shape;
 
-	if (scene->shape_count >= MAX_SOLID)
-		return (ft_warning("not handling these many solids", \
-				NULL, INVALID_FILE));
 	if (ft_arrlen(el) != 6)
 		return (ft_warning("Cylinder expects 5 parameters", \
 				NULL, INVALID_ELEMENT));
