@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:30:47 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 10:42:01 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/21 09:29:26 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_err	validate_camera(t_scene *scene, char **el)
 	if (scene->camera.fov < 0 || scene->camera.fov > 180)
 		return (ft_warning("invalid argument: ", el[3], \
 				INVALID_ELEMENT));
-	scene->camera.focal_length = ZNEAR;
+	scene->camera.focal_length = CANV_DIST;
 	scene->camera.vert_up = vec3(0.0f, 1.0f, 0.0f);
 	cam_setup(&scene->camera);
 	return (SUCCESS);

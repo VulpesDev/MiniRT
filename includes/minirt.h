@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/20 18:49:03 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/21 09:29:02 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,11 @@
 # include "hittable.h"
 # define SPACE "\t\n\f\r\v "
 # define MAX_SOLID 30
-# define CANV_MIN_X -1.0f
-# define CANV_MAX_X 1.0f
-# define CANV_MIN_Y -1.0f
 # define CANV_DIST 1.0f
 # define CAM_PACE 0.8
 # define LIGHT_PACE 0.3
 # define ORIENT_PACE 0.4
 # define RAY_LEN 100000
-# define BOUNCES 2
-# define ZNEAR CANV_DIST
-# define ZFAR RAY_LEN
 # define EPSILON 1e-6
 
 typedef struct s_ray	t_ray;
@@ -119,8 +113,6 @@ t_err	validate_light(t_scene *scene, char **el);
 int		validate_sphere(t_scene *scene, char **el);
 int		validate_plane(t_scene *scene, char **el);
 int		validate_cylinder(t_scene *scene, char **el);
-void	set_camera_canvas(t_camera *c);
-void	set_transform_mx(t_camera *c);
 
 /* PARSE UTILS */
 int		validate_3d_range(t_point_3d point, float min, float max);
@@ -145,7 +137,7 @@ int		intersect_element(t_scene *scene, t_ray ray, int *color, float *min_t);
 double	light_coeff(t_scene *scene, t_hit_record *hit);
 double	diffuse_shade(t_scene *scene, t_vector n, t_vector p, \
 	t_hit_record *rec);
-int	cast_shadow(t_scene *scene, t_ray ray, t_hit_record *rec);
+int		cast_shadow(t_scene *scene, t_ray ray, t_hit_record *rec);
 
 /* ERROR HANDLING*/
 t_err	ft_error(char *msg, char *arg, int err_code, t_scene *scene);
