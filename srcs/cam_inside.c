@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 15:14:07 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/12 19:05:33 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/21 11:09:09 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ bool	sp_is_inside(t_shape *s, t_point_3d cam)
 {
 	return (vec3_len(vec3_sub(cam, s->sp.pos)) < s->sp.diameter / 2);
 }
-
 
 bool	pl_is_inside(t_shape *s, t_point_3d cam)
 {

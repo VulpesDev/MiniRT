@@ -6,12 +6,11 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 10:26:42 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/14 17:15:58 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/21 11:08:33 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vec3.h"
-#include <stdio.h> // @todo delete
 
 t_vec3	vec3_inv(t_vec3 a)
 {
@@ -41,9 +40,4 @@ double	vec3_len(t_vec3 a)
 t_vec3	vec3_unit(t_vec3 a)
 {
 	return (vec3_div(a, vec3_len(a)));
-}
-
-void	vec3_print(t_vec3 a)
-{
-	printf("x: %f, y: %f, z: %f\n", a.x, a.y, a.z);
 }
