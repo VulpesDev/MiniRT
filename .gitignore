@@ -8,3 +8,4 @@ RT_weekend_C
 .gitignore
 *workspace
 mlx-linux
+matrix_*
