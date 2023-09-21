@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:39:08 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 12:23:13 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/21 09:47:03 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ typedef struct s_camera
 	double			aspect_ratio;
 	double			viewport_height;
 	double			viewport_width;
-	double			half_hor;
-	double			half_ver;
 	double			focal_length;
 	t_point3		viewport_top_left;
 	t_vec3			horizontal;
@@ -40,10 +38,8 @@ typedef struct s_camera
 	t_vec3			vert_up;
 	t_vec3			up;
 	t_vec3			right;
-	t_matrix		m;
 }					t_camera;
 
 void		cam_setup(t_camera *c);
-t_point3	cam_look_at(t_vec3 forward, t_vec3 rot);
 
 #endif
