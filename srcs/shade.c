@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shade.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvasilev <tvasilev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 15:45:15 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/20 18:49:10 by tvasilev         ###   ########.fr       */
+/*   Updated: 2023/09/21 11:05:02 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,46 @@ double	diffuse_shade(t_scene *scene, t_vector n, t_vector p, t_hit_record *rec)
 		return (diff_shade / 2);
 	light = ((1 + scene->light.brightness) * diff_shade) / 2;
 	return (light);
+}
+
+/**
+ * Former intersect_element function
+ * @brief Checks if the ray hits any element in the scene
+ * In the scene->shape[i].hit(&scene->shape[i], ray, rec) call
+ * the ray is updated with hit distance, hit point, normal and color
+*/
+bool	hit_element(t_scene *scene, t_ray ray, t_hit_record *rec)
+{
+	bool	hit_anything;
+	int		i;
+
+	hit_anything = false;
+	rec->t = RAY_LEN;
+	i = scene->shape_count - 1;
+	while (i >= 0)
+	{
+		if (scene->shape[i].hit(&scene->shape[i], ray, rec) && rec->t > EPSILON)
+			hit_anything = true;
+		i--;
+	}
+	return (hit_anything);
+}
+
+/**
+ * @brief Creates a hit record that gets updated if the ray hits an element
+ * @returns the color of the hit element
+*/
+t_color	ray_color(t_scene *scene, t_ray r)
+{
+	double			light;
+	t_hit_record	rec;
+
+	if (hit_element(scene, r, &rec))
+	{
+		light = light_coeff(scene, &rec);
+		return (apply_light_to_color(rec.color, light));
+	}
+	return (convert_color(scene->ambient.trgb));
 }
 
 /**
