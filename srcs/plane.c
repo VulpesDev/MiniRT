@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 23:25:30 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/12 17:21:12 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/21 10:04:38 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ bool	pl_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 }
 
 /**
- * The absolute value of the denom allows to render alse the dark side
+ * @brief: The absolute value of the denom allows to render also the dark side
  * of the plane. If the denom is negative we're in the back of the plane
 */
 bool	pl_hit(t_shape *shape, t_ray r, t_hit_record *rec)
@@ -66,4 +66,3 @@ bool	pl_hit(t_shape *shape, t_ray r, t_hit_record *rec)
 	}
 	return (false);
 }
-
