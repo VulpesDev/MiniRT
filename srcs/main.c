@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:42:10 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/09 09:38:44 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/21 09:55:47 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	free_scene(t_scene **scene)
 }
 
 /**
- * It throws an error and returns an error code without freeing the scene
+ * @brief: It throws an error and returns an error code without freeing the scene
  * To be used for errors that don't interrupt the program
 */
 t_err	ft_warning(char *msg, char *arg, int err_code)
@@ -38,7 +38,7 @@ t_err	ft_warning(char *msg, char *arg, int err_code)
 }
 
 /**
- * It throws an error, frees the scene and returns an error code
+ * @brief: It throws an error, frees the scene and returns an error code
  * To be used for fatal errors
 */
 t_err	ft_error(char *msg, char *arg, int err_code, t_scene *scene)
