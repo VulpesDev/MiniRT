@@ -6,14 +6,12 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/22 18:05:19 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/22 21:44:54 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "ray.h"
-#include "matrix_math.h"
-#include <time.h>
 
 /**
  * @brief creates a ray from the camera to the canvas
@@ -44,15 +42,15 @@ int	per_pixel(t_pxl p, t_scene *scene)
 	t_ray		r;
 	t_color		c;
 	t_vec3		tot_col;
-	double		rnd;
+	uint64_t	rnd_state;
 	static int	i = 0;
 
 	tot_col = (t_vec3){0, 0, 0};
+	ft_lcg_seed(12345, &rnd_state);
 	while (i++ < RAYS_PER_PIXEL)
 	{
-		srand(time(NULL));
-		rnd = (double)rand() / RAND_MAX;
-		r = create_cam_ray(&scene->camera, p.x + rnd * 0.5f, p.y + rnd * 0.5f);
+		r = create_cam_ray(&scene->camera, p.x + ft_lcg_random(&rnd_state), \
+			p.y + ft_lcg_random(&rnd_state));
 		c = ray_color(scene, r);
 		tot_col = vec3_sum(tot_col, (t_vec3){c.r, c.g, c.b});
 	}
