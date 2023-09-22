@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/21 11:02:27 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/22 18:05:59 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include "hittable.h"
 # define SPACE "\t\n\f\r\v "
 # define MAX_SOLID 30
+# define RAYS_PER_PIXEL 50
 # define CANV_DIST 1.0f
 # define CAM_PACE 0.8
 # define LIGHT_PACE 0.3

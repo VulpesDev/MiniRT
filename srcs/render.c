@@ -6,13 +6,14 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/22 12:00:08 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/22 18:05:19 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "ray.h"
 #include "matrix_math.h"
+#include <time.h>
 
 /**
  * @brief creates a ray from the camera to the canvas
@@ -35,7 +36,6 @@ t_ray	create_cam_ray(t_camera *c, double int_x, double int_y)
 	return (ray);
 }
 
-#define RAYS_PP 4
 /**
  * @returns a color as int
 */
@@ -43,14 +43,22 @@ int	per_pixel(t_pxl p, t_scene *scene)
 {
 	t_ray		r;
 	t_color		c;
+	t_vec3		tot_col;
+	double		rnd;
 	static int	i = 0;
 
-	while (i++ < RAYS_PP)
+	tot_col = (t_vec3){0, 0, 0};
+	while (i++ < RAYS_PER_PIXEL)
 	{
-		r = create_cam_ray(&scene->camera, p.x, p.y);
+		srand(time(NULL));
+		rnd = (double)rand() / RAND_MAX;
+		r = create_cam_ray(&scene->camera, p.x + rnd * 0.5f, p.y + rnd * 0.5f);
 		c = ray_color(scene, r);
-		c = apply_light_to_color(c, 1 + scene->ambient.lighting_ratio);
+		tot_col = vec3_sum(tot_col, (t_vec3){c.r, c.g, c.b});
 	}
+	tot_col = vec3_div(tot_col, i);
+	c = apply_light_to_color((t_color){0, tot_col.x, tot_col.y, tot_col.z}, \
+		1 + scene->ambient.lighting_ratio);
 	i = 0;
 	return (convert_trgb(c));
 }
