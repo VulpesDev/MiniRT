@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 18:21:29 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/22 13:10:19 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/22 13:14:56 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
  * Finally, the normal is the normalized vector from the hit point to
  * the point I found along the center vector.
 */
-t_vec3	cy_normal(t_shape *cy, t_point_3d hit)
+t_vec3	cy_body_normal(t_shape *cy, t_point_3d hit)
 {
 	double	center_t;
 	t_vec3	hit_vec;
@@ -48,7 +48,7 @@ bool	cy_hit_record(double t, t_shape *shape, t_hit_record *rec, t_ray ray)
 		rec->t = t;
 		rec->p = ray_at(ray, t);
 		rec->shape = shape;
-		rec->normal = cy_normal(shape, rec->p);
+		rec->normal = cy_body_normal(shape, rec->p);
 		rec->color = shape->color;
 		return (true);
 	}
