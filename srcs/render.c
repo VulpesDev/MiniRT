@@ -6,12 +6,30 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/22 21:44:54 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/22 22:31:12 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "ray.h"
+
+static void	string_on_screen(t_img *data)
+{
+	mlx_string_put(data->mlx_ptr, data->win_ptr, 20, 20, WHITE, "Wheel: FOV");
+	mlx_string_put(data->mlx_ptr, data->win_ptr, 20, 40, WHITE, \
+		"Arrows: move camera X Y");
+	mlx_string_put(data->mlx_ptr, data->win_ptr, 20, 60, WHITE, \
+		"+, -: move camera Z");
+	mlx_string_put(data->mlx_ptr, data->win_ptr, 20, 80, WHITE, \
+		"A, D: camera orientation X");
+	mlx_string_put(data->mlx_ptr, data->win_ptr, 20, 100, WHITE, \
+		"W, S: camera orientation Y");
+	mlx_string_put(data->mlx_ptr, data->win_ptr, 20, 120, WHITE, \
+		"Q, E: camera orientation Z");
+	mlx_string_put(data->mlx_ptr, data->win_ptr, 20, 140, WHITE, \
+		"R, F: ambient light plus/minus");
+	mlx_string_put(data->mlx_ptr, data->win_ptr, 20, 160, WHITE, "ESC: exit");
+}
 
 /**
  * @brief creates a ray from the camera to the canvas
@@ -71,23 +89,22 @@ void	draw(t_scene *scene)
 	data = scene->img;
 	cam_setup(&scene->camera);
 	shape_ins = check_inside(scene);
-	p.y = 0;
-	while (p.y < HEIGHT)
+	p.y = -1;
+	while (++p.y < HEIGHT)
 	{
-		p.x = 0;
-		while (p.x < WIDTH)
+		p.x = -1;
+		while (++p.x < WIDTH)
 		{
 			if (shape_ins)
 				c = shape_ins->trgb;
 			else
 				c = per_pixel(p, scene);
 			my_mlx_pixel_put_d(data, p.x, p.y, c);
-			p.x++;
 		}
-		p.y++;
 		print_progress((double)p.y / HEIGHT);
 	}
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img, 0, 0);
+	string_on_screen(scene->img);
 }
 
 t_err	render_scene(t_scene *scene)
