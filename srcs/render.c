@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 20:41:01 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/21 11:06:26 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/22 12:00:08 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,23 @@ t_ray	create_cam_ray(t_camera *c, double int_x, double int_y)
 	return (ray);
 }
 
+#define RAYS_PP 4
 /**
  * @returns a color as int
 */
 int	per_pixel(t_pxl p, t_scene *scene)
 {
-	t_ray	r;
-	t_color	c;
+	t_ray		r;
+	t_color		c;
+	static int	i = 0;
 
-	r = create_cam_ray(&scene->camera, p.x, p.y);
-	c = ray_color(scene, r);
-	c = apply_light_to_color(c, 1 + scene->ambient.lighting_ratio);
+	while (i++ < RAYS_PP)
+	{
+		r = create_cam_ray(&scene->camera, p.x, p.y);
+		c = ray_color(scene, r);
+		c = apply_light_to_color(c, 1 + scene->ambient.lighting_ratio);
+	}
+	i = 0;
 	return (convert_trgb(c));
 }
 
