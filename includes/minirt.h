@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/22 18:05:59 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/22 21:09:05 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,11 @@
 # include <math.h>
 # include "libft.h"
 # include "keys.h"
-# include "matrix_math.h"
 # include "camera.h"
 # include "hittable.h"
 # define SPACE "\t\n\f\r\v "
 # define MAX_SOLID 30
-# define RAYS_PER_PIXEL 50
+# define RAYS_PER_PIXEL 4
 # define CANV_DIST 1.0f
 # define CAM_PACE 0.8
 # define LIGHT_PACE 0.3
@@ -148,7 +147,6 @@ int		free_img(t_img *data);
 void	free_scene(t_scene **scene);
 
 /* DEBUG */
-void	print_4x4(t_matrix_trans m);
 void	print_progress(double percentage);
 
 #endif

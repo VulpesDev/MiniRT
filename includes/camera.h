@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:39:08 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/21 09:47:03 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/22 21:05:26 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 # include <stdint.h>
 # include <math.h>
 # include "vec3.h"
-# include "matrix_math.h"
 
 # define WIDTH 1024
 # define HEIGHT 768
