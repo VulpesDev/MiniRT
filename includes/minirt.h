@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:43:46 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/22 22:20:08 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/23 14:40:39 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@
 # define MAX_SOLID 30
 # define RAYS_PER_PIXEL 4
 # define CANV_DIST 1.0f
-# define CAM_PACE 0.8
-# define LIGHT_PACE 0.3
-# define ORIENT_PACE 0.4
+# define CAM_PACE 0.8f
+# define LIGHT_PACE 0.1f
+# define ORIENT_PACE 0.4f
 # define RAY_LEN 100000
 # define EPSILON 1e-6
 
