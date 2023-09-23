@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:30:47 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/21 09:29:26 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/23 13:17:20 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,13 @@ t_err	validate_light(t_scene *scene, char **el)
 		scene->light.brightness = ft_atof(el[2]);
 		if ((arrlen == 4 && !extract_rgb(el[3], &scene->light.trgb))
 			|| arrlen == 3)
+		{
+			if (arrlen == 4)
+				printf("Thanks for providing the light color! "\
+				"Unfortunately we could't be bothered to do the bonus "\
+				"and your setting will be ignored. Nothing personal...\n");
 			return (SUCCESS);
+		}
 	}
 	return (ft_warning("invalid argument", \
 			el[2], INVALID_ELEMENT));
