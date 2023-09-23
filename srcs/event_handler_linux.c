@@ -1,25 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   event_handler.c                                    :+:      :+:    :+:   */
+/*   event_handler_linux.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 12:29:38 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/22 22:18:25 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/23 12:40:48 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "event_handler.h"
 #include <stdio.h>
-
-// int	close_window(t_img *data)
-// {
-// 	mlx_loop_end(data->mlx_ptr);
-// 	return (1);
-// }
-
 
 void	cam_pos(int keycode, t_scene *scene)
 {
@@ -75,8 +68,7 @@ int	key_handle(int keycode, t_scene *scene)
 
 	data = scene->img;
 	if (keycode == ESC)
-		free_img(data);
-		// mlx_loop_end(scene->img->mlx_ptr);
+		mlx_loop_end(scene->img->mlx_ptr);
 	else if (keycode == PLUS || keycode == MINUS || keycode == UP
 		|| keycode == DOWN || keycode == LEFT || keycode == RIGHT)
 		cam_pos(keycode, scene);
@@ -85,8 +77,6 @@ int	key_handle(int keycode, t_scene *scene)
 		cam_orient(keycode, scene);
 	else if (keycode == R || keycode == F)
 		ambient_light(keycode, scene);
-	else
-		ft_printf("KeyCode: %d\n", keycode); // @todo delete
 	if (keycode != ESC)
 		draw(scene);
 	return (0);

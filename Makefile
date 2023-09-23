@@ -6,12 +6,12 @@
 #    By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 20:41:46 by tfregni           #+#    #+#              #
-#    Updated: 2023/09/21 09:57:56 by tfregni          ###   ########.fr        #
+#    Updated: 2023/09/23 12:39:37 by tfregni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS		= $(addprefix $(SRCS_DIR)/, main.c parse.c populate_element.c populate_solid.c parse_util.c \
-				libx.c render.c cam_inside.c sphere.c plane.c cylinder.c cylinder_disk.c event_handler.c \
+				render.c cam_inside.c sphere.c plane.c cylinder.c cylinder_disk.c \
 				camera.c shade.c vec3_op.c vec3_utils.c vec3_fact.c ray.c additional.c lightcolor.c)
 UNAME_S		:= $(shell uname -s)
 OBJS		= $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, ${SRCS}) # $(patsubst pattern,replacement,text)
@@ -33,6 +33,7 @@ RM			= rm -rf
 MAKE		= make -s
 
 ifeq (${UNAME_S}, Linux)
+SRCS		+= $(addprefix $(SRCS_DIR)/, event_handler_linux.c libx_linux.c)
 MLX_PATH	= mlx-linux
 MLX_TAR 	= minilibx-linux.tgz
 LINKS 		+= -lbsd -lXext -lX11
@@ -40,6 +41,7 @@ INC			+= -Ilinux
 endif
 
 ifeq (${UNAME_S}, Darwin)
+SRCS		+= $(addprefix $(SRCS_DIR)/, event_handler_mac.c libx_mac.c)
 MLX_PATH	= mlx-mac
 MLX_TAR		= minilibx_opengl.tgz
 LINKS		+= -framework OpenGL -framework AppKit
