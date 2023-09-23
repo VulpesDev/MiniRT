@@ -6,20 +6,13 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 12:29:38 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/23 12:40:39 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/23 13:04:19 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "event_handler.h"
 #include <stdio.h>
-
-// int	close_window(t_img *data)
-// {
-// 	mlx_loop_end(data->mlx_ptr);
-// 	return (1);
-// }
-
 
 void	cam_pos(int keycode, t_scene *scene)
 {
@@ -57,13 +50,13 @@ void	ambient_light(int keycode, t_scene *scene)
 {
 	if (keycode == R)
 	{
-		scene->ambient.lighting_ratio += 0.1f;
+		scene->ambient.lighting_ratio += LIGHT_PACE;
 		if (scene->ambient.lighting_ratio > 1)
 			scene->ambient.lighting_ratio = 1;
 	}
 	else if (keycode == F)
 	{
-		scene->ambient.lighting_ratio -= 0.1f;
+		scene->ambient.lighting_ratio -= LIGHT_PACE;
 		if (scene->ambient.lighting_ratio < 0)
 			scene->ambient.lighting_ratio = 0;
 	}

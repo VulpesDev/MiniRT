@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 12:29:38 by tvasilev          #+#    #+#             */
-/*   Updated: 2023/09/23 12:40:48 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/23 13:04:33 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@ void	ambient_light(int keycode, t_scene *scene)
 {
 	if (keycode == R)
 	{
-		scene->ambient.lighting_ratio += 0.1f;
+		scene->ambient.lighting_ratio += LIGHT_PACE;
 		if (scene->ambient.lighting_ratio > 1)
 			scene->ambient.lighting_ratio = 1;
 	}
 	else if (keycode == F)
 	{
-		scene->ambient.lighting_ratio -= 0.1f;
+		scene->ambient.lighting_ratio -= LIGHT_PACE;
 		if (scene->ambient.lighting_ratio < 0)
 			scene->ambient.lighting_ratio = 0;
 	}
