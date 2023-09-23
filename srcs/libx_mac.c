@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 08:25:02 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/23 12:41:19 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/23 14:51:46 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	free_img(t_img *data)
 {
 	mlx_destroy_image(data->mlx_ptr, data->img);
 	mlx_destroy_window(data->mlx_ptr, data->win_ptr);
-	mlx_destroy_display(data->mlx_ptr);
 	free(data->mlx_ptr);
 	data = NULL;
 	exit (0);
