@@ -4,6 +4,12 @@
 Once completed you will be able to render simple Computer-Generated-Images and you
 will never be afraid of implementing mathematical formulas again.</p>
 
+<div style="max-width: 100%; overflow: hidden;">
+  <img src="imgs/temple.png" alt="monks" style="width: 70%; flex: 1;">
+  <img src="imgs/multisampler.png" alt="random rays" style="width: 70%; flex: 1;">
+  <img src="imgs/romantic_couple.png" alt="romance" style="width: 70%; flex: 1;">
+</div>
+
 # Description
 
 <h3>What is <b>Raytracing?</b></h3>
