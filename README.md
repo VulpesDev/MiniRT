@@ -7,13 +7,8 @@ will never be afraid of implementing mathematical formulas again.</p>
 # Description
 
 <h3>What is <b>Raytracing?</b></h3>
-<p>When it comes to rendering 3-dimensional computer-generated images there are 2 possi-
-ble approaches: <b>“Rasterization”</b>, which is used by almost all graphic engines because
-of its efficiency and <b>“Ray Tracing.”</b>
-The <b>“Ray Tracing”</b> method, developed for the first time in 1968 (but improved upon
-since) is even today more expensive in computation than the <b>“Rasterization”</b> method.
-As a result, it is not yet fully adapted to real time use-cases but it produce a much higher
-degree of visual realism.</p>
+<p>When it comes to rendering 3-dimensional computer-generated images there are 2 possible approaches:<b>“Rasterization”</b>, which is used by almost all graphic engines because of its efficiency and <b>“Ray Tracing.”</b> The <b>“Ray Tracing”</b> method, developed for the first time in 1968 (but improved upon since) is even today more expensive in computation than the <b>“Rasterization”</b> method. As a result, it is not yet fully adapted to real time use-cases but it produce a much higher degree of visual realism.</p>
+
 <h3>Objective</h3>
 <p>Create a simple raytracing engine.</p>
 <ul>
