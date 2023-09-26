@@ -23,6 +23,7 @@ degree of visual realism.</p>
   <li>The program must be able to apply translation and rotation transformation to objects, lights and cameras.</li>
   <li>Light management: spot brightness, hard shadows, ambiance lighting (objects are never completely in the dark). Ambient and diffuse lighting must be implemented</li>
 </ul>
+
 # Install and Run
 <sub><i>(tested on Ubuntu)</i></sub>
 
