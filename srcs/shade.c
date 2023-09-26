@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 15:45:15 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/22 13:29:33 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/26 13:22:16 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ int	cast_shadow(t_scene *scene, t_ray ray, t_hit_record *rec)
  * The conditions to cast the shadow are:
  * - cast_shadow function: hit an object with a ray with positive length
  * - len_l > rec->t: the light is farther than the object
+ * Adding the condition || n_dot_l < 0 would get the solid to cast a shadow
+ * onto itself, effectively having a dark side.
 */
 double	diffuse_shade(t_scene *scene, t_vector n, t_vector p, t_hit_record *rec)
 {
@@ -72,7 +74,6 @@ double	diffuse_shade(t_scene *scene, t_vector n, t_vector p, t_hit_record *rec)
 	n_dot_l = vec3_dot(n, l);
 	diff_shade = n_dot_l / 2 + 0.5f;
 	if (cast_shadow(scene, (t_ray){vec3_sum(p, vec3_mult(l, EPSILON)), l}, rec)
-	// if (cast_shadow(scene, (t_ray){p, l}, rec)
 		&& len_l > rec->t)
 		return (diff_shade / 2);
 	light = ((1 + scene->light.brightness) * diff_shade) / 2;
