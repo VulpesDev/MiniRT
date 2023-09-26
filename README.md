@@ -40,8 +40,8 @@ Just run the executable with the scene directory "./miniRT <scene directry>"
 ```
 
 # ".rt" files
-<ul>
-  <li>Overview</li>
+
+  <b>Overview</b>
   <ul>
     <li>Each type of element can be separated by one or more line break(s).</li>
     <li>Each type of information from an element can be separated by one or more space(s).</li>
@@ -49,6 +49,7 @@ Just run the executable with the scene directory "./miniRT <scene directry>"
     <li>Elements which are defined by a capital letter can only be declared once in the scene.</li>
   </ul>
   <br><br><br>
+<ul>
   <li>Ambient lightning:</li>
   <ul>
     <li>identifier: A</li>
