@@ -6,7 +6,7 @@
 /*   By: tfregni <tfregni@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 15:45:15 by tfregni           #+#    #+#             */
-/*   Updated: 2023/09/26 13:22:16 by tfregni          ###   ########.fr       */
+/*   Updated: 2023/09/30 20:29:49 by tfregni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,10 @@ int	cast_shadow(t_scene *scene, t_ray ray, t_hit_record *rec)
  * The conditions to cast the shadow are:
  * - cast_shadow function: hit an object with a ray with positive length
  * - len_l > rec->t: the light is farther than the object
- * Adding the condition || n_dot_l < 0 would get the solid to cast a shadow
+ * - n_dot_l < 0 to get the solid to cast a shadow
  * onto itself, effectively having a dark side.
+ * To scale the light intensity I multiply the light by the dot product
+ * and not the dot product in range [0, 1]
 */
 double	diffuse_shade(t_scene *scene, t_vector n, t_vector p, t_hit_record *rec)
 {
@@ -73,10 +75,12 @@ double	diffuse_shade(t_scene *scene, t_vector n, t_vector p, t_hit_record *rec)
 	l = vec3_unit(l);
 	n_dot_l = vec3_dot(n, l);
 	diff_shade = n_dot_l / 2 + 0.5f;
-	if (cast_shadow(scene, (t_ray){vec3_sum(p, vec3_mult(l, EPSILON)), l}, rec)
-		&& len_l > rec->t)
+	if ((cast_shadow(scene, (t_ray){vec3_sum(p, vec3_mult(l, EPSILON)), l}, rec)
+		&& len_l > rec->t) || n_dot_l < 0)
 		return (diff_shade / 2);
-	light = ((1 + scene->light.brightness) * diff_shade) / 2;
+	light = ((scene->light.brightness * n_dot_l) + diff_shade) / 2;
+	if (light < 0 || light > 1)
+		printf("light: %f\n", light);
 	return (light);
 }
 
