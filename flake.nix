@@ -21,15 +21,15 @@
           buildInputs = if pkgs.stdenv.isDarwin then
             [ ]
           else
-            with pkgs; [ minilibx xorg.libX11 xorg.libXext zlib ];
+            with pkgs; [ minilibx xorg.libX11 xorg.libXext zlib libbsd ];
 
           CFLAGS = if pkgs.stdenv.isDarwin then "-Imlx" else "";
           LDFLAGS = if pkgs.stdenv.isDarwin then
-            "-Lmlx -lmlx -framework OpenGL -framework AppKit"
+            "-Lmlx -lmlx -framework OpenGL -framework AppKit -lbsd -lbsd"
           else
             "";
 
-          buildPhase = "make";
+          buildPhase = "make miniRT";
           installPhase = ''
             mkdir -p $out/bin
             cp miniRT $out/bin/
