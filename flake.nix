@@ -36,8 +36,10 @@
         installPhase = ''
           mkdir -p $out/bin
           cp miniRT $out/bin/
+	
+	# Wrap the binary to include all library paths
           wrapProgram $out/bin/miniRT \
-            --set LD_LIBRARY_PATH ${pkgs.libbsd}/lib
+            --set LD_LIBRARY_PATH "${pkgs.libbsd}/lib:${pkgs.xorg.libX11}/lib:${pkgs.xorg.libXext}/lib:${pkgs.zlib}/lib"
         '';
       };
 
@@ -55,7 +57,6 @@
           mkdir -p mlx_linux
           ln -sf ${pkgs.minilibx}/lib/libmlx.a mlx_linux/libmlx_Linux.a
           ln -sf ${pkgs.minilibx}/include/mlx.h mlx_linux/
-          echo "libbsd is available at ${pkgs.libbsd}/lib"
         '';
       };
 
