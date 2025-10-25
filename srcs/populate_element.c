@@ -44,7 +44,7 @@ t_err	validate_camera(t_scene *scene, char **el)
 		return (ft_warning("invalid argument: ", el[2], \
 				INVALID_ELEMENT));
 	scene->camera.fov = ft_atoi(el[3]);
-	if (scene->camera.fov < 0 || scene->camera.fov > 180)
+	if (/*scene->camera.fov < 0 ||*/ scene->camera.fov > 180)
 		return (ft_warning("invalid argument: ", el[3], \
 				INVALID_ELEMENT));
 	scene->camera.focal_length = CANV_DIST;

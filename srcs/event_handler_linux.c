@@ -64,9 +64,9 @@ void	ambient_light(int keycode, t_scene *scene)
 
 int	key_handle(int keycode, t_scene *scene)
 {
-	t_img	*data;
+	//t_img	*data;
 
-	data = scene->img;
+	//data = scene->img;
 	if (keycode == ESC)
 		mlx_loop_end(scene->img->mlx_ptr);
 	else if (keycode == PLUS || keycode == MINUS || keycode == UP
