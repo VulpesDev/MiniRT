@@ -1,5 +1,5 @@
 {
-  description = "A project from 42Berlin's core curriculum. Exploring fractals and complex numbers. Written in C, also using our own ft_printf.";
+  description = "Flake for miniRT";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
@@ -8,34 +8,36 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
     in {
-      packages.${system}.default = pkgs.stdenv.mkDerivation {
+      packages.${system}.miniRT = pkgs.stdenv.mkDerivation {
         pname = "miniRT";
         version = "1.0";
-        
+
         src = ./.;
-        
+
         buildInputs = with pkgs; [
           minilibx
           xorg.libX11
           xorg.libXext
           zlib
-	  libbsd
+          libbsd
+	  makeWrapper
         ];
-        
+
         preBuild = ''
           mkdir -p mlx_linux
           ln -sf ${pkgs.minilibx}/lib/libmlx.a mlx_linux/libmlx_Linux.a
           ln -sf ${pkgs.minilibx}/include/mlx.h mlx_linux/
-	  ln -sf ${pkgs.libbsd}/lib/
         '';
 
-	buildPhase = ''
-		make miniRT
-	'';
-        
+        buildPhase = ''
+          make miniRT
+        '';
+
         installPhase = ''
           mkdir -p $out/bin
           cp miniRT $out/bin/
+          wrapProgram $out/bin/miniRT \
+            --set LD_LIBRARY_PATH ${pkgs.libbsd}/lib
         '';
       };
 
@@ -46,18 +48,25 @@
           xorg.libXext
           zlib
           libbsd
+	  makeWrapper
         ];
-        
+
         shellHook = ''
           mkdir -p mlx_linux
           ln -sf ${pkgs.minilibx}/lib/libmlx.a mlx_linux/libmlx_Linux.a
           ln -sf ${pkgs.minilibx}/include/mlx.h mlx_linux/
+          echo "libbsd is available at ${pkgs.libbsd}/lib"
         '';
       };
 
-      apps.${system}.default = {
+      apps.${system}.miniRT = {
         type = "app";
-        program = "${self.packages.${system}.default}/bin/miniRT";
+        program = "${self.packages.${system}.miniRT}/bin/miniRT";
       };
+
+      # Set defaults so 'nix build' and 'nix run' work
+      defaultPackage.${system} = self.packages.${system}.miniRT;
+      defaultApp.${system} = self.apps.${system}.miniRT;
     };
 }
+
