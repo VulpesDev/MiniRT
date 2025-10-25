@@ -1,5 +1,5 @@
 {
-  description = "Fractol - cross platform flake";
+  description = "MiniRT - cross platform flake";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
@@ -21,15 +21,15 @@
           buildInputs = if pkgs.stdenv.isDarwin then
             [ ]
           else
-            with pkgs; [ minilibx xorg.libX11 xorg.libXext zlib libbsd ];
+            with pkgs; [ minilibx xorg.libX11 xorg.libXext zlib ];
 
           CFLAGS = if pkgs.stdenv.isDarwin then "-Imlx" else "";
           LDFLAGS = if pkgs.stdenv.isDarwin then
-            "-Lmlx -lmlx -lbsd -framework OpenGL -framework AppKit"
+            "-Lmlx -lmlx -framework OpenGL -framework AppKit"
           else
             "";
 
-          buildPhase = "make miniRT";
+          buildPhase = "make";
           installPhase = ''
             mkdir -p $out/bin
             cp miniRT $out/bin/
