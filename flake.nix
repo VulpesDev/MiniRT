@@ -28,6 +28,10 @@
           ln -sf ${pkgs.minilibx}/include/mlx.h mlx_linux/
 	  ln -sf ${pkgs.libbsd}/lib/
         '';
+
+	buildPhase = ''
+		make miniRT
+	'';
         
         installPhase = ''
           mkdir -p $out/bin
