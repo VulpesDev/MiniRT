@@ -18,11 +18,6 @@ pkgs.stdenv.mkDerivation {
     mkdir -p mlx_linux
     ln -sf ${pkgs.minilibx}/lib/libmlx.a mlx_linux/libmlx_Linux.a
     ln -sf ${pkgs.minilibx}/include/mlx.h mlx_linux/
-    ln -sf ${pkgs.libbsd}/lib/libbsd.so
-  '';
-
-  buildPhase = ''
-	make miniRT
   '';
 
   installPhase = ''
