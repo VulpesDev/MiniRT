@@ -25,7 +25,7 @@
 
           CFLAGS = if pkgs.stdenv.isDarwin then "-Imlx" else "";
           LDFLAGS = if pkgs.stdenv.isDarwin then
-            "-Lmlx -lmlx -framework OpenGL -framework AppKit"
+            "-Lmlx -lmlx -lbsd -framework OpenGL -framework AppKit"
           else
             "";
 
