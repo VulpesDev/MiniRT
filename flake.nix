@@ -19,12 +19,14 @@
           xorg.libX11
           xorg.libXext
           zlib
+	  libbsd
         ];
         
         preBuild = ''
           mkdir -p mlx_linux
           ln -sf ${pkgs.minilibx}/lib/libmlx.a mlx_linux/libmlx_Linux.a
           ln -sf ${pkgs.minilibx}/include/mlx.h mlx_linux/
+	  ln -sf ${pkgs.libbsd}/lib/
         '';
         
         installPhase = ''
